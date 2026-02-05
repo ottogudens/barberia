@@ -1,0 +1,14 @@
+{
+    "name": "ottogudens/barberia",
+    "description": "Barberia SaaS Platform",
+    "require": {
+        "php": ">=8.1",
+        "ext-pdo_pgsql": "*",
+        "ext-pgsql": "*"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}
