@@ -4,7 +4,10 @@
     <div class="container">
         <nav class="navbar">
             <a href="#" class="navbar-brand">
-                <img src="Design/images/barbershop_logo.png" alt="Barbershop Logo">
+                <?php
+                $logoSrc = isset($settings['website_logo']) && !empty($settings['website_logo']) ? $settings['website_logo'] : 'Design/images/barbershop_logo.png';
+                ?>
+                <img src="<?php echo $logoSrc; ?>" alt="Barbershop Logo">
             </a>
             <div class="d-flex menu-wrap align-items-center main-menu-container">
                 <div class="mainmenu" id="mainmenu">
@@ -13,8 +16,13 @@
                         <li><a href="./#about">Nosotros</a></li>
                         <li><a href="./#services">Servicios</a></li>
                         <li><a href="./#gallery">Galería</a></li>
-                        <li><a href="./#pricing">Precios</a></li>
                         <li><a href="./#contact-us">Contáctanos</a></li>
+                        <?php if (isset($_SESSION['client_logged_in'])): ?>
+                            <li><a href="logout_client.php" style="color: #d9534f;">Cerrar Sesión
+                                    (<?php echo $_SESSION['client_name']; ?>)</a></li>
+                        <?php else: ?>
+                            <li><a href="login.php" style="color: #5bc0de;">Iniciar Sesión</a></li>
+                        <?php endif; ?>
                     </ul>
                 </div>
                 <div class="header-btn" style="margin-left:10px">

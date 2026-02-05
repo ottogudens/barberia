@@ -1,10 +1,8 @@
-body
-{
+body {
     background: #f7f7f7;
 }
 
-.text_header
-{
+.text_header {
     margin-bottom: 5px;
     font-size: 18px;
     font-weight: bold;
@@ -12,23 +10,20 @@ body
     margin-top: 22px;
 }
 
-.booking_section
-{
+.booking_section {
     max-width: 720px;
     margin: 50px auto;
     /*min-height: 500px;*/
 }
 
-.items_tab
-{
+.items_tab {
     border-radius: 4px;
     background-color: white;
     overflow: hidden;
     box-shadow: 0 0 5px 0 rgba(60, 66, 87, 0.04), 0 0 10px 0 rgba(0, 0, 0, 0.04);
 }
 
-.itemListElement
-{
+.itemListElement {
     font-size: 14px;
     line-height: 1.29;
     border-bottom: solid 1px #e5e5e5;
@@ -36,8 +31,7 @@ body
     padding: 16px 12px 18px 12px;
 }
 
-.item_details
-{
+.item_details {
     width: auto;
     display: -webkit-box;
     display: -moz-box;
@@ -56,8 +50,7 @@ body
     -webkit-align-items: center;
 }
 
-.servide_name
-{
+.servide_name {
     flex: 1;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -67,24 +60,22 @@ body
     -webkit-flex: 1;
 }
 
-.item_label
-{
-    color: #9e8a78;
-    border-color: #9e8a78;
+.item_label {
+    color: #D4AF37;
+    border-color: #D4AF37;
     background: white;
     font-size: 12px;
     font-weight: 700;
 }
 
-.btn-secondary:not(:disabled):not(.disabled).active, .btn-secondary:not(:disabled):not(.disabled):active 
-{
-    color: #fff;
-    background-color: #9e8a78;
-    border-color: #9e8a78;
+.btn-secondary:not(:disabled):not(.disabled).active,
+.btn-secondary:not(:disabled):not(.disabled):active {
+    color: #000;
+    background-color: #D4AF37;
+    border-color: #D4AF37;
 }
 
-.item_select_part
-{
+.item_select_part {
     display: flex;
     -webkit-box-pack: justify;
     justify-content: space-between;
@@ -93,8 +84,7 @@ body
     flex-shrink: 0;
 }
 
-.select_item_bttn
-{
+.select_item_bttn {
     width: 55px;
     display: flex;
     margin-left: 30px;
@@ -102,8 +92,7 @@ body
     justify-content: flex-end;
 }
 
-.service_duration_field
-{
+.service_duration_field {
     text-align: right;
     min-width: 60px;
     width: auto;
@@ -112,8 +101,7 @@ body
     font-size: 14px;
 }
 
-.service_price_field
-{
+.service_price_field {
     width: auto;
     display: flex;
     margin-left: 30px;
@@ -121,54 +109,48 @@ body
     align-items: baseline;
 }
 
-.radio_employee_select
-{
+.radio_employee_select {
     position: absolute;
-    clip: rect(0,0,0,0);
+    clip: rect(0, 0, 0, 0);
     pointer-events: none;
 }
 
 /* Make circles that indicate the steps of the form: */
-.step 
-{
+.step {
     height: 15px;
     width: 15px;
     margin: 0 2px;
     background-color: #bbbbbb;
-    border: none;  
+    border: none;
     border-radius: 50%;
     display: inline-block;
     opacity: 0.5;
 }
 
-.step.active 
-{
+.step.active {
     opacity: 1;
 }
 
 /* Mark the steps that are finished and valid: */
-.step.finish 
-{
-    background-color: #4CAF50;
+.step.finish {
+    background-color: #D4AF37;
 }
 
-.next_prev_buttons
-{
-    background-color: #4CAF50;
-    color: #ffffff;
+.next_prev_buttons {
+    background-color: #D4AF37;
+    color: #000;
     border: none;
     padding: 10px 20px;
     font-size: 17px;
     cursor: pointer;
+    font-weight: bold;
 }
 
-.tab_reservation
-{
+.tab_reservation {
     display: none;
 }
 
-.client_details_div .form-control
-{
+.client_details_div .form-control {
     background-color: #fff;
     border-radius: 0;
     padding: 25px 10px;
@@ -177,9 +159,8 @@ body
     margin: 10px 0px;
 }
 
-.client_details_div .form-control:focus 
-{
-    border-color: #9e8a78;
+.client_details_div .form-control:focus {
+    border-color: #D4AF37;
     box-shadow: none;
     outline: none;
 }

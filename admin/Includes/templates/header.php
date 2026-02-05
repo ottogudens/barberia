@@ -14,7 +14,9 @@
 	<link href="Design/fonts/css/all.min.css" rel="stylesheet" type="text/css">
 	<link rel="shortcut icon" href="../templates/faviconconfiguroweb.png" type="image/x-icon">
 	<!-- Nunito FONT FAMILY FILE -->
-	<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+	<link
+		href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+		rel="stylesheet">
 
 	<!-- CSS FILES -->
 	<link href="Design/css/sb-admin-2.min.css" rel="stylesheet">
@@ -32,12 +34,28 @@
 	<div id="wrapper">
 
 		<!-- Sidebar -->
-		<ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion" id="accordionSidebar">
+		<!-- Changed bg-gradient-danger to bg-gradient-dark and added style -->
+		<ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar"
+			style="background: #111;">
 
 			<!-- Sidebar - Brand -->
 			<a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
 				<div class="sidebar-brand-icon rotate-n-10">
-					CWEB
+					<!-- Icon or Logo could go here -->
+					<i class="bs bs-scissors-1" style="color: #D4AF37;"></i>
+				</div>
+				<?php
+				// Fetch Tenant Name if not already available
+				if (isset($tenant_id)) {
+					$stmtBrand = $con->prepare("SELECT name FROM tenants WHERE tenant_id = ?");
+					$stmtBrand->execute([$tenant_id]);
+					$brand = $stmtBrand->fetch();
+					$shopName = $brand['name'] ?? 'Barbería';
+				} else {
+					$shopName = 'Barbería SaaS';
+				}
+				?>
+				<div class="sidebar-brand-text mx-3" style="color: #D4AF37;"><?php echo htmlspecialchars($shopName); ?>
 				</div>
 			</a>
 
@@ -54,6 +72,13 @@
 
 			<!-- Divider -->
 			<hr class="sidebar-divider">
+
+			<li class="nav-item">
+				<a class="nav-link" href="reservations_stats.php">
+					<i class="fas fa-history"></i>
+					<span>Historial y Reportes</span>
+				</a>
+			</li>
 
 			<!-- Heading -->
 			<div class="sidebar-heading">
@@ -102,6 +127,66 @@
 			</li>
 
 			<!-- Divider -->
+			<hr class="sidebar-divider">
+
+			<!-- Heading -->
+			<div class="sidebar-heading">
+				Configuración
+			</div>
+
+			<li class="nav-item">
+				<a class="nav-link" href="website_settings.php">
+					<i class="fas fa-globe"></i>
+					<span>Sitio Web</span>
+				</a>
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link" href="backup.php">
+					<i class="fas fa-database"></i>
+					<span>Respaldo BD</span>
+				</a>
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link" href="offers.php">
+					<i class="fas fa-tag"></i>
+					<span>Ofertas</span>
+				</a>
+			</li>
+
+
+
+			<li class="nav-item">
+				<a class="nav-link" href="gallery.php">
+					<i class="fas fa-images"></i>
+					<span>Galería</span>
+				</a>
+			</li>
+
+			<!-- Divider -->
+			<hr class="sidebar-divider">
+
+			<!-- Heading -->
+			<div class="sidebar-heading">
+				Finanzas
+			</div>
+
+			<li class="nav-item">
+				<a class="nav-link" href="payments.php">
+					<i class="fas fa-hand-holding-usd"></i>
+					<span>Ingresos</span>
+				</a>
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link" href="expenses.php">
+					<i class="fas fa-file-invoice-dollar"></i>
+					<span>Egresos y Pagos</span>
+				</a>
+			</li>
+
+			<!-- Divider -->
 			<hr class="sidebar-divider d-none d-md-block">
 
 			<!-- Sidebar Toggler (Sidebar) -->
@@ -138,7 +223,8 @@
 
 						<!-- Nav Item - User Information -->
 						<li class="nav-item dropdown no-arrow">
-							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<span class="mr-2 d-none d-lg-inline text-gray-600 small">
 									<?php echo $_SESSION['username_barbershop_Xw211qAAsq4']; ?>
 								</span>
@@ -146,7 +232,8 @@
 							</a>
 
 							<!-- Dropdown - User Information -->
-							<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+							<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+								aria-labelledby="userDropdown">
 								<a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
 									<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
 									Cerrar Sesión

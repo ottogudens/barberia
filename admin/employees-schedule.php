@@ -8,13 +8,16 @@ $pageTitle = 'Horario de Emplead@s';
 include 'connect.php';
 include 'Includes/functions/functions.php';
 include 'Includes/templates/header.php';
+include '../Includes/tenant_context.php';
+
+$tenant_id = getCurrentTenantId($con);
 
 //Extra JS FILES
 echo "<script src='https://unpkg.com/sweetalert/dist/sweetalert.min.js'></script>";
 
 //Check If user is already logged in
 if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['password_barbershop_Xw211qAAsq4'])) {
-?>
+    ?>
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
@@ -34,8 +37,8 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['pass
                             </label>
                             <div style="display:inline-block;margin-bottom: 10px;">
                                 <?php
-                                $stmt = $con->prepare('select * from employees');
-                                $stmt->execute();
+                                $stmt = $con->prepare('select * from employees WHERE tenant_id = ?');
+                                $stmt->execute(array($tenant_id));
                                 $employees = $stmt->fetchAll();
 
                                 echo "<select class='form-control' name='employee_selected'>";
@@ -45,13 +48,15 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['pass
                                 echo "</select>";
                                 ?>
                             </div>
-                            <button type="submit" name="show_schedule_sbmt" class="btn btn-primary">Mostrar horarios</button>
+                            <button type="submit" name="show_schedule_sbmt" class="btn btn-primary">Mostrar
+                                horarios</button>
                         </div>
                     </form>
                 </div>
 
                 <div class="alert alert-info">
-                    Configure los ajustes de su semana aquí. Simplemente seleccione la hora de inicio y la hora de finalización para configurar las horas de trabajo de los empleados.
+                    Configure los ajustes de su semana aquí. Simplemente seleccione la hora de inicio y la hora de
+                    finalización para configurar las horas de trabajo de los empleados.
                 </div>
 
 
@@ -63,14 +68,14 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['pass
                     /** WHEN SHOW SCHEDULE BUTTON CLICKED **/
 
                     if (isset($_POST['show_schedule_sbmt'])) {
-                    ?>
+                        ?>
                         <form method="POST" action="employees-schedule.php">
                             <input type="hidden" name="employee_id" value="<?php echo $_POST['employee_selected']; ?>" hidden>
                             <div class="worktime-days">
                                 <?php
                                 $employee_id = $_POST['employee_selected'];
-                                $stmt = $con->prepare('select * from employees e, employees_schedule es where es.employee_id = e.employee_id and e.employee_id = ?');
-                                $stmt->execute(array($employee_id));
+                                $stmt = $con->prepare('select * from employees e, employees_schedule es where es.employee_id = e.employee_id and e.employee_id = ? AND e.tenant_id = ?');
+                                $stmt->execute(array($employee_id, $tenant_id));
                                 $employees = $stmt->fetchAll();
 
                                 $days = array(
@@ -141,7 +146,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['pass
                                 <button type="submit" name="save_schedule_sbmt" class="btn btn-info">Guardar horario</button>
                             </div>
                         </form>
-                    <?php
+                        <?php
                     }
                     ?>
                 </div>
@@ -160,8 +165,17 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['pass
                         "6" => "Saturday",
                         "7" => "Sunday"
                     );
-                    $stmt = $con->prepare("delete from employees_schedule where employee_id = ?");
-                    $stmt->execute(array($_POST['employee_id']));
+                    // Verify employee belongs to tenant
+                    $stmtCheck = $con->prepare("SELECT 1 FROM employees WHERE employee_id = ? AND tenant_id = ?");
+                    $stmtCheck->execute(array($_POST['employee_id'], $tenant_id));
+
+                    if ($stmtCheck->rowCount() > 0) {
+                        $stmt = $con->prepare("delete from employees_schedule where employee_id = ?");
+                        $stmt->execute(array($_POST['employee_id']));
+                    } else {
+                        // Invalid employee for this tenant
+                        die("Error: Invalid Employee ID");
+                    }
 
                     foreach ($days as $key => $value) {
                         if (isset($_POST[$value])) {
@@ -170,13 +184,13 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['pass
 
                             $message = "¡Ha actualizado con éxito el horario de los empleados!";
 
-                ?>
+                            ?>
 
                             <script type="text/javascript">
-                                swal("Establecer horario de empleados", "¡Ha establecido con éxito el horario de los empleados!", "success").then((value) => {});
+                                swal("Establecer horario de empleados", "¡Ha establecido con éxito el horario de los empleados!", "success").then((value) => { });
                             </script>
 
-                <?php
+                            <?php
                         }
                     }
                 }
@@ -185,7 +199,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['pass
         </div>
     </div>
 
-<?php
+    <?php
 
     //Include Footer
     include 'Includes/templates/footer.php';
