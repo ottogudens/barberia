@@ -1,0 +1,8 @@
+[setup]
+nixPkgs = ["php83", "php83Extensions.pdo_pgsql", "php83Extensions.pgsql", "nginx"]
+
+[variables]
+NIXPACKS_PHP_EXTENSION_INSTALL = "pdo_pgsql,pgsql"
+
+[start]
+cmd = "php-fpm -y /assets/php-fpm.conf & nginx -c /nginx.conf"
