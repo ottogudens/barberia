@@ -3,11 +3,12 @@
 require_once __DIR__ . '/Includes/env_loader.php';
 loadEnv(__DIR__ . '/.env');
 
-$dsn = 'mysql:host=' . getenv('DB_HOST') . ';dbname=' . getenv('DB_NAME');
+$dsn = 'pgsql:host=' . getenv('DB_HOST') . ';port=' . getenv('DB_PORT') . ';dbname=' . getenv('DB_NAME');
 $user = getenv('DB_USER');
 $pass = getenv('DB_PASS');
 $option = array(
-    PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
 );
 try {
     $con = new PDO($dsn, $user, $pass, $option);

@@ -114,7 +114,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['pass
                                 </div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
                                     <?php
-                                    $stmt = $con->prepare("SELECT SUM(total_amount) FROM appointments WHERE tenant_id = ? AND is_paid = 1 AND DATE(paid_at) = CURDATE()");
+                                    $stmt = $con->prepare("SELECT SUM(total_amount) FROM appointments WHERE tenant_id = ? AND is_paid = 1 AND DATE(paid_at) = CURRENT_DATE");
                                     $stmt->execute([$tenant_id]);
                                     echo "$" . number_format($stmt->fetchColumn() ?: 0, 2);
                                     ?>
@@ -139,7 +139,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['pass
                                 </div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
                                     <?php
-                                    $stmt = $con->prepare("SELECT SUM(total_amount) FROM appointments WHERE tenant_id = ? AND is_paid = 1 AND YEARWEEK(paid_at, 1) = YEARWEEK(CURDATE(), 1)");
+                                    $stmt = $con->prepare("SELECT SUM(total_amount) FROM appointments WHERE tenant_id = ? AND is_paid = 1 AND extract(year from paid_at) = extract(year from current_date) AND extract(week from paid_at) = extract(week from current_date)");
                                     $stmt->execute([$tenant_id]);
                                     echo "$" . number_format($stmt->fetchColumn() ?: 0, 2);
                                     ?>
@@ -206,7 +206,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['pass
                                                         FROM employees e 
                                                         JOIN appointments a ON e.employee_id = a.employee_id 
                                                         WHERE a.tenant_id = ? AND a.canceled = 0 
-                                                        AND MONTH(a.start_time) = MONTH(CURRENT_DATE()) AND YEAR(a.start_time) = YEAR(CURRENT_DATE())
+                                                        AND EXTRACT(MONTH FROM a.start_time) = EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM a.start_time) = EXTRACT(YEAR FROM CURRENT_DATE)
                                                         GROUP BY e.employee_id 
                                                         ORDER BY appt_count DESC 
                                                         LIMIT 1");
