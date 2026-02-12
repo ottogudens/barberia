@@ -113,8 +113,9 @@ CREATE TABLE IF NOT EXISTS super_admins (
 
 -- Insert Default Super Admin
 INSERT INTO super_admins (username, password, email)
-SELECT 'admin', '$2y$10$tXVoIuUdLfrkkwK9lkUr2O.pWvkSpBzLCf7X5y2y3BAIdDnw3Z89q', 'admin@example.com'
-WHERE NOT EXISTS (SELECT 1 FROM super_admins WHERE username = 'admin');
+VALUES ('admin', '$2y$10$tXVoIuUdLfrkkwK9lkUr2O.pWvkSpBzLCf7X5y2y3BAIdDnw3Z89q', 'admin@example.com')
+ON CONFLICT (username) 
+DO UPDATE SET password = '$2y$10$tXVoIuUdLfrkkwK9lkUr2O.pWvkSpBzLCf7X5y2y3BAIdDnw3Z89q';
 
 -- 3. Create Default Tenant
 INSERT INTO tenants (name, slug, owner_email) 
