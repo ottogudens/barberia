@@ -16,14 +16,19 @@ function getCurrentTenantId($con)
     } else {
         // 2. Extract from Host
         $host = $_SERVER['HTTP_HOST'];
-
-        // Remove port if present
-        $host = explode(':', $host)[0];
-
+        $host = explode(':', $host)[0]; // Remove port
         $parts = explode('.', $host);
 
-        if (count($parts) > 2 || (count($parts) == 2 && $parts[1] == 'localhost')) {
-            $slug = $parts[0];
+        // Logic for Production Domain (e.g., barberia.com)
+        // sub.barberia.com -> 3 parts
+        // www.barberia.com -> exclude 'www'
+        if (count($parts) > 2) {
+            $sub = $parts[0];
+            if ($sub !== 'www') {
+                $slug = $sub;
+            }
+        } elseif (count($parts) == 2 && $parts[1] == 'localhost') {
+            $slug = $parts[0]; // local.localhost
         } elseif ($host === 'localhost') {
             // Fallback for localhost
             // We can check session before falling back to 1

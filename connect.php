@@ -13,17 +13,11 @@ $port = getenv('DB_PORT') ?: getenv('PGPORT') ?: '5432';
 $user = getenv('DB_USER') ?: getenv('PGUSER');
 $pass = getenv('DB_PASS') ?: getenv('PGPASSWORD');
 $dbname = getenv('DB_NAME') ?: getenv('PGDATABASE');
-
-// Diagnostic check (helpful for the user to see in logs/browser if it fails)
-if (!$host || !$user || !$dbname) {
-    if (basename($_SERVER['PHP_SELF']) !== 'index.php') {
-        echo "<!-- Debug info: Host=$host, User=$user, DB=$dbname -->";
-    }
-}
+$debug = isset($_GET['debug_init']) || getenv('APP_DEBUG') === 'true';
 
 $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
 $option = array(
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_ERRMODE => $debug ? PDO::ERRMODE_EXCEPTION : PDO::ERRMODE_SILENT,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
 );
 
@@ -39,14 +33,11 @@ try {
         $initFile = __DIR__ . '/all_pg_init.sql';
         if (file_exists($initFile)) {
             $sql = file_get_contents($initFile);
-            // We use a try-catch specifically for the exec to see if it fails
             try {
                 $con->exec($sql);
-                // Success - we might want to log this or just let it be
             } catch (Exception $initEx) {
-                // If tables fail to create, we need to know why
                 error_log("Database Initialization Failed: " . $initEx->getMessage());
-                if (isset($_GET['debug_init'])) {
+                if ($debug) {
                     echo "Database Initialization Failed: " . $initEx->getMessage();
                 }
             }
@@ -56,7 +47,10 @@ try {
     }
 } catch (PDOException $ex) {
     // Serious connection error
-    $msg = "Failed to connect with database! Host: $host. Error: " . $ex->getMessage();
+    $msg = "Database connection error.";
+    if ($debug) {
+        $msg .= " Host: $host. Error: " . $ex->getMessage();
+    }
     error_log($msg);
     if (!headers_sent()) {
         echo $msg;

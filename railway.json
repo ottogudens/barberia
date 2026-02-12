@@ -4,8 +4,6 @@
         "builder": "NIXPACKS"
     },
     "deploy": {
-        "restartPolicyType": "ON_FAILURE",
-        "healthCheckPath": "/",
-        "healthCheckTimeout": 100
+        "restartPolicyType": "ON_FAILURE"
     }
 }
