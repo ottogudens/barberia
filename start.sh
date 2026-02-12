@@ -3,6 +3,10 @@
 # Substitute the PORT environment variable in nginx.conf
 sed -i "s/\$PORT/$PORT/g" /app/nginx.conf
 
+# Initialize Database
+echo "Running Database Initialization..."
+php /app/init_railway_db.php
+
 # Start PHP-FPM in the background
 php-fpm -y /app/php-fpm.conf &
 

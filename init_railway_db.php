@@ -1,57 +1,55 @@
 <?php
 /**
  * Script de inicialización de base de datos para Railway
- * Úsalo solo una vez y bórralo después por seguridad.
+ * Se ejecuta automáticamente al iniciar el contenedor.
  */
 
-require_once __DIR__ . '/Includes/env_loader.php';
-loadEnv(__DIR__ . '/.env');
+// Intentar cargar variables de entorno locales si existen
+if (file_exists(__DIR__ . '/Includes/env_loader.php')) {
+    require_once __DIR__ . '/Includes/env_loader.php';
+    if (file_exists(__DIR__ . '/.env')) {
+        loadEnv(__DIR__ . '/.env');
+    }
+}
 
-// Intentar obtener credenciales de variables de entorno (ya configuradas en Railway)
-$host = getenv('DB_HOST');
-$port = getenv('DB_PORT') ?: '5432';
-$user = getenv('DB_USER');
-$pass = getenv('DB_PASS');
-$dbname = getenv('DB_NAME');
+// Obtener credenciales de variables de entorno
+// Railway proporciona variables estándar PG* para PostgreSQL
+$host = getenv('PGHOST') ?: getenv('DB_HOST');
+$port = getenv('PGPORT') ?: getenv('DB_PORT') ?: '5432';
+$user = getenv('PGUSER') ?: getenv('DB_USER');
+$pass = getenv('PGPASSWORD') ?: getenv('DB_PASS');
+$dbname = getenv('PGDATABASE') ?: getenv('DB_NAME');
 
-if (!$host || !$user || !$pass || !$dbname) {
-    die("Error: Variables de entorno de base de datos no configuradas en Railway. Revisa la pestaña 'Variables'.");
+if (!$host || !$user || !$dbname) {
+    error_log("DB INIT SKIPPED: Database environment variables not set.");
+    exit(0); // No fallar, solo saltar si no hay configuración
 }
 
 $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
 
 try {
+    echo "Connecting to PostgreSQL database...\n";
     $pdo = new PDO($dsn, $user, $pass, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-    echo "<h1>Conectado a PostgreSQL exitosamente</h1>";
 
-    $files = [
-        'database_pg.sql',
-        'saas_migration_pg.sql',
-        'financial_migration_pg.sql',
-        'offers_migration_pg.sql',
-        'gallery_pg.sql',
-        'settings_pg.sql'
-    ];
+    $initFile = 'all_pg_init.sql';
+    $filePath = __DIR__ . '/' . $initFile;
 
-    echo "<ul>";
-    foreach ($files as $file) {
-        if (!file_exists(__DIR__ . '/' . $file)) {
-            echo "<li style='color:red'>Error: Archivo $file no encontrado.</li>";
-            continue;
-        }
-
-        echo "<li>Ejecutando $file... ";
-        $sql = file_get_contents(__DIR__ . '/' . $file);
-        $pdo->exec($sql);
-        echo "<span style='color:green'>Completado</span></li>";
+    if (!file_exists($filePath)) {
+        echo "Error: SQL file $initFile not found.\n";
+        exit(1);
     }
-    echo "</ul>";
 
-    echo "<h2 style='color:blue'>¡Base de datos inicializada correctamente!</h2>";
-    echo "<p style='color:orange'><strong>IMPORTANTE:</strong> Por seguridad, borra este archivo (init_railway_db.php) de tu repositorio ahora.</p>";
+    echo "Executing $initFile...\n";
+    $sql = file_get_contents($filePath);
+
+    // Ejecutar el SQL completo
+    $pdo->exec($sql);
+
+    echo "Database initialization completed successfully.\n";
 
 } catch (PDOException $e) {
-    echo "<h2 style='color:red'>Error de Conexión:</h2>";
-    echo "<pre>" . $e->getMessage() . "</pre>";
-    echo "<p>Asegúrate de haber instalado la extensión <code>pdo_pgsql</code> vía NIXPACKS_PHP_EXTENSION_INSTALL.</p>";
+    echo "DB Connection/Init Error: " . $e->getMessage() . "\n";
+    // No hacer exit(1) para no detener el despliegue si la base de datos ya está en uso o hay un error transitorio
+    // Pero si es crítico, debería fallar. Para inicialización, dejémoslo pasar con error log.
+    exit(1);
 }

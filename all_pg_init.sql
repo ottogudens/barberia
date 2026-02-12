@@ -83,7 +83,13 @@ CREATE TABLE IF NOT EXISTS services_booked (
 
 -- DEFAULT DATA
 -- Insert default categories
-INSERT INTO service_categories (category_name) VALUES ('Cortes de Cabello'), ('Barba'), ('Tratamientos');
+-- Insert default categories safely
+INSERT INTO service_categories (category_name)
+SELECT 'Cortes de Cabello' WHERE NOT EXISTS (SELECT 1 FROM service_categories WHERE category_name = 'Cortes de Cabello');
+INSERT INTO service_categories (category_name)
+SELECT 'Barba' WHERE NOT EXISTS (SELECT 1 FROM service_categories WHERE category_name = 'Barba');
+INSERT INTO service_categories (category_name)
+SELECT 'Tratamientos' WHERE NOT EXISTS (SELECT 1 FROM service_categories WHERE category_name = 'Tratamientos');
 -- SAAS MIGRATION SCRIPT (PostgreSQL Version)
 -- Phase 1: Structural Changes
 
