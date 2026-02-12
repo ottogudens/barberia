@@ -12,7 +12,7 @@ echo "Running Database Initialization..."
 php /app/init_railway_db.php
 
 # Start PHP-FPM in the background
-php-fpm -y /app/php-fpm.conf &
+php-fpm -y /app/php-fpm.conf -R &
 
 # Start Nginx in the foreground
 nginx -c /app/nginx.conf

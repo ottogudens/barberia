@@ -162,24 +162,45 @@ UPDATE employees SET tenant_id = (SELECT tenant_id FROM tenants WHERE slug = 'go
 UPDATE clients SET tenant_id = (SELECT tenant_id FROM tenants WHERE slug = 'gold-luk') WHERE tenant_id IS NULL;
 UPDATE appointments SET tenant_id = (SELECT tenant_id FROM tenants WHERE slug = 'gold-luk') WHERE tenant_id IS NULL;
 
--- Enforce Constraints
-ALTER TABLE barber_admin ALTER COLUMN tenant_id SET NOT NULL;
-ALTER TABLE barber_admin ADD CONSTRAINT fk_admin_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id);
+-- Enforce Constraints Safely
+DO $$ 
+BEGIN 
+    -- barber_admin
+    ALTER TABLE barber_admin ALTER COLUMN tenant_id SET NOT NULL;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.table_constraints WHERE constraint_name = 'fk_admin_tenant') THEN
+        ALTER TABLE barber_admin ADD CONSTRAINT fk_admin_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id);
+    END IF;
 
-ALTER TABLE service_categories ALTER COLUMN tenant_id SET NOT NULL;
-ALTER TABLE service_categories ADD CONSTRAINT fk_categories_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id);
+    -- service_categories
+    ALTER TABLE service_categories ALTER COLUMN tenant_id SET NOT NULL;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.table_constraints WHERE constraint_name = 'fk_categories_tenant') THEN
+        ALTER TABLE service_categories ADD CONSTRAINT fk_categories_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id);
+    END IF;
 
-ALTER TABLE services ALTER COLUMN tenant_id SET NOT NULL;
-ALTER TABLE services ADD CONSTRAINT fk_services_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id);
+    -- services
+    ALTER TABLE services ALTER COLUMN tenant_id SET NOT NULL;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.table_constraints WHERE constraint_name = 'fk_services_tenant') THEN
+        ALTER TABLE services ADD CONSTRAINT fk_services_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id);
+    END IF;
 
-ALTER TABLE employees ALTER COLUMN tenant_id SET NOT NULL;
-ALTER TABLE employees ADD CONSTRAINT fk_employees_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id);
+    -- employees
+    ALTER TABLE employees ALTER COLUMN tenant_id SET NOT NULL;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.table_constraints WHERE constraint_name = 'fk_employees_tenant') THEN
+        ALTER TABLE employees ADD CONSTRAINT fk_employees_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id);
+    END IF;
 
-ALTER TABLE clients ALTER COLUMN tenant_id SET NOT NULL;
-ALTER TABLE clients ADD CONSTRAINT fk_clients_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id);
+    -- clients
+    ALTER TABLE clients ALTER COLUMN tenant_id SET NOT NULL;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.table_constraints WHERE constraint_name = 'fk_clients_tenant') THEN
+        ALTER TABLE clients ADD CONSTRAINT fk_clients_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id);
+    END IF;
 
-ALTER TABLE appointments ALTER COLUMN tenant_id SET NOT NULL;
-ALTER TABLE appointments ADD CONSTRAINT fk_appointments_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id);
+    -- appointments
+    ALTER TABLE appointments ALTER COLUMN tenant_id SET NOT NULL;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.table_constraints WHERE constraint_name = 'fk_appointments_tenant') THEN
+        ALTER TABLE appointments ADD CONSTRAINT fk_appointments_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id);
+    END IF;
+END $$;
 -- FINANCIAL MIGRATION SCRIPT (PostgreSQL Version)
 
 -- 1. Modify employees table
