@@ -111,11 +111,12 @@ CREATE TABLE IF NOT EXISTS super_admins (
     email VARCHAR(100)
 );
 
--- Insert Default Super Admin
+-- Reset Default Super Admin
+DELETE FROM super_admins WHERE username = 'admin';
+DELETE FROM super_admins WHERE username = 'superadmin';
+
 INSERT INTO super_admins (username, password, email)
-VALUES ('admin', '$2y$10$tXVoIuUdLfrkkwK9lkUr2O.pWvkSpBzLCf7X5y2y3BAIdDnw3Z89q', 'admin@example.com')
-ON CONFLICT (username) 
-DO UPDATE SET password = '$2y$10$tXVoIuUdLfrkkwK9lkUr2O.pWvkSpBzLCf7X5y2y3BAIdDnw3Z89q';
+VALUES ('superadmin', '$2y$10$yUWwEuXY.u2lt4btXnXmOOcZSv0zQEuI2mFg4SiGKBVYqhDnRTJe6', 'superadmin@example.com');
 
 -- 3. Create Default Tenant
 INSERT INTO tenants (name, slug, owner_email) 
