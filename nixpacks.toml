@@ -5,4 +5,4 @@ nixPkgs = ["php83", "php83Extensions.pdo_pgsql", "php83Extensions.pgsql", "nginx
 NIXPACKS_PHP_EXTENSION_INSTALL = "pdo_pgsql,pgsql"
 
 [start]
-cmd = "php-fpm -y /assets/php-fpm.conf & nginx -c /nginx.conf"
+cmd = "chmod +x /app/start.sh && /app/start.sh"
