@@ -44,6 +44,16 @@ if (isset($_SESSION['super_admin_username'])) {
                 $stmt->execute([$username]);
                 $row = $stmt->fetch();
 
+                // DEBUG LOGGING
+                error_log("Login Attempt: Username='{$username}'");
+                if ($row) {
+                    error_log("User found in DB. Hash: " . $row['password']);
+                    $verify = password_verify($password, $row['password']);
+                    error_log("Password Verify Result: " . ($verify ? 'TRUE' : 'FALSE'));
+                } else {
+                    error_log("User NOT found in DB.");
+                }
+
                 if ($row && password_verify($password, $row['password'])) {
                     $_SESSION['super_admin_username'] = $username;
                     $_SESSION['super_admin_id'] = $row['id'];
