@@ -14,8 +14,6 @@
 	{
     	margin: -175px 0 0 31px;
 	}
-
-	
 }
 
 @media (max-width: 767px)
@@ -44,6 +42,175 @@
 	{
 		font-size: 10px;
 	}
+
+	/* Mobile Hero Section */
+	.hero-section {
+		height: 70vh;
+		min-height: 500px;
+	}
+
+	.hero-title {
+		font-size: 2rem !important;
+		line-height: 1.2;
+	}
+
+	.hero-subtitle {
+		font-size: 1rem !important;
+	}
+
+	/* Mobile Services Section */
+	.services-section {
+		padding: 40px 0 !important;
+	}
+
+	.service-box {
+		padding: 30px 20px !important;
+		margin-bottom: 20px;
+	}
+
+	.section-title {
+		font-size: 1.8rem !important;
+		margin-bottom: 30px;
+	}
+
+	/* Mobile About Section */
+	.about-section {
+		padding: 40px 0 !important;
+	}
+
+	.about-section h2 {
+		font-size: 1.8rem !important;
+	}
+
+	/* Mobile Team Section */
+	.team-section {
+		padding: 40px 0 !important;
+	}
+
+	.team-member {
+		margin-bottom: 20px;
+	}
+
+	/* Mobile Gallery */
+	.gallery-section {
+		padding: 40px 0 !important;
+	}
+
+	/* Mobile Contact Section */
+	.contact-section {
+		padding: 40px 0 !important;
+	}
+
+	.contact-info h2 {
+		font-size: 1.8rem !important;
+	}
+
+	/* Mobile Footer */
+	.footer_social {
+		text-align: center !important;
+		margin-top: 20px;
+	}
+
+	.footer_social li {
+		display: block;
+		margin-bottom: 10px;
+	}
+
+	.footer_social li a {
+		margin-left: 0 !important;
+	}
+
+	.copyright {
+		text-align: center !important;
+		margin-bottom: 20px;
+	}
+
+	/* Mobile Pricing */
+	.pricing_section {
+		padding: 40px 0 !important;
+	}
+
+	/* Mobile Widget Section */
+	.widget_section {
+		padding: 40px 0 !important;
+	}
+}
+
+/* Extra Small Devices (phones, less than 576px) */
+@media (max-width: 575px) {
+	.hero-title {
+		font-size: 1.75rem !important;
+	}
+
+	.hero-subtitle {
+		font-size: 0.9rem !important;
+	}
+
+	.section-title {
+		font-size: 1.5rem !important;
+	}
+
+	.btn-gold, .default_btn {
+		padding: 10px 20px !important;
+		font-size: 11px !important;
+	}
+
+	.service-box h4, .service-box h3 {
+		font-size: 1.2rem !important;
+	}
+
+	.service-box p {
+		font-size: 0.9rem !important;
+	}
+
+	/* Mobile Appointment Form */
+	.appointment_form {
+		padding: 20px !important;
+	}
+
+	.appointment_form .form-control {
+		height: 45px !important;
+	}
+
+	/* Mobile Navbar Adjustments */
+	.header-section {
+		height: 70px !important;
+	}
+
+	.navbar-brand img {
+		max-height: 50px !important;
+	}
+
+	ul.nav li a {
+		line-height: 70px !important;
+	}
+
+	/* Mobile Table Responsiveness */
+	.table-responsive {
+		font-size: 0.85rem;
+	}
+
+	/* Mobile Padding Adjustments */
+	.container {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+
+	/* Mobile Text Adjustments */
+	h1 { font-size: 1.75rem !important; }
+	h2 { font-size: 1.5rem !important; }
+	h3 { font-size: 1.25rem !important; }
+	h4 { font-size: 1.1rem !important; }
+	h5 { font-size: 1rem !important; }
+
+	/* Mobile Card Adjustments */
+	.card {
+		margin-bottom: 15px;
+	}
+
+	.card-body {
+		padding: 15px !important;
+	}
 }
 
 @media (max-width: 1230px)
@@ -56,5 +223,33 @@
     a.mob-menu-toggle 
     {
      	display: block !important;
+	}
+}
+
+/* Tablet Landscape (768px - 992px) */
+@media (min-width: 768px) and (max-width: 992px) {
+	.hero-title {
+		font-size: 2.5rem !important;
+	}
+
+	.hero-subtitle {
+		font-size: 1.25rem !important;
+	}
+
+	.section-title {
+		font-size: 2rem !important;
+	}
+}
+
+/* Print Styles */
+@media print {
+	.navbar, .footer_section, .mob-menu-toggle, #menu_mobile {
+		display: none !important;
+	}
+
+	.hero-section {
+		height: auto !important;
+		min-height: 0 !important;
+		page-break-after: always;
 	}
 }
