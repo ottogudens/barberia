@@ -17,7 +17,7 @@ if (isset($_SESSION['super_admin_username'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SaaS Super Admin Login</title>
+    <title>SKBarber Super Admin Login</title>
     <link href="../Design/fonts/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -30,7 +30,7 @@ if (isset($_SESSION['super_admin_username'])) {
     <div class="login">
         <form class="login-container" method="POST" action="login.php">
             <?php csrfInput(); ?>
-            <h2 class="text-center mb-4" style="color:#D4AF37;">Super Admin Access</h2>
+            <h2 class="text-center mb-4" style="color:#D4AF37;">SKBarber - Super Admin</h2>
 
             <?php
             if ($_SERVER["REQUEST_METHOD"] == "POST") {

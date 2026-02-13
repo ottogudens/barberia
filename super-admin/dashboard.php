@@ -35,7 +35,7 @@ $tenants = $stmt->fetchAll();
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-gold sidebar sidebar-dark accordion" id="accordionSidebar">
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard.php">
-                <div class="sidebar-brand-text mx-3">Barberia SaaS</div>
+                <div class="sidebar-brand-text mx-3">SKBarber</div>
             </a>
             <hr class="sidebar-divider my-0">
             <li class="nav-item active">
@@ -107,7 +107,7 @@ $tenants = $stmt->fetchAll();
                                                 <td><?php echo $tenant['tenant_id']; ?></td>
                                                 <td><?php echo htmlspecialchars($tenant['name']); ?></td>
                                                 <td>
-                                                    <a href="http://<?php echo $tenant['slug'] == 'gold-luk' ? 'localhost:8000' : $tenant['slug'] . '.localhost:8000'; ?>/?tenant_slug=<?php echo $tenant['slug']; ?>"
+                                                    <a href="https://barberia.skale.cl/<?php echo $tenant['slug']; ?>"
                                                         target="_blank">
                                                         <?php echo $tenant['slug']; ?>
                                                     </a>

@@ -5,7 +5,7 @@ include "Includes/tenant_context.php";
 $tenant_id = getCurrentTenantId($con);
 
 if (!$tenant_id) {
-    include "saas_landing.php";
+    include "landing.php";
     exit();
 }
 

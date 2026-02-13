@@ -14,29 +14,21 @@ function getCurrentTenantId($con)
     if (isset($_GET['tenant_slug'])) {
         $slug = $_GET['tenant_slug'];
     } else {
-        // 2. Extract from Host
-        $host = $_SERVER['HTTP_HOST'];
-        $host = explode(':', $host)[0]; // Remove port
-        $parts = explode('.', $host);
+        // 2. Extract from URL PATH (e.g., barberia.skale.cl/slug)
+        $uri = $_SERVER['REQUEST_URI'];
+        $path = parse_url($uri, PHP_URL_PATH);
+        $segments = array_filter(explode('/', $path));
 
-        // Logic for Production Domain (e.g., barberia.com)
-        // sub.barberia.com -> 3 parts
-        // www.barberia.com -> exclude 'www'
-        if (count($parts) > 2) {
-            $sub = $parts[0];
-            if ($sub !== 'www') {
-                $slug = $sub;
+        // If first segment exists and is not a system path, use it as slug
+        if (!empty($segments)) {
+            $firstSegment = reset($segments);
+
+            // Exclude system paths
+            $systemPaths = ['super-admin', 'admin', 'register_tenant.php', 'landing.php', 'Design', 'Includes'];
+
+            if (!in_array($firstSegment, $systemPaths) && !str_ends_with($firstSegment, '.php')) {
+                $slug = $firstSegment;
             }
-        } elseif (count($parts) == 2 && $parts[1] == 'localhost') {
-            $slug = $parts[0]; // local.localhost
-        } elseif ($host === 'localhost') {
-            // Fallback for localhost
-            // We can check session before falling back to 1
-            if (isset($_SESSION['tenant_id'])) {
-                return $_SESSION['tenant_id'];
-            }
-            // Else use default
-            return 1;
         }
     }
 
