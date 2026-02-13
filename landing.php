@@ -366,9 +366,9 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <h1>La Plataforma Definitiva para Gestionar tu Barbería</h1>
-            <p>Sistema completo de gestión multi-tenant diseñado específicamente para barberías modernas. Reservas,
-                clientes, empleados y más, todo en un solo lugar.</p>
+            <h1>Gestiona tu Barbería como un Profesional</h1>
+            <p>La plataforma completa diseñada para dueños de barberías que quieren tomar el control total de su
+                negocio. Automatiza reservas, gestiona tu equipo, y aumenta tus ingresos.</p>
             <div class="hero-buttons">
                 <a href="register_tenant.php" class="cta-button">Comenzar Gratis</a>
                 <a href="#features" class="button-secondary">Ver Características</a>
@@ -378,88 +378,93 @@
 
     <!-- Features Section -->
     <section id="features" class="features">
-        <h2 class="section-title">Características Potentes</h2>
+        <h2 class="section-title">Todo lo que Necesitas para Crecer</h2>
         <div class="features-grid">
             <div class="feature-card">
                 <div class="feature-icon"><i class="fas fa-calendar-check"></i></div>
-                <h3>Gestión de Citas</h3>
-                <p>Sistema completo de reservas online con notificaciones automáticas y recordatorios para tus clientes.
-                </p>
+                <h3>Reservas 24/7</h3>
+                <p>Tus clientes pueden reservar en cualquier momento. Sistema automático de confirmaciones y
+                    recordatorios que reduce las ausencias.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-users"></i></div>
-                <h3>Multi-Tenant</h3>
-                <p>Cada barbería tiene su propio espacio aislado con datos completamente separados y seguros.</p>
+                <div class="feature-icon"><i class="fas fa-store"></i></div>
+                <h3>Panel de Control Completo</h3>
+                <p>Visualiza todo tu negocio desde un solo lugar. Controla citas, empleados, servicios y clientes con
+                    facilidad.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
-                <h3>Análisis y Reportes</h3>
-                <p>Visualiza el rendimiento de tu negocio con reportes detallados y análisis en tiempo real.</p>
+                <h3>Reportes de Ingresos</h3>
+                <p>Toma decisiones informadas con reportes detallados de ventas, servicios más solicitados, y
+                    rendimiento de tu equipo.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-user-tie"></i></div>
+                <div class="feature-icon"><i class="fas fa-users-cog"></i></div>
                 <h3>Gestión de Empleados</h3>
-                <p>Administra horarios, servicios y comisiones de tus empleados desde un solo panel.</p>
+                <p>Administra horarios, comisiones y desempeño de tus barberos. Asigna servicios y controla la
+                    productividad.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
-                <h3>100% Responsive</h3>
-                <p>Accede desde cualquier dispositivo: desktop, tablet o smartphone con una experiencia fluida.</p>
+                <div class="feature-icon"><i class="fas fa-database"></i></div>
+                <h3>Base de Datos de Clientes</h3>
+                <p>Mantén un historial completo de cada cliente: preferencias, servicios anteriores, y notas importantes
+                    para un servicio personalizado.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-lock"></i></div>
-                <h3>Seguridad Premium</h3>
-                <p>Tus datos están protegidos con encriptación de nivel empresarial y backups automáticos.</p>
+                <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3>100% Seguro</h3>
+                <p>Tus datos y los de tus clientes están protegidos con encriptación de nivel bancario. Backups
+                    automáticos diarios.</p>
             </div>
         </div>
     </section>
 
     <!-- Pricing Section -->
     <section id="pricing" class="pricing">
-        <h2 class="section-title">Precios Transparentes</h2>
+        <h2 class="section-title">Planes para Cada Etapa de tu Negocio</h2>
         <div class="pricing-grid">
             <div class="pricing-card">
                 <h3>Starter</h3>
                 <div class="price">Gratis</div>
                 <ul class="pricing-features">
                     <li><i class="fas fa-check"></i> Hasta 50 citas/mes</li>
-                    <li><i class="fas fa-check"></i> 1 Empleado</li>
+                    <li><i class="fas fa-check"></i> 1 Barbero</li>
                     <li><i class="fas fa-check"></i> Gestión básica de clientes</li>
                     <li><i class="fas fa-check"></i> Soporte por email</li>
                 </ul>
-                <a href="register_tenant.php" class="cta-button">Empezar</a>
+                <a href="register_tenant.php" class="cta-button">Empezar Ahora</a>
             </div>
             <div class="pricing-card featured">
                 <h3>Professional</h3>
                 <div class="price">$29<span>/mes</span></div>
                 <ul class="pricing-features">
                     <li><i class="fas fa-check"></i> Citas ilimitadas</li>
-                    <li><i class="fas fa-check"></i> Hasta 5 Empleados</li>
-                    <li><i class="fas fa-check"></i> Reportes avanzados</li>
+                    <li><i class="fas fa-check"></i> Hasta 5 Barberos</li>
+                    <li><i class="fas fa-check"></i> Reportes de ingresos</li>
                     <li><i class="fas fa-check"></i> Notificaciones SMS</li>
                     <li><i class="fas fa-check"></i> Soporte prioritario</li>
                 </ul>
-                <a href="register_tenant.php" class="cta-button">Comenzar Prueba</a>
+                <a href="register_tenant.php" class="cta-button">Prueba 14 Días Gratis</a>
             </div>
             <div class="pricing-card">
                 <h3>Enterprise</h3>
-                <div class="price">Custom</div>
+                <div class="price">Personalizado</div>
                 <ul class="pricing-features">
                     <li><i class="fas fa-check"></i> Todo en Professional</li>
-                    <li><i class="fas fa-check"></i> Empleados ilimitados</li>
+                    <li><i class="fas fa-check"></i> Barberos ilimitados</li>
+                    <li><i class="fas fa-check"></i> Múltiples sucursales</li>
                     <li><i class="fas fa-check"></i> API personalizada</li>
                     <li><i class="fas fa-check"></i> Soporte 24/7</li>
-                    <li><i class="fas fa-check"></i> Entrenamiento dedicado</li>
                 </ul>
-                <a href="#contacto" class="cta-button">Contactar</a>
+                <a href="mailto:skbarber@skale.cl" class="cta-button">Contactar Ventas</a>
             </div>
         </div>
     </section>
 
     <!-- CTA Section -->
     <section class="cta-section">
-        <h2>¿Listo para Transformar tu Barbería?</h2>
-        <p>Únete a cientos de barberías que ya confían en SKBarber</p>
+        <h2>¿Listo para Llevar tu Barbería al Siguiente Nivel?</h2>
+        <p>Únete a cientos de dueños de barberías que ya confían en SKBarber para hacer crecer su negocio</p>
         <a href="register_tenant.php" class="cta-button">Crear mi Cuenta Gratis</a>
     </section>
 
@@ -467,6 +472,7 @@
     <footer>
         <p>&copy; 2026 SKBarber by <a href="https://skale.cl" target="_blank">Skale IA</a>. Todos los derechos
             reservados.</p>
+        <p>Contacto: <a href="mailto:skbarber@skale.cl">skbarber@skale.cl</a></p>
     </footer>
 </body>
 
