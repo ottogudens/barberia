@@ -55,7 +55,12 @@ CREATE TABLE IF NOT EXISTS clients (
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     phone_number VARCHAR(20) NOT NULL,
-    client_email VARCHAR(100) NOT NULL UNIQUE
+    client_email VARCHAR(100) NOT NULL,
+    password VARCHAR(255),
+    tenant_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id) ON DELETE CASCADE,
+    UNIQUE(client_email, tenant_id)
 );
 
 -- TABLE: appointments
