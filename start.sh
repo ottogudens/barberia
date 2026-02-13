@@ -4,7 +4,14 @@
 sed -i "s/\$PORT/$PORT/g" /app/nginx.conf
 
 # Configure PHP-FPM user and group dynamically
-# Ensure /run/php exists for sockets if needed (though we use /tmp)
+sed -i "s/FPM_USER/$(whoami)/g" /app/php-fpm.conf
+sed -i "s/FPM_GROUP/$(id -gn)/g" /app/php-fpm.conf
+
+# Initialize Database
+echo "Running Database Initialization..."
+php /app/init_railway_db.php
+
+# Create directory for sockets if needed
 mkdir -p /tmp/php
 
 # Start PHP-FPM in the background
