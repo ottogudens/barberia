@@ -3,7 +3,7 @@
 <header id="header" class="header-section">
     <div class="container">
         <nav class="navbar">
-            <a href="#" class="navbar-brand">
+            <a href="index.php" class="navbar-brand">
                 <?php
                 $logoSrc = isset($settings['website_logo']) && !empty($settings['website_logo']) ? $settings['website_logo'] : 'Design/images/barbershop_logo.png';
                 ?>
