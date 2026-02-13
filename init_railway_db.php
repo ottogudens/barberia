@@ -29,6 +29,24 @@ try {
 
     echo "Database initialized successfully.\n";
 
+    echo "Ensuring Super Admin exists via PHP...\n";
+    try {
+        $con->exec("DELETE FROM super_admins WHERE username = 'admin'");
+        $con->exec("DELETE FROM super_admins WHERE username = 'superadmin'");
+
+        $stmt = $con->prepare("INSERT INTO super_admins (username, password, email) VALUES (?, ?, ?)");
+        $result = $stmt->execute(['superadmin', '$2y$10$yUWwEuXY.u2lt4btXnXmOOcZSv0zQEuI2mFg4SiGKBVYqhDnRTJe6', 'superadmin@example.com']);
+
+        if ($result) {
+            echo "Super Admin Inserted via PHP successfully.\n";
+        } else {
+            echo "Super Admin Insert via PHP returned FALSE.\n";
+            print_r($stmt->errorInfo());
+        }
+    } catch (PDOException $e) {
+        echo "Super Admin Insert Failed: " . $e->getMessage() . "\n";
+    }
+
     // VERIFICATION
     $stmt = $con->query("SELECT username, password FROM super_admins WHERE username = 'superadmin'");
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
