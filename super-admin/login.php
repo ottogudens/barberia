@@ -44,20 +44,9 @@ if (isset($_SESSION['super_admin_username'])) {
                 $stmt->execute([$username]);
                 $row = $stmt->fetch();
 
-                // DEBUG LOGGING
-                error_log("Login Attempt: Username='{$username}'");
-
-                // Extra Debug: Check if table even exists and has data
-                $count = $con->query("SELECT count(*) FROM super_admins")->fetchColumn();
-                error_log("Debug: Total rows in super_admins table: $count");
-
-                if ($row) {
-                    error_log("User found in DB. Hash: " . $row['password']);
-                    $verify = password_verify($password, $row['password']);
-                    error_log("Password Verify Result: " . ($verify ? 'TRUE' : 'FALSE'));
-                } else {
-                    error_log("User NOT found in DB.");
-                }
+                $stmt = $con->prepare("SELECT id, username, password FROM super_admins WHERE username = ?");
+                $stmt->execute([$username]);
+                $row = $stmt->fetch();
 
                 if ($row && password_verify($password, $row['password'])) {
                     $_SESSION['super_admin_username'] = $username;
