@@ -24,6 +24,9 @@ $option = array(
 try {
     $con = new PDO($dsn, $user, $pass, $option);
 
+    // DEBUG: Log successful connection
+    error_log("DB Connected: Host=$host, DB=$dbname");
+
     // Check if tables exist
     $checkSql = "SELECT count(*) FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'tenants'";
     $stmt = $con->query($checkSql);
