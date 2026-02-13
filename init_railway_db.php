@@ -29,6 +29,15 @@ try {
 
     echo "Database initialized successfully.\n";
 
+    // VERIFICATION
+    $stmt = $con->query("SELECT username, password FROM super_admins WHERE username = 'superadmin'");
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($user) {
+        echo "VERIFICATION SUCCESS: User 'superadmin' found in DB. Hash starts with: " . substr($user['password'], 0, 10) . "...\n";
+    } else {
+        echo "VERIFICATION FAILED: User 'superadmin' NOT found in DB after Insert!\n";
+    }
+
 } catch (PDOException $e) {
     echo "DB Init Error: " . $e->getMessage() . "\n";
     // Do not exit with error to avoid crashing the container on transient errors
