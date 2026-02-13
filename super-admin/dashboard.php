@@ -21,11 +21,73 @@ $tenants = $stmt->fetchAll();
     <meta charset="UTF-8">
     <title>Super Admin Dashboard</title>
     <link href="../Design/css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="../Design/fonts/css/all.min.css" rel="stylesheet">
+    <link href="../Design/fonts/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
     <style>
+        /* Custom SKBarber Super Admin Styles */
         .bg-gradient-gold {
-            background: linear-gradient(180deg, #D4AF37 10%, #111 100%);
-            background-size: cover;
+            background: linear-gradient(180deg, #D4AF37 10%, #C5A028 100%);
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #000;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.875rem;
+            margin: 0 2px;
+        }
+
+        .table td,
+        .table th {
+            vertical-align: middle;
+        }
+
+        .badge-success {
+            background-color: #28a745;
+        }
+
+        .badge-warning {
+            background-color: #ffc107;
+            color: #000;
+        }
+
+        .sidebar-brand-text {
+            color: #000 !important;
+            font-weight: 700;
+        }
+
+        .nav-item .nav-link {
+            color: rgba(0, 0, 0, .8);
+        }
+
+        .nav-item .nav-link:hover {
+            color: rgba(0, 0, 0, 1);
+        }
+
+        .card-header {
+            background-color: #f8f9fc;
+            border-bottom: 1px solid #e3e6f0;
         }
     </style>
 </head>

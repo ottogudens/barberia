@@ -17,6 +17,15 @@ function getCurrentTenantId($con)
         // 2. Extract from URL PATH (e.g., barberia.skale.cl/slug)
         $uri = $_SERVER['REQUEST_URI'];
         $path = parse_url($uri, PHP_URL_PATH);
+
+        // Skip static files (CSS, JS, images, etc)
+        $staticExtensions = ['.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.eot'];
+        foreach ($staticExtensions as $ext) {
+            if (str_ends_with($path, $ext)) {
+                return null; // Not a tenant request, it's a static file
+            }
+        }
+
         $segments = array_filter(explode('/', $path));
 
         // If first segment exists and is not a system path, use it as slug
@@ -24,7 +33,7 @@ function getCurrentTenantId($con)
             $firstSegment = reset($segments);
 
             // Exclude system paths
-            $systemPaths = ['super-admin', 'admin', 'register_tenant.php', 'landing.php', 'Design', 'Includes'];
+            $systemPaths = ['super-admin', 'admin', 'register_tenant.php', 'landing.php', 'Design', 'Includes', 'admin_login.php'];
 
             if (!in_array($firstSegment, $systemPaths) && !str_ends_with($firstSegment, '.php')) {
                 $slug = $firstSegment;
