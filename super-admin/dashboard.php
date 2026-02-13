@@ -45,6 +45,12 @@ $tenants = $stmt->fetchAll();
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="change_password.php">
+                    <i class="fas fa-fw fa-key"></i>
+                    <span>Change Password</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="logout.php">
                     <i class="fas fa-fw fa-sign-out-alt"></i>
                     <span>Logout</span>
@@ -60,6 +66,20 @@ $tenants = $stmt->fetchAll();
                 </nav>
 
                 <div class="container-fluid">
+                    <?php if (isset($_SESSION['msg'])): ?>
+                        <div class="alert alert-<?php echo $_SESSION['msg_type']; ?> alert-dismissible fade show"
+                            role="alert">
+                            <?php echo $_SESSION['msg']; ?>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <?php
+                        unset($_SESSION['msg']);
+                        unset($_SESSION['msg_type']);
+                        ?>
+                    <?php endif; ?>
+
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 d-flex justify-content-between">
                             <h6 class="m-0 font-weight-bold text-primary">Listado de Barberías</h6>
@@ -93,11 +113,33 @@ $tenants = $stmt->fetchAll();
                                                     </a>
                                                 </td>
                                                 <td><?php echo htmlspecialchars($tenant['owner_email']); ?></td>
-                                                <td><?php echo $tenant['status']; ?></td>
+                                                <td>
+                                                    <?php if ($tenant['status'] == 'active'): ?>
+                                                        <span class="badge badge-success">Active</span>
+                                                    <?php elseif ($tenant['status'] == 'suspended'): ?>
+                                                        <span class="badge badge-warning">Suspended</span>
+                                                    <?php else: ?>
+                                                        <span
+                                                            class="badge badge-secondary"><?php echo $tenant['status']; ?></span>
+                                                    <?php endif; ?>
+                                                </td>
                                                 <td><?php echo $tenant['created_at']; ?></td>
                                                 <td>
-                                                    <a href="#" class="btn btn-info btn-sm">Editar</a>
-                                                    <a href="#" class="btn btn-danger btn-sm">Suspender</a>
+                                                    <a href="edit_tenant.php?tenant_id=<?php echo $tenant['tenant_id']; ?>"
+                                                        class="btn btn-info btn-sm">Editar</a>
+
+                                                    <?php if ($tenant['status'] == 'suspended'): ?>
+                                                        <a href="tenant_action.php?tenant_id=<?php echo $tenant['tenant_id']; ?>&action=activate"
+                                                            class="btn btn-success btn-sm">Activar</a>
+                                                    <?php else: ?>
+                                                        <a href="tenant_action.php?tenant_id=<?php echo $tenant['tenant_id']; ?>&action=suspend"
+                                                            class="btn btn-warning btn-sm"
+                                                            onclick="return confirm('¿Seguro que quieres suspender esta barbería?');">Suspender</a>
+                                                    <?php endif; ?>
+
+                                                    <a href="tenant_action.php?tenant_id=<?php echo $tenant['tenant_id']; ?>&action=delete"
+                                                        class="btn btn-danger btn-sm"
+                                                        onclick="return confirm('¡ADVERTENCIA! Esto eliminará TODOS los datos de esta barbería permanentemente. ¿Estás seguro?');">Eliminar</a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
