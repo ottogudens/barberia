@@ -9,8 +9,29 @@ if (isset($_SESSION['super_admin_username'])) {
     header('Location: dashboard.php');
     exit();
 }
-?>
 
+// Handle login POST request
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!verifyCsrfToken($_POST['csrf_token'])) {
+        die("CSRF Validation Failed");
+    }
+    $username = test_input($_POST['username']);
+    $password = test_input($_POST['password']);
+
+    $stmt = $con->prepare("SELECT id, username, password FROM super_admins WHERE username = ?");
+    $stmt->execute([$username]);
+    $row = $stmt->fetch();
+
+    if ($row && password_verify($password, $row['password'])) {
+        $_SESSION['super_admin_username'] = $username;
+        $_SESSION['super_admin_id'] = $row['id'];
+        header('Location: dashboard.php');
+        exit();
+    } else {
+        $loginError = "Usuario o contraseña incorrectos.";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,29 +54,8 @@ if (isset($_SESSION['super_admin_username'])) {
             <h2 class="text-center mb-4" style="color:#D4AF37;">SKBarber - Super Admin</h2>
 
             <?php
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                if (!verifyCsrfToken($_POST['csrf_token'])) {
-                    die("CSRF Validation Failed");
-                }
-                $username = test_input($_POST['username']);
-                $password = test_input($_POST['password']);
-
-                $stmt = $con->prepare("SELECT id, username, password FROM super_admins WHERE username = ?");
-                $stmt->execute([$username]);
-                $row = $stmt->fetch();
-
-                $stmt = $con->prepare("SELECT id, username, password FROM super_admins WHERE username = ?");
-                $stmt->execute([$username]);
-                $row = $stmt->fetch();
-
-                if ($row && password_verify($password, $row['password'])) {
-                    $_SESSION['super_admin_username'] = $username;
-                    $_SESSION['super_admin_id'] = $row['id'];
-                    header('Location: dashboard.php');
-                    exit();
-                } else {
-                    echo "<div class='alert alert-danger'>Usuario o contraseña incorrectos.</div>";
-                }
+            if (isset($loginError)) {
+                echo "<div class='alert alert-danger'>$loginError</div>";
             }
             ?>
 
