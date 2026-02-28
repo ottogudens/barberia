@@ -15,27 +15,70 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
     $tenant_id = getCurrentTenantId($con);
 
     ?>
+    ?>
     <!-- Begin Page Content -->
-    <div class="container-fluid">
+    <div class="container-fluid py-4">
+
+        <?php if ($_SESSION['username_barbershop_Xw211qAAsq4'] == 'demo'): ?>
+            <div class="alert alert-info border-0 shadow-sm glass-card mb-4 d-flex align-items-center animate-fade-in"
+                style="background: rgba(49, 130, 206, 0.2);">
+                <i class="fas fa-info-circle mr-3 fa-lg text-info"></i>
+                <div>
+                    <span class="font-weight-bold">Modo Demostración Activo:</span>
+                    Estás visualizando datos de prueba reales. Puedes resetear el entorno en cualquier momento.
+                </div>
+            </div>
+            <?php if (isset($_SESSION['demo_reset_msg'])): ?>
+                <script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Listo',
+                        text: '<?php echo $_SESSION['demo_reset_msg'];
+                        unset($_SESSION['demo_reset_msg']); ?>',
+                        timer: 3000,
+                        showConfirmButton: false,
+                        background: '#1a202c',
+                        color: '#fff'
+                    });
+                </script>
+            <?php endif; ?>
+        <?php endif; ?>
 
         <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4 animate-fade-in">
+            <h1 class="h3 mb-0 text-white font-weight-bold">Dashboard Administrativo</h1>
+            <div class="d-flex">
+                <?php if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && $_SESSION['username_barbershop_Xw211qAAsq4'] == 'demo'): ?>
+                    <button class="btn btn-outline-warning btn-sm shadow-sm mr-2 glass-card" onclick="resetDemo()">
+                        <i class="fas fa-sync-alt"></i> Resetear Demo
+                    </button>
+                <?php endif; ?>
+                <a href="reservations_stats.php"
+                    class="d-none d-sm-inline-block btn btn-sm btn-outline-light shadow-sm mr-2 glass-card">
+                    <i class="fas fa-download fa-sm text-white-50"></i> Generar Reporte
+                </a>
+                <button class="btn btn-primary btn-sm shadow-sm"
+                    onclick="Swal.fire('Tip', 'Puedes ver el historial detallado en la sección de reportes', 'info')">
+                    <i class="fas fa-lightbulb"></i> Ver Tips
+                </button>
+            </div>
+        </div>
 
-        <!-- Content Row -->
+        <!-- KPI Cards Row -->
         <div class="row">
 
             <div class="col-xl-3 col-md-6 mb-4 animate-fade-in">
-                <div class="card glass-card border-left-primary shadow h-100 py-2 border-0">
+                <div class="card glass-card shadow h-100 py-2 border-left-primary">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    Total de Clientes
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Clientes</div>
+                                <div class="h3 mb-0 font-weight-bold text-white">
+                                    <?php echo countItems("client_id", "clients", $tenant_id) ?>
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-white">
-                                    <?php echo countItems("client_id", "clients", $tenant_id) ?></div>
                             </div>
                             <div class="col-auto">
-                                <i class="bs bs-boy fa-2x text-gray-300"></i>
+                                <i class="fas fa-users fa-2x text-gray-800 opacity-50"></i>
                             </div>
                         </div>
                     </div>
@@ -43,201 +86,114 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
             </div>
 
             <div class="col-xl-3 col-md-6 mb-4 animate-fade-in" style="animation-delay: 0.1s;">
-                <div class="card glass-card border-left-success shadow h-100 py-2 border-0">
+                <div class="card glass-card shadow h-100 py-2 border-left-success">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Total de Servicios
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Ventas Hoy</div>
+                                <div class="h3 mb-0 font-weight-bold text-white">
+                                    <?php
+                                    $stmt = $con->prepare("SELECT SUM(total_amount) FROM appointments WHERE tenant_id = ? AND is_paid = 1 AND DATE(paid_at) = CURRENT_DATE");
+                                    $stmt->execute([$tenant_id]);
+                                    echo "$" . number_format($stmt->fetchColumn() ?: 0, 0);
+                                    ?>
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-white">
-                                    <?php echo countItems("service_id", "services", $tenant_id) ?></div>
                             </div>
-                            <div class="col-auto">
-                                <i class="bs bs-scissors-1 fa-2x text-gray-300"></i>
-                            </div>
+                            <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-800 opacity-50"></i></div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="col-xl-3 col-md-6 mb-4 animate-fade-in" style="animation-delay: 0.2s;">
-                <div class="card glass-card border-left-info shadow h-100 py-2 border-0">
+                <div class="card glass-card shadow h-100 py-2 border-left-warning">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                    Empleados
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pendiente de Cobro
                                 </div>
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col-auto">
-                                        <div class="h5 mb-0 mr-3 font-weight-bold text-white">
-                                            <?php echo countItems("employee_id", "employees", $tenant_id) ?></div>
-                                    </div>
+                                <div class="h3 mb-0 font-weight-bold text-white">
+                                    <?php
+                                    $stmt = $con->prepare("SELECT COUNT(*) FROM appointments WHERE tenant_id = ? AND is_paid = 0 AND canceled = 0");
+                                    $stmt->execute([$tenant_id]);
+                                    echo $stmt->fetchColumn() ?: 0;
+                                    ?>
                                 </div>
                             </div>
-                            <div class="col-auto">
-                                <i class="bs bs-man fa-2x text-gray-300"></i>
-                            </div>
+                            <div class="col-auto"><i class="fas fa-clock fa-2x text-gray-800 opacity-50"></i></div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="col-xl-3 col-md-6 mb-4 animate-fade-in" style="animation-delay: 0.3s;">
-                <div class="card glass-card border-left-warning shadow h-100 py-2 border-0">
+                <div class="card glass-card shadow h-100 py-2 border-left-info">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                    Citas
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Citas Finalizadas Hoy
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-white">
-                                    <?php echo countItems("appointment_id", "appointments", $tenant_id) ?></div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-md-6 mb-4 animate-fade-in" style="animation-delay: 0.3s;">
-                <div class="card glass-card border-left-warning shadow h-100 py-2 border-0">
-                    <div class="card-body">
-                        <ul class="nav nav-tabs glass-card border-0 mb-3 p-1" id="appointmentTab" role="tablist" style="background: rgba(255,255,255,0.05);">
-                            <li class="nav-item">
-                                <a class="nav-link active text-white" id="upcoming-tab" data-toggle="tab" href="#upcoming" role="tab">Próximas</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" id="all-tab" data-toggle="tab" href="#all" role="tab">Todas</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" id="canceled-tab" data-toggle="tab" href="#canceled" role="tab">Canceladas</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Ventas del Día -->
-            <div class="col-xl-3 col-md-6 mb-4 animate-fade-in" style="animation-delay: 0.4s;">
-                <div class="card glass-card border-left-primary shadow h-100 py-2 border-0">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    Ventas Hoy
-                                </div>
-                                <div class="h5 mb-0 font-weight-bold text-white">
+                                <div class="h3 mb-0 font-weight-bold text-white">
                                     <?php
-                                    $stmt = $con->prepare("SELECT SUM(total_amount) FROM appointments WHERE tenant_id = ? AND is_paid = 1 AND DATE(paid_at) = CURRENT_DATE");
+                                    $stmt = $con->prepare("SELECT COUNT(*) FROM appointments WHERE tenant_id = ? AND DATE(start_time) = CURRENT_DATE AND canceled = 0");
                                     $stmt->execute([$tenant_id]);
-                                    echo "$" . number_format($stmt->fetchColumn() ?: 0, 2);
+                                    echo $stmt->fetchColumn() ?: 0;
                                     ?>
                                 </div>
                             </div>
-                            <div class="col-auto">
-                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                            </div>
+                            <div class="col-auto"><i class="fas fa-check-circle fa-2x text-gray-800 opacity-50"></i></div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Ventas de la Semana -->
-            <div class="col-xl-3 col-md-6 mb-4 animate-fade-in" style="animation-delay: 0.5s;">
-                <div class="card glass-card border-left-success shadow h-100 py-2 border-0">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Ventas Semana
-                                </div>
-                                <div class="h5 mb-0 font-weight-bold text-white">
-                                    <?php
-                                    $stmt = $con->prepare("SELECT SUM(total_amount) FROM appointments WHERE tenant_id = ? AND is_paid = 1 AND paid_at >= DATE_TRUNC('week', CURRENT_DATE)");
-                                    $stmt->execute([$tenant_id]);
-                                    echo "$" . number_format($stmt->fetchColumn() ?: 0, 2);
-                                    ?>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-chart-line fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
+        <!-- Charts and Lists Row -->
         <div class="row">
-            <div class="row animate-fade-in" style="animation-delay: 0.4s;">
-            <div class="col-lg-12">
-                <div class="card glass-card shadow mb-4 border-0">
-                    <div class="card-header py-3 bg-transparent border-secondary">
-                        <h6 class="m-0 font-weight-bold text-gold text-uppercase">Gestión de Citas</h6>
+            <!-- Sales Chart -->
+            <div class="col-xl-8 col-lg-7 mb-4 animate-fade-in" style="animation-delay: 0.4s;">
+                <div class="card glass-card shadow h-100 border-0">
+                    <div class="card-header d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-gold text-uppercase">Rendimiento de Ventas (Últimos 7 días)
+                        </h6>
                     </div>
                     <div class="card-body">
+                        <div class="chart-area" style="height: 300px;">
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Top Services List -->
+            <div class="col-xl-4 col-lg-5 mb-4 animate-fade-in" style="animation-delay: 0.5s;">
+                <div class="card glass-card shadow h-100 border-0">
+                    <div class="card-header">
+                        <h6 class="m-0 font-weight-bold text-gold text-uppercase">Servicios más Solicitados</h6>
+                    </div>
+                    <div class="card-body">
                         <?php
                         $stmtTop = $con->prepare("SELECT s.service_name, COUNT(sb.service_id) as usage_count 
                                                     FROM services s 
                                                     JOIN services_booked sb ON s.service_id = sb.service_id 
                                                     JOIN appointments a ON sb.appointment_id = a.appointment_id 
                                                     WHERE a.tenant_id = ? 
-                                                    GROUP BY s.service_id 
+                                                    GROUP BY s.service_id, s.service_name
                                                     ORDER BY usage_count DESC 
                                                     LIMIT 5");
                         $stmtTop->execute([$tenant_id]);
                         $topServices = $stmtTop->fetchAll();
 
                         if (count($topServices) > 0) {
-                            echo '<ul class="list-group">';
                             foreach ($topServices as $svc) {
-                                echo '<li class="list-group-item d-flex justify-content-between align-items-center">';
-                                echo $svc['service_name'];
-                                echo '<span class="badge badge-primary badge-pill">' . $svc['usage_count'] . '</span>';
-                                echo '</li>';
+                                $pct = min(100, $svc['usage_count'] * 10); // Dummy percentage logic for visual
+                                echo '<div class="mb-3">';
+                                echo '  <div class="small text-white-50 d-flex justify-content-between"><span>' . htmlspecialchars($svc['service_name']) . '</span><span>' . $svc['usage_count'] . '</span></div>';
+                                echo '  <div class="progress progress-sm"><div class="progress-bar bg-gold" style="width: ' . $pct . '%"></div></div>';
+                                echo '</div>';
                             }
-                            echo '</ul>';
                         } else {
-                            echo "<p class='text-muted'>No hay datos de servicios aún.</p>";
-                        }
-                        ?>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Employee of the Month -->
-            <div class="col-lg-6 mb-4">
-                <div class="card shadow mb-4 h-100">
-                    <div class="card-header py-3">
-
-                        <h6 class="m-0 font-weight-bold text-success">Empleado del Mes</h6>
-                    </div>
-                    <div class="card-body text-center">
-                        <?php
-                        $stmtEmpMonth = $con->prepare("SELECT e.first_name, e.last_name, e.image, COUNT(a.appointment_id) as appt_count 
-                                                        FROM employees e 
-                                                        JOIN appointments a ON e.employee_id = a.employee_id 
-                                                        WHERE a.tenant_id = ? AND a.canceled = 0 
-                                                        AND EXTRACT(MONTH FROM a.start_time) = EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM a.start_time) = EXTRACT(YEAR FROM CURRENT_DATE)
-                                                        GROUP BY e.employee_id 
-                                                        ORDER BY appt_count DESC 
-                                                        LIMIT 1");
-                        $stmtEmpMonth->execute([$tenant_id]);
-                        $empOfTheMonth = $stmtEmpMonth->fetch();
-
-                        if ($empOfTheMonth) {
-                            $img = !empty($empOfTheMonth['image']) ? $empOfTheMonth['image'] : 'Design/images/default_employee.png';
-                            echo "<img src='../$img' class='img-fluid rounded-circle mb-3' style='width: 150px; height: 150px; object-fit: cover;'>";
-                            echo "<h4>" . $empOfTheMonth['first_name'] . " " . $empOfTheMonth['last_name'] . "</h4>";
-                            echo "<p class='lead text-gray-800'>Atenciones: <strong>" . $empOfTheMonth['appt_count'] . "</strong></p>";
-                        } else {
-                            echo "<p class='text-muted'>Aún no hay datos suficientes este mes.</p>";
+                            echo "<div class='text-center py-5'><p class='text-muted'>No hay datos suficientes.</p></div>";
                         }
                         ?>
                     </div>
@@ -245,228 +201,142 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
             </div>
         </div>
 
-        <!-- Appointment Tables -->
-        <div class="card shadow mb-4">
-            <div class="card-header tab" style="padding: 0px !important;background: #1984bc!important">
-                <button class="tablinks active" onclick="openTab(event, 'Upcoming')">
-                    Reservas Próximas
-                </button>
-                <button class="tablinks" onclick="openTab(event, 'All')">
-                    Todas las Reservas
-                </button>
-                <button class="tablinks" onclick="openTab(event, 'Canceled')">
-                    Reservas Canceladas
-                </button>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered tabcontent" id="Upcoming" style="display:table" width="100%"
-                        cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>
-                                    Hora de inicio
-                                </th>
-                                <th>
-                                    Servicios reservados
-                                </th>
-                                <th>
-                                    Hora de finalización prevista
-                                </th>
-                                <th>
-                                    Cliente
-                                </th>
-                                <th>
-                                    Empleado
-                                </th>
-                                <th>
-                                    Administrar
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
+        <!-- Recent Appointments Table -->
+        <div class="row">
+            <div class="col-12 animate-fade-in" style="animation-delay: 0.6s;">
+                <div class="card glass-card shadow mb-4 border-0">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-gold text-uppercase">Próximas Citas Hoy</h6>
+                        <a href="calendar.php" class="btn btn-sm btn-link text-gold">Ver Calendario Full</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0" style="color: #e2e8f0;">
+                                <thead>
+                                    <tr class="text-white-50 small text-uppercase">
+                                        <th>Hora</th>
+                                        <th>Cliente</th>
+                                        <th>Barbero</th>
+                                        <th>Servicios</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $stmt = $con->prepare("SELECT a.*, c.first_name as c_fname, c.last_name as c_lname, e.first_name as e_fname, e.last_name as e_lname 
+                                                            FROM appointments a 
+                                                            JOIN clients c ON a.client_id = c.client_id
+                                                            JOIN employees e ON a.employee_id = e.employee_id
+                                                            WHERE a.tenant_id = ? AND a.canceled = 0 
+                                                            AND DATE(a.start_time) = CURRENT_DATE
+                                                            ORDER BY a.start_time ASC LIMIT 5");
+                                    $stmt->execute([$tenant_id]);
+                                    $rows = $stmt->fetchAll();
 
-                            <?php
-                            // UPCOMING APPOINTMENTS
-                            $stmt = $con->prepare("SELECT a.*, c.first_name as c_fname, c.last_name as c_lname 
-                                                    FROM appointments a 
-                                                    JOIN clients c ON a.client_id = c.client_id
-                                                    where a.start_time >= ?
-                                                    and a.canceled = 0
-                                                    and a.tenant_id = ?
-                                                    order by a.start_time");
-                            $stmt->execute(array(date('Y-m-d H:i:s'), $tenant_id));
-                            $rows = $stmt->fetchAll();
-                            $count = $stmt->rowCount();
-
-                            if ($count == 0) {
-                                echo "<tr><td colspan='6' class='text-center'>La lista de sus próximas reservas se presentará aquí</td></tr>";
-                            } else {
-                                foreach ($rows as $row) {
-                                    echo "<tr>";
-                                    echo "<td>" . $row['start_time'] . "</td>";
-                                    echo "<td>";
-                                    $stmtServices = $con->prepare("SELECT service_name from services s, services_booked sb where s.service_id = sb.service_id and appointment_id = ?");
-                                    $stmtServices->execute(array($row['appointment_id']));
-                                    $rowsServices = $stmtServices->fetchAll();
-                                    foreach ($rowsServices as $rowsService) {
-                                        echo "- " . $rowsService['service_name'] . "<br>";
+                                    if (count($rows) == 0) {
+                                        echo "<tr><td colspan='5' class='text-center text-muted'>No hay más citas programadas para hoy.</td></tr>";
+                                    } else {
+                                        foreach ($rows as $row) {
+                                            $startTime = date('H:i', strtotime($row['start_time']));
+                                            echo "<tr>";
+                                            echo "<td class='font-weight-bold'>" . $startTime . "</td>";
+                                            echo "<td>" . $row['c_fname'] . " " . $row['c_lname'] . "</td>";
+                                            echo "<td>" . $row['e_fname'] . "</td>";
+                                            echo "<td class='small opacity-75'>";
+                                            $stmtS = $con->prepare("SELECT service_name FROM services s JOIN services_booked sb ON s.service_id = sb.service_id WHERE sb.appointment_id = ?");
+                                            $stmtS->execute([$row['appointment_id']]);
+                                            echo implode(", ", $stmtS->fetchAll(PDO::FETCH_COLUMN));
+                                            echo "</td>";
+                                            echo "<td>";
+                                            echo '<a href="edit_appointment.php?appointment_id=' . $row['appointment_id'] . '" class="btn btn-sm btn-circle btn-outline-light"><i class="fas fa-edit"></i></a>';
+                                            echo "</td>";
+                                            echo "</tr>";
+                                        }
                                     }
-                                    echo "</td>";
-                                    echo "<td>" . $row['end_time_expected'] . "</td>";
-                                    echo "<td>" . $row['c_fname'] . " " . $row['c_lname'] . "</td>"; // Full Name fixed
-                                    echo "<td>";
-                                    $stmtEmployees = $con->prepare("SELECT first_name,last_name from employees e, appointments a where e.employee_id = a.employee_id and a.appointment_id = ?");
-                                    $stmtEmployees->execute(array($row['appointment_id']));
-                                    $rowsEmployees = $stmtEmployees->fetchAll();
-                                    foreach ($rowsEmployees as $rowsEmployee) {
-                                        echo $rowsEmployee['first_name'] . " " . $rowsEmployee['last_name'];
-                                    }
-                                    echo "</td>";
-                                    echo "<td>";
-                                    $cancel_data = "cancel_appointment_" . $row["appointment_id"];
                                     ?>
-                                    <ul class="list-inline m-0">
-                                        
-                                        <!-- EDIT BUTTON -->
-                                        <li class="list-inline-item" data-toggle="tooltip" title="Editar Reserva">
-                                            <a href="edit_appointment.php?appointment_id=<?php echo $row['appointment_id']; ?>" class="btn btn-primary btn-sm rounded-0">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                        </li>
-
-                                        <!-- CANCEL BUTTON -->
-                                        <li class="list-inline-item" data-toggle="tooltip" title="Cancelar Cita">
-                                            <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="modal" data-target="#<?php echo $cancel_data; ?>" data-placement="top">
-                                                <i class="fas fa-calendar-times"></i>
-                                            </button>
-                                            <div class="modal fade" id="<?php echo $cancel_data; ?>" tabindex="-1" role="dialog" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">Cancelar cita</h5>
-                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        </div>
-                                                                    <div class="modal-body">
-                                                                        <p>¿Deseas cancelar esta cita?</p>
-                                                                        <div class="form-group">
-                                                                            <label>¿Dinos por qué?</label>
-                                                                            <textarea class="form-control" id=<?php echo "appointment_cancellation_reason_" . $row['appointment_id'] ?>></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                                                        <button type="button" data-id="<?php echo $row['appointment_id']; ?>" class="btn btn-danger cancel_appointment_button">Sí, Cancelar</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                        <?php
-                                        echo "</td>";
-                                        echo "</tr>";
-                                }
-                            }
-                            ?>
-                            </tbody>
-                        </table>
-                    
-                        <!-- ALL APPOINTMENTS -->
-                        <table class="table table-bordered tabcontent" id="All" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Hora de inicio</th>
-                                    <th>Servicios reservados</th>
-                                    <th>Hora de finalización</th>
-                                    <th>Cliente</th>
-                                    <th>Empleado</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $stmt = $con->prepare("SELECT a.*, c.first_name as c_fname, c.last_name as c_lname 
-                                                FROM appointments a 
-                                                JOIN clients c ON a.client_id = c.client_id
-                                                where a.tenant_id = ?
-                                                order by start_time");
-                                $stmt->execute(array($tenant_id));
-                                $rows = $stmt->fetchAll();
-                                $count = $stmt->rowCount();
-
-                                if ($count == 0) {
-                                    echo "<tr><td colspan='5' class='text-center'>La lista de todas sus reservas se presentará aquí</td></tr>";
-                                } else {
-                                    foreach ($rows as $row) {
-                                        echo "<tr>";
-                                        echo "<td>" . $row['start_time'] . "</td>";
-                                        echo "<td>";
-                                        $stmtServices = $con->prepare("SELECT service_name from services s, services_booked sb where s.service_id = sb.service_id and appointment_id = ?");
-                                        $stmtServices->execute(array($row['appointment_id']));
-                                        $rowsServices = $stmtServices->fetchAll();
-                                        foreach ($rowsServices as $rowsService) {
-                                            echo $rowsService['service_name'] . " + ";
-                                        }
-                                        echo "</td>";
-                                        echo "<td>" . $row['end_time_expected'] . "</td>";
-                                        echo "<td>" . $row['c_fname'] . " " . $row['c_lname'] . "</td>"; // Full Name fixed
-                                        echo "<td>";
-                                        $stmtEmployees = $con->prepare("SELECT first_name,last_name from employees e, appointments a where e.employee_id = a.employee_id and a.appointment_id = ?");
-                                        $stmtEmployees->execute(array($row['appointment_id']));
-                                        $rowsEmployees = $stmtEmployees->fetchAll();
-                                        foreach ($rowsEmployees as $rowsEmployee) {
-                                            echo $rowsEmployee['first_name'] . " " . $rowsEmployee['last_name'];
-                                        }
-                                        echo "</td>";
-                                        echo "</tr>";
-                                    }
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    
-                        <!-- CANCELED APPOINTMENTS -->
-                        <table class="table table-bordered tabcontent" id="Canceled" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Hora de inicio</th>
-                                    <th>Cliente</th>
-                                    <th>Razon de cancelación</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $stmt = $con->prepare("SELECT a.*, c.first_name as c_fname, c.last_name as c_lname 
-                                                FROM appointments a 
-                                                JOIN clients c ON a.client_id = c.client_id
-                                                where canceled = 1
-                                                and a.tenant_id = ?");
-                                $stmt->execute(array($tenant_id));
-                                $rows = $stmt->fetchAll();
-                                $count = $stmt->rowCount();
-
-                                if ($count == 0) {
-                                    echo "<tr><td colspan='3' class='text-center'>La lista de sus reservas canceladas se presentará aquí</td></tr>";
-                                } else {
-                                    foreach ($rows as $row) {
-                                        echo "<tr>";
-                                        echo "<td>" . $row['start_time'] . "</td>";
-                                        echo "<td>" . $row['c_fname'] . " " . $row['c_lname'] . "</td>"; // Full Name fixed
-                                        echo "<td>" . $row['cancellation_reason'] . "</td>";
-                                        echo "</tr>";
-                                    }
-                                }
-                                ?>
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
+    </div>
+
+    <!-- Chart Data Logic -->
+    <?php
+    $labels = [];
+    $data = [];
+    for ($i = 6; $i >= 0; $i--) {
+        $date = date('Y-m-d', strtotime("-$i days"));
+        $labels[] = date('D', strtotime($date));
+
+        $stmtSales = $con->prepare("SELECT SUM(total_amount) FROM appointments WHERE tenant_id = ? AND is_paid = 1 AND DATE(paid_at) = ?");
+        $stmtSales->execute([$tenant_id, $date]);
+        $data[] = $stmtSales->fetchColumn() ?: 0;
+    }
+    ?>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var ctx = document.getElementById('salesChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: <?php echo json_encode($labels); ?>,
+                    datasets: [{
+                        label: 'Ventas ($)',
+                        data: <?php echo json_encode($data); ?>,
+                        backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                        borderColor: '#D4AF37',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#D4AF37',
+                        pointBorderColor: '#fff',
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: { color: '#94a3b8' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#94a3b8' }
+                        }
+                    }
+                }
+            });
+        });
+
+        function resetDemo() {
+            Swal.fire({
+                title: '¿Reiniciar Demo?',
+                text: "Se generarán nuevos datos reales para la demostración.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#D4AF37',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, reiniciar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'demo_reset_handler.php';
+                }
+            })
+        }
+    </script>
 
     <?php
-
     //Include Footer
     include 'Includes/templates/footer.php';
 } else {

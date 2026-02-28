@@ -26,17 +26,16 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['pass
         $stmt->execute(array($tenant_id));
         $rows_categories = $stmt->fetchAll();
         ?>
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Categorías de Servicio</h6>
+        <div class="card glass-card shadow mb-4 border-0">
+            <div class="card-header py-3 bg-transparent">
+                <h6 class="m-0 font-weight-bold text-gold text-uppercase">Categorías de Servicio</h6>
             </div>
             <div class="card-body">
 
-                <!-- ADD NEW CATEGORY BUTTON -->
-                <button class="btn btn-success btn-sm" style="margin-bottom: 10px;" type="button" data-toggle="modal"
-                    data-target="#add_new_category" data-placement="top">
-                    <i class="fa fa-plus"></i>
-                    Agregar Categoría
+                <button class="btn btn-primary btn-sm mb-3" type="button" data-toggle="modal"
+                    data-target="#add_new_category">
+                    <i class="fa fa-plus mr-1"></i>
+                    Nueva Categoría
                 </button>
 
                 <!-- Add New Category Modal -->

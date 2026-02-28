@@ -14,6 +14,32 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
 $pageTitle = 'Panel Administrativo - Acceso';
 $login_error = '';
 
+// DEMO LOGIN HANDLER
+if (isset($_GET['demo']) && $_GET['demo'] == '1') {
+	$demo_user = "demo";
+	$demo_slug = "demo-barber";
+
+	// Find Demo Tenant
+	$stmtT = $con->prepare("SELECT tenant_id FROM tenants WHERE slug = ?");
+	$stmtT->execute([$demo_slug]);
+	$t_row = $stmtT->fetch();
+
+	if ($t_row) {
+		$tenant_id = $t_row['tenant_id'];
+		$stmtA = $con->prepare("SELECT admin_id FROM barber_admin WHERE username = ? AND tenant_id = ?");
+		$stmtA->execute([$demo_user, $tenant_id]);
+		$a_row = $stmtA->fetch();
+
+		if ($a_row) {
+			$_SESSION['username_barbershop_Xw211qAAsq4'] = $demo_user;
+			$_SESSION['admin_id_barbershop_Xw211qAAsq4'] = $a_row['admin_id'];
+			$_SESSION['tenant_id_barbershop'] = $tenant_id;
+			header('Location: index.php');
+			exit();
+		}
+	}
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['admin_login_btn'])) {
 	if (!verifyCsrfToken($_POST['csrf_token'])) {
 		$login_error = 'Error de seguridad (CSRF).';
@@ -138,6 +164,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['admin_login_btn'])) {
 									class="btn btn-gold-premium btn-user btn-block shadow-lg mt-4 font-weight-bold">
 									INICIAR SESIÓN
 								</button>
+								<div class="text-center mt-3">
+									<a href="?demo=1" class="btn btn-outline-light btn-sm glass-card px-4">
+										<i class="fas fa-play mr-2"></i> VER DEMO
+									</a>
+								</div>
 							</form>
 							<hr class="border-secondary my-4">
 							<div class="text-center">

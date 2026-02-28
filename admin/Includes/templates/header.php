@@ -27,6 +27,13 @@
 	<link rel="stylesheet" type="text/css" href="Design/css/barber-icons.css">
 	<link rel="stylesheet" type="text/css" href="../Design/css/premium.css">
 
+	<!-- Chart.js -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<!-- SweetAlert2 -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<!-- Inter Font -->
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
 </head>
 
 <body id="page-top">

@@ -46,15 +46,15 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['pass
         </div>
 
         <!-- TABS -->
-        <div class="card shadow mb-4">
-            <div class="card-header border-bottom-0 p-0">
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <div class="card glass-card shadow mb-4 border-0">
+            <div class="card-header border-bottom-0 p-0 bg-transparent">
+                <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link <?php echo ($activeTab == 'services') ? 'active' : ''; ?>"
+                        <a class="nav-link border-0 text-white rounded-0 <?php echo ($activeTab == 'services') ? 'active bg-gold text-dark font-weight-bold' : ''; ?>"
                             href="payments.php?tab=services">Cobros de Servicios</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?php echo ($activeTab == 'payroll') ? 'active' : ''; ?>"
+                        <a class="nav-link border-0 text-white rounded-0 <?php echo ($activeTab == 'payroll') ? 'active bg-gold text-dark font-weight-bold' : ''; ?>"
                             href="payments.php?tab=payroll">Nómina y Comisiones</a>
                     </li>
                 </ul>
