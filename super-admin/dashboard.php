@@ -176,6 +176,10 @@ $tenants = $stmt->fetchAll();
                                 <td><?php echo date('d/m/Y', strtotime($tenant['created_at'])); ?></td>
                                 <td class="text-center">
                                     <div class="btn-group">
+                                        <a href="export_tenant.php?tenant_id=<?php echo $tenant['tenant_id']; ?>"
+                                            class="btn btn-outline-success btn-sm" title="Respaldar Datos">
+                                            <i class="fas fa-download"></i>
+                                        </a>
                                         <a href="edit_tenant.php?tenant_id=<?php echo $tenant['tenant_id']; ?>"
                                             class="btn btn-outline-info btn-sm" title="Editar">
                                             <i class="fas fa-edit"></i>
@@ -194,7 +198,7 @@ $tenants = $stmt->fetchAll();
                                         <?php endif; ?>
                                         <a href="tenant_action.php?tenant_id=<?php echo $tenant['tenant_id']; ?>&action=delete"
                                             class="btn btn-outline-danger btn-sm" title="Eliminar"
-                                            onclick="return confirm('¡ADVERTENCIA! Eliminación permanente. ¿Continuar?');">
+                                            onclick="return confirm('¡ADVERTENCIA! Eliminación permanente. Se recomienda realizar un RESPALDO primero. ¿Desea continuar con la eliminación?');">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </div>

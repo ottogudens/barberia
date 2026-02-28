@@ -180,25 +180,25 @@ BEGIN
     -- barber_admin
     ALTER TABLE barber_admin ALTER COLUMN tenant_id SET NOT NULL;
     IF NOT EXISTS (SELECT 1 FROM information_schema.table_constraints WHERE constraint_name = 'fk_admin_tenant') THEN
-        ALTER TABLE barber_admin ADD CONSTRAINT fk_admin_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id);
+        ALTER TABLE barber_admin ADD CONSTRAINT fk_admin_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id) ON DELETE CASCADE;
     END IF;
 
     -- service_categories
     ALTER TABLE service_categories ALTER COLUMN tenant_id SET NOT NULL;
     IF NOT EXISTS (SELECT 1 FROM information_schema.table_constraints WHERE constraint_name = 'fk_categories_tenant') THEN
-        ALTER TABLE service_categories ADD CONSTRAINT fk_categories_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id);
+        ALTER TABLE service_categories ADD CONSTRAINT fk_categories_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id) ON DELETE CASCADE;
     END IF;
 
     -- services
     ALTER TABLE services ALTER COLUMN tenant_id SET NOT NULL;
     IF NOT EXISTS (SELECT 1 FROM information_schema.table_constraints WHERE constraint_name = 'fk_services_tenant') THEN
-        ALTER TABLE services ADD CONSTRAINT fk_services_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id);
+        ALTER TABLE services ADD CONSTRAINT fk_services_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id) ON DELETE CASCADE;
     END IF;
 
     -- employees
     ALTER TABLE employees ALTER COLUMN tenant_id SET NOT NULL;
     IF NOT EXISTS (SELECT 1 FROM information_schema.table_constraints WHERE constraint_name = 'fk_employees_tenant') THEN
-        ALTER TABLE employees ADD CONSTRAINT fk_employees_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id);
+        ALTER TABLE employees ADD CONSTRAINT fk_employees_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id) ON DELETE CASCADE;
     END IF;
 
     -- clients
@@ -210,7 +210,7 @@ BEGIN
     -- appointments
     ALTER TABLE appointments ALTER COLUMN tenant_id SET NOT NULL;
     IF NOT EXISTS (SELECT 1 FROM information_schema.table_constraints WHERE constraint_name = 'fk_appointments_tenant') THEN
-        ALTER TABLE appointments ADD CONSTRAINT fk_appointments_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id);
+        ALTER TABLE appointments ADD CONSTRAINT fk_appointments_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id) ON DELETE CASCADE;
     END IF;
 END $$;
 -- FINANCIAL MIGRATION SCRIPT (PostgreSQL Version)
