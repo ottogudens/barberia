@@ -16,6 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_tenant'])) {
     $name = test_input($_POST['name']);
     $email = test_input($_POST['owner_email']);
     $slug = test_input($_POST['slug']);
+    $city = test_input($_POST['city']);
+    $address = test_input($_POST['address']);
+
+    $admin_full_name = test_input($_POST['admin_full_name']);
+    $admin_phone = test_input($_POST['admin_phone']);
     $admin_user = test_input($_POST['admin_username']);
     $admin_pass = password_hash(test_input($_POST['admin_password']), PASSWORD_DEFAULT);
 
@@ -23,13 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_tenant'])) {
         $con->beginTransaction();
 
         // 1. Create Tenant
-        $stmt = $con->prepare("INSERT INTO tenants (name, slug, owner_email) VALUES (?, ?, ?)");
-        $stmt->execute([$name, $slug, $email]);
+        $stmt = $con->prepare("INSERT INTO tenants (name, slug, owner_email, city, address) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([$name, $slug, $email, $city, $address]);
         $tenant_id = $con->lastInsertId();
 
         // 2. Create Initial Admin for this Tenant
-        $stmt_admin = $con->prepare("INSERT INTO barber_admin (username, password, email, full_name, tenant_id) VALUES (?, ?, ?, ?, ?)");
-        $stmt_admin->execute([$admin_user, $admin_pass, $email, 'Administrador ' . $name, $tenant_id]);
+        $stmt_admin = $con->prepare("INSERT INTO barber_admin (username, password, email, full_name, phone_number, tenant_id) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt_admin->execute([$admin_user, $admin_pass, $email, $admin_full_name, $admin_phone, $tenant_id]);
 
         $con->commit();
         $success = "Barbería y administrador creados con éxito.";
@@ -75,6 +80,25 @@ include 'Includes/templates/header.php';
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
+                                    <label class="text-gold small font-weight-bold text-uppercase">Ciudad</label>
+                                    <input type="text" class="form-control bg-dark border-secondary text-white"
+                                        name="city" placeholder="Ej: Santiago"
+                                        style="background: rgba(255,255,255,0.05) !important;" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label class="text-gold small font-weight-bold text-uppercase">Dirección</label>
+                                    <input type="text" class="form-control bg-dark border-secondary text-white"
+                                        name="address" placeholder="Ej: Av. Providencia 1234"
+                                        style="background: rgba(255,255,255,0.05) !important;" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
                                     <label class="text-gold small font-weight-bold text-uppercase">Nombre del
                                         Negocio</label>
                                     <input type="text" class="form-control bg-dark border-secondary text-white"
@@ -103,6 +127,25 @@ include 'Includes/templates/header.php';
 
                         <h5 class="text-white mt-5 mb-4 border-left-gold pl-3">Credenciales de Administración del Tenant
                         </h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label class="text-gold small font-weight-bold text-uppercase">Nombre y Apellido del
+                                        Admin</label>
+                                    <input type="text" class="form-control bg-dark border-secondary text-white"
+                                        name="admin_full_name" placeholder="Ej: Juan Pérez"
+                                        style="background: rgba(255,255,255,0.05) !important;" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label class="text-gold small font-weight-bold text-uppercase">Teléfono</label>
+                                    <input type="text" class="form-control bg-dark border-secondary text-white"
+                                        name="admin_phone" placeholder="Ej: +56 9 1234 5678"
+                                        style="background: rgba(255,255,255,0.05) !important;" required>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group mb-4">

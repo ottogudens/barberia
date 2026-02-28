@@ -7,10 +7,11 @@
 -- TABLE: barber_admin
 CREATE TABLE IF NOT EXISTS barber_admin (
     admin_id SERIAL PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE,
+    username VARCHAR(50) NOT NULL,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(100) NOT NULL,
-    full_name VARCHAR(100) NOT NULL
+    full_name VARCHAR(100) NOT NULL,
+    phone_number VARCHAR(20)
 );
 
 -- TABLE: service_categories
@@ -104,6 +105,8 @@ CREATE TABLE IF NOT EXISTS tenants (
     name VARCHAR(100) NOT NULL,
     slug VARCHAR(50) NOT NULL UNIQUE,
     owner_email VARCHAR(100) NOT NULL,
+    city VARCHAR(100),
+    address TEXT,
     status VARCHAR(20) DEFAULT 'active' CHECK (status IN ('active', 'inactive', 'suspended')),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
