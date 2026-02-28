@@ -12,6 +12,46 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
 }
 
 $pageTitle = 'Panel Administrativo - Acceso';
+$login_error = '';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['admin_login_btn'])) {
+	if (!verifyCsrfToken($_POST['csrf_token'])) {
+		$login_error = 'Error de seguridad (CSRF).';
+	} else {
+		$username = test_input($_POST['username']);
+		$password = test_input($_POST['password']);
+		$tenant_id = getCurrentTenantId($con);
+
+		$stmt = $con->prepare("SELECT admin_id, username, password FROM barber_admin WHERE username = ? AND tenant_id = ?");
+		$stmt->execute([$username, $tenant_id]);
+		$row = $stmt->fetch();
+
+		if ($row) {
+			$db_password = $row['password'];
+			$loginSuccess = false;
+
+			if (sha1($password) === $db_password) {
+				$newHash = password_hash($password, PASSWORD_DEFAULT);
+				$upd = $con->prepare("UPDATE barber_admin SET password = ? WHERE admin_id = ?");
+				$upd->execute([$newHash, $row['admin_id']]);
+				$loginSuccess = true;
+			} elseif (password_verify($password, $db_password)) {
+				$loginSuccess = true;
+			}
+
+			if ($loginSuccess) {
+				$_SESSION['username_barbershop_Xw211qAAsq4'] = $username;
+				$_SESSION['admin_id_barbershop_Xw211qAAsq4'] = $row['admin_id'];
+				header('Location: index.php');
+				exit();
+			} else {
+				$login_error = 'Usuario o contraseña incorrectos.';
+			}
+		} else {
+			$login_error = 'Usuario o contraseña incorrectos.';
+		}
+	}
+}
 ?>
 
 <!DOCTYPE html>
@@ -66,43 +106,8 @@ $pageTitle = 'Panel Administrativo - Acceso';
 							</div>
 
 							<?php
-							if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['admin_login_btn'])) {
-								if (!verifyCsrfToken($_POST['csrf_token'])) {
-									echo '<div class="alert alert-danger small">Error de seguridad (CSRF).</div>';
-								} else {
-									$username = test_input($_POST['username']);
-									$password = test_input($_POST['password']);
-									$tenant_id = getCurrentTenantId($con);
-
-									$stmt = $con->prepare("SELECT admin_id, username, password FROM barber_admin WHERE username = ? AND tenant_id = ?");
-									$stmt->execute([$username, $tenant_id]);
-									$row = $stmt->fetch();
-
-									if ($row) {
-										$db_password = $row['password'];
-										$loginSuccess = false;
-
-										if (sha1($password) === $db_password) {
-											$newHash = password_hash($password, PASSWORD_DEFAULT);
-											$upd = $con->prepare("UPDATE barber_admin SET password = ? WHERE admin_id = ?");
-											$upd->execute([$newHash, $row['admin_id']]);
-											$loginSuccess = true;
-										} elseif (password_verify($password, $db_password)) {
-											$loginSuccess = true;
-										}
-
-										if ($loginSuccess) {
-											$_SESSION['username_barbershop_Xw211qAAsq4'] = $username;
-											$_SESSION['admin_id_barbershop_Xw211qAAsq4'] = $row['admin_id'];
-											header('Location: index.php');
-											exit();
-										} else {
-											echo '<div class="alert alert-danger small text-center">Usuario o contraseña incorrectos.</div>';
-										}
-									} else {
-										echo '<div class="alert alert-danger small text-center">Usuario o contraseña incorrectos.</div>';
-									}
-								}
+							if (!empty($login_error)) {
+								echo '<div class="alert alert-danger small text-center">' . $login_error . '</div>';
 							}
 							?>
 
