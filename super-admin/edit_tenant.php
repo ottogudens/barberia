@@ -19,92 +19,123 @@ $stmt->execute([$tenant_id]);
 $tenant = $stmt->fetch();
 
 if (!$tenant) {
-    echo "Tenant not found!";
+    header('Location: dashboard.php');
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+$pageTitle = 'Editar Tenant';
+$error = '';
+$success = '';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['save_tenant'])) {
     $name = test_input($_POST['name']);
     $email = test_input($_POST['email']);
     $slug = test_input($_POST['slug']);
+    $status = test_input($_POST['status']);
 
     // Update tenant
-    $updateStmt = $con->prepare("UPDATE tenants SET name = ?, owner_email = ?, slug = ? WHERE tenant_id = ?");
+    $updateStmt = $con->prepare("UPDATE tenants SET name = ?, owner_email = ?, slug = ?, status = ? WHERE tenant_id = ?");
     try {
-        $updateStmt->execute([$name, $email, $slug, $tenant_id]);
-        $success = "Tenant updated successfully!";
+        $updateStmt->execute([$name, $email, $slug, $status, $tenant_id]);
+        $success = "Tenant actualizado con éxito.";
         // Refresh data
         $stmt->execute([$tenant_id]);
         $tenant = $stmt->fetch();
     } catch (PDOException $e) {
-        $error = "Error updating tenant: " . $e->getMessage();
+        $error = "Error al actualizar: " . $e->getMessage();
     }
 }
+
+include 'Includes/templates/header.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4 animate-fade-in">
+        <h1 class="h3 mb-0 text-white-50">Editar Barbería: <span
+                class="text-gold"><?php echo htmlspecialchars($tenant['name']); ?></span></h1>
+        <a href="dashboard.php" class="btn btn-sm btn-outline-secondary shadow-sm">
+            <i class="fas fa-arrow-left fa-sm mr-1"></i> Volver al Dashboard
+        </a>
+    </div>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Edit Tenant - Super Admin</title>
-    <link href="../Design/css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="../Design/fonts/css/all.min.css" rel="stylesheet">
-</head>
+    <div class="row justify-content-center">
+        <div class="col-lg-8 animate-fade-in" style="animation-delay: 0.1s;">
+            <div class="card glass-card shadow mb-4 border-0">
+                <div class="card-header py-3 bg-transparent border-secondary">
+                    <h6 class="m-0 font-weight-bold text-gold text-uppercase">Información del Tenant</h6>
+                </div>
+                <div class="card-body">
+                    <?php if ($error): ?>
+                        <div class="alert alert-danger border-0 bg-danger text-white small mb-4">
+                            <i class="fas fa-exclamation-circle mr-2"></i> <?php echo $error; ?>
+                        </div>
+                    <?php endif; ?>
+                    <?php if ($success): ?>
+                        <div class="alert alert-success border-0 bg-success text-white small mb-4">
+                            <i class="fas fa-check-circle mr-2"></i> <?php echo $success; ?>
+                        </div>
+                    <?php endif; ?>
 
-<body class="bg-gradient-primary" style="background-color: #f8f9fc;">
-
-    <div class="container">
-        <div class="card o-hidden border-0 shadow-lg my-5">
-            <div class="card-body p-0">
-                <div class="row justify-content-center">
-                    <div class="col-lg-8">
-                        <div class="p-5">
-                            <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Edit Tenant</h1>
+                    <form method="POST">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label class="text-gold small font-weight-bold text-uppercase">Nombre de la
+                                        Barbería</label>
+                                    <input type="text" class="form-control bg-dark border-secondary text-white"
+                                        name="name" value="<?php echo htmlspecialchars($tenant['name']); ?>"
+                                        style="background: rgba(255,255,255,0.05) !important;" required>
+                                </div>
                             </div>
-                            <?php if (isset($error)): ?>
-                                <div class="alert alert-danger">
-                                    <?php echo $error; ?>
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label class="text-gold small font-weight-bold text-uppercase">Slug (URL /
+                                        Dominio)</label>
+                                    <input type="text" class="form-control bg-dark border-secondary text-white"
+                                        name="slug" value="<?php echo htmlspecialchars($tenant['slug']); ?>"
+                                        style="background: rgba(255,255,255,0.05) !important;" required>
+                                    <small class="text-white-50">Ej:
+                                        <code>barberia.skale.cl/<?php echo $tenant['slug']; ?></code></small>
                                 </div>
-                            <?php endif; ?>
-                            <?php if (isset($success)): ?>
-                                <div class="alert alert-success">
-                                    <?php echo $success; ?>
-                                </div>
-                            <?php endif; ?>
-                            <form class="user" method="POST">
-                                <div class="form-group">
-                                    <label>Barbershop Name</label>
-                                    <input type="text" class="form-control form-control-user" name="name"
-                                        value="<?php echo htmlspecialchars($tenant['name']); ?>" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Owner Email</label>
-                                    <input type="email" class="form-control form-control-user" name="email"
-                                        value="<?php echo htmlspecialchars($tenant['owner_email']); ?>" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Slug (Subdomain)</label>
-                                    <input type="text" class="form-control form-control-user" name="slug"
-                                        value="<?php echo htmlspecialchars($tenant['slug']); ?>" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-user btn-block"
-                                    style="background-color: #D4AF37; border-color: #D4AF37; color: black;">
-                                    Save Changes
-                                </button>
-                            </form>
-                            <hr>
-                            <div class="text-center">
-                                <a class="small" href="dashboard.php">Back to Dashboard</a>
                             </div>
                         </div>
-                    </div>
+
+                        <div class="form-group mb-4">
+                            <label class="text-gold small font-weight-bold text-uppercase">Email del Propietario</label>
+                            <input type="email" class="form-control bg-dark border-secondary text-white" name="email"
+                                value="<?php echo htmlspecialchars($tenant['owner_email']); ?>"
+                                style="background: rgba(255,255,255,0.05) !important;" required>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="text-gold small font-weight-bold text-uppercase">Estado de la Cuenta</label>
+                            <select name="status" class="form-control bg-dark border-secondary text-white"
+                                style="background: rgba(255,255,255,0.05) !important;">
+                                <option value="active" <?php if ($tenant['status'] == 'active')
+                                    echo 'selected'; ?>>ACTIVO
+                                </option>
+                                <option value="suspended" <?php if ($tenant['status'] == 'suspended')
+                                    echo 'selected'; ?>>
+                                    SUSPENDIDO</option>
+                                <option value="inactive" <?php if ($tenant['status'] == 'inactive')
+                                    echo 'selected'; ?>>
+                                    INACTIVO</option>
+                            </select>
+                        </div>
+
+                        <hr class="border-secondary mt-5">
+
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" name="save_tenant"
+                                class="btn btn-gold-premium px-5 font-weight-bold text-uppercase">
+                                Guardar Cambios
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-</body>
-
-</html>
+<?php include 'Includes/templates/footer.php'; ?>
