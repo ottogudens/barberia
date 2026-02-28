@@ -22,34 +22,48 @@
 
     <style>
         .sidebar {
-            background: linear-gradient(180deg, #111 0%, #000 100%) !important;
-            border-right: 1px solid rgba(212, 175, 55, 0.2);
+            background: #000 !important;
+            border-right: 1px solid rgba(212, 175, 55, 0.15);
         }
 
         .sidebar-brand-text {
             color: var(--premium-gold) !important;
-            letter-spacing: 2px;
+            letter-spacing: 2.5px;
+            font-weight: 800 !important;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.6) !important;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover,
+        .nav-item.active .nav-link {
+            color: var(--premium-gold) !important;
+            background: rgba(212, 175, 55, 0.05);
         }
 
         .nav-link i {
-            color: var(--premium-gold) !important;
+            color: inherit !important;
+            margin-right: 10px;
         }
 
         .bg-gold-gradient {
-            background: linear-gradient(90deg, var(--premium-gold), #C5A028);
+            background: linear-gradient(135deg, var(--premium-gold), #C5A028);
             border: none;
             color: black !important;
-            font-weight: bold;
+            font-weight: 700;
         }
 
         #content-wrapper {
-            background: #0a0a0a !important;
+            background: #050505 !important;
         }
 
         .topbar {
-            background: rgba(17, 17, 17, 0.9) !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 10, 0.95) !important;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1) !important;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
         }
     </style>
 </head>

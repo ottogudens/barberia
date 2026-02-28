@@ -107,28 +107,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         <?php endif; ?>
 
-        <form method="POST" action="login.php">
+        <form method="POST" action="login.php" class="mt-4">
             <?php csrfInput(); ?>
             <div class="form-group mb-4">
-                <label class="text-gold small font-weight-bold text-uppercase">Usuario</label>
-                <input type="text" name="username" class="form-control bg-dark border-secondary text-white"
-                    style="background: rgba(255,255,255,0.05) !important;" required autofocus>
+                <label class="text-gold small font-weight-bold text-uppercase mb-2 d-block">Usuario</label>
+                <input type="text" name="username" class="form-control bg-dark border-secondary text-white px-3 py-4"
+                    style="background: rgba(255,255,255,0.05) !important; border-radius: 10px;"
+                    placeholder="Ingrese su usuario" required autofocus>
             </div>
             <div class="form-group mb-4">
-                <label class="text-gold small font-weight-bold text-uppercase">Contraseña</label>
-                <input type="password" name="password" class="form-control bg-dark border-secondary text-white"
-                    style="background: rgba(255,255,255,0.05) !important;" required>
+                <label class="text-gold small font-weight-bold text-uppercase mb-2 d-block">Contraseña</label>
+                <input type="password" name="password"
+                    class="form-control bg-dark border-secondary text-white px-3 py-4"
+                    style="background: rgba(255,255,255,0.05) !important; border-radius: 10px;" placeholder="••••••••"
+                    required>
             </div>
             <button type="submit"
                 class="btn btn-gold-premium btn-block py-3 font-weight-bold text-uppercase mt-4 shadow-lg">
                 Ingresar al Sistema
             </button>
-        </form>
 
-        <div class="text-center mt-5">
-            <p class="text-white-50 x-small mb-0">&copy; <?php echo date('Y'); ?> SKBarber SaaS Platform</p>
-            <p class="text-gold x-small">Powered by Skale IA</p>
-        </div>
+            <div class="text-center mt-5">
+                <p class="text-white-50 x-small mb-0">&copy; <?php echo date('Y'); ?> SKBarber SaaS Platform</p>
+                <p class="text-gold x-small">Powered by Skale IA</p>
+            </div>
     </div>
 
     <script src="../Design/js/jquery.min.js"></script>

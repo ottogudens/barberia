@@ -40,6 +40,43 @@ $tenants = $stmt->fetchAll();
         unset($_SESSION['msg_type']); ?>
     <?php endif; ?>
 
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.1) !important;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            border-color: rgba(212, 175, 55, 0.3) !important;
+        }
+
+        .table-dark {
+            background: transparent !important;
+        }
+
+        .table thead th {
+            border-bottom: 2px solid rgba(212, 175, 55, 0.3) !important;
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .badge-success {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+            border: 1px solid #28a745;
+        }
+
+        .badge-danger {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+    </style>
+
     <!-- Summary Cards -->
     <div class="row mb-4">
         <!-- Total Tenants -->
