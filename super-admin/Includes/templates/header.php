@@ -12,13 +12,14 @@
     </title>
 
     <!-- FONTS -->
-    <link href="../Design/fonts/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/Design/fonts/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet">
 
     <!-- CSS -->
-    <link href="../Design/css/sb-admin-2.min.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="../Design/css/main.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="../Design/css/premium.css?v=<?php echo time(); ?>" rel="stylesheet">
+    <link href="/Design/css/bootstrap.min.css?v=<?php echo time(); ?>" rel="stylesheet">
+    <link href="/Design/css/sb-admin-2.min.css?v=<?php echo time(); ?>" rel="stylesheet">
+    <link href="/Design/css/main.css?v=<?php echo time(); ?>" rel="stylesheet">
+    <link href="/Design/css/premium.css?v=<?php echo time(); ?>" rel="stylesheet">
 
     <style>
         .sidebar {

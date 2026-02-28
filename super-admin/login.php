@@ -44,12 +44,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Super Admin Login | SKBarber</title>
 
     <!-- FONTS -->
-    <link href="../Design/fonts/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/Design/fonts/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet">
 
     <!-- CSS -->
-    <link href="../Design/css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="../Design/css/premium.css" rel="stylesheet">
+    <link href="/Design/css/bootstrap.min.css?v=<?php echo time(); ?>" rel="stylesheet">
+    <link href="/Design/css/sb-admin-2.min.css?v=<?php echo time(); ?>" rel="stylesheet">
+    <link href="/Design/css/premium.css?v=<?php echo time(); ?>" rel="stylesheet">
 
     <style>
         body {
@@ -133,9 +134,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
     </div>
 
-    <script src="../Design/js/jquery.min.js"></script>
-    <script src="../Design/js/bootstrap.bundle.min.js"></script>
-    <script src="../Design/js/premium.js"></script>
+    <script src="/Design/js/jquery.min.js?v=<?php echo time(); ?>"></script>
+    <script src="/Design/js/bootstrap.bundle.min.js?v=<?php echo time(); ?>"></script>
+    <script src="/Design/js/premium.js?v=<?php echo time(); ?>"></script>
 </body>
 
 </html>
