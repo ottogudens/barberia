@@ -16,9 +16,9 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet">
 
     <!-- CSS -->
-    <link href="../Design/css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="../Design/css/main.css" rel="stylesheet">
-    <link href="../Design/css/premium.css" rel="stylesheet">
+    <link href="../Design/css/sb-admin-2.min.css?v=<?php echo time(); ?>" rel="stylesheet">
+    <link href="../Design/css/main.css?v=<?php echo time(); ?>" rel="stylesheet">
+    <link href="../Design/css/premium.css?v=<?php echo time(); ?>" rel="stylesheet">
 
     <style>
         .sidebar {
@@ -98,6 +98,13 @@
                 <a class="nav-link" href="dashboard.php">
                     <i class="fas fa-fw fa-users-cog"></i>
                     <span>Gestionar Tenants</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="clear_cache.php">
+                    <i class="fas fa-fw fa-broom"></i>
+                    <span>Limpiar Caché</span>
                 </a>
             </li>
 

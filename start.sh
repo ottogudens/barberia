@@ -11,8 +11,11 @@ sed -i "s/FPM_GROUP/$(id -gn)/g" /app/php-fpm.conf
 echo "Running Database Initialization..."
 php /app/init_railway_db.php
 
-# Create directory for sockets if needed
+# Create and Clean directory for sockets/temp if needed
+echo "Cleaning temporary files..."
+rm -rf /tmp/*
 mkdir -p /tmp/php
+chmod 777 /tmp/php
 
 # Start PHP-FPM in the background
 echo "Starting PHP-FPM..."
