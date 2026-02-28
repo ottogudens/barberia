@@ -1,169 +1,143 @@
 <?php
 session_start();
-
-// IF THE USER HAS ALREADY LOGGED IN
-if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['password_barbershop_Xw211qAAsq4'])) {
-	header('Location: index.php');
-	exit();
-}
-// ELSE
-$pageTitle = 'Peluquería ConfiguroWeb';
 include 'connect.php';
 include 'Includes/functions/functions.php';
 include '../Includes/csrf.php';
 include '../Includes/tenant_context.php';
+
+// IF THE USER HAS ALREADY LOGGED IN
+if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admin_id_barbershop_Xw211qAAsq4'])) {
+	header('Location: index.php');
+	exit();
+}
+
+$pageTitle = 'Panel Administrativo - Acceso';
 ?>
 
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Panel Administrativo</title>
-	<!-- FONTS FILE -->
+	<title>
+		<?php echo $pageTitle; ?>
+	</title>
 	<link href="Design/fonts/css/all.min.css" rel="stylesheet" type="text/css">
-
-	<!-- Nunito FONT FAMILY FILE -->
-	<link
-		href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-		rel="stylesheet">
-
-	<!-- CSS FILES -->
+	<link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet">
 	<link href="Design/css/sb-admin-2.min.css" rel="stylesheet">
 	<link href="Design/css/main.css" rel="stylesheet">
+	<link href="../Design/css/premium.css" rel="stylesheet">
+	<style>
+		body {
+			background: #000;
+			height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.login-bg {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(45deg, #111 0%, #000 100%);
+			z-index: -1;
+		}
+	</style>
 </head>
 
 <body>
-	<div class="login">
-		<form class="login-container validate-form" name="login-form" method="POST"
-			action="login.php<?php echo isset($_GET['tenant_slug']) ? '?tenant_slug=' . htmlspecialchars($_GET['tenant_slug']) : ''; ?>"
-			onsubmit="return validateLogInForm()">
-			<?php csrfInput(); ?>
-			<span class="login100-form-title p-b-32">
-				Panel Administrativo Peluquería
-			</span>
+	<div class="login-bg"></div>
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-xl-5 col-lg-6 col-md-9">
+				<div class="card o-hidden border-0 shadow-lg my-5 glass-card animate-fade-in"
+					style="background: rgba(17,17,17,0.8);">
+					<div class="card-body p-0">
+						<div class="p-5">
+							<div class="text-center mb-4">
+								<i class="fas fa-cut fa-3x text-gold mb-3 glow-text"></i>
+								<h1 class="h4 text-white text-uppercase font-weight-bold letter-spacing-1">Panel
+									Administrativo</h1>
+								<p class="text-white-50 small">SaaS Barbershop Management</p>
+							</div>
 
-			<!-- PHP SCRIPT WHEN SUBMIT -->
+							<?php
+							if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['admin_login_btn'])) {
+								if (!verifyCsrfToken($_POST['csrf_token'])) {
+									echo '<div class="alert alert-danger small">Error de seguridad (CSRF).</div>';
+								} else {
+									$username = test_input($_POST['username']);
+									$password = test_input($_POST['password']);
+									$tenant_id = getCurrentTenantId($con);
 
-			<?php
+									$stmt = $con->prepare("SELECT admin_id, username, password FROM barber_admin WHERE username = ? AND tenant_id = ?");
+									$stmt->execute([$username, $tenant_id]);
+									$row = $stmt->fetch();
 
-			if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signin-button'])) {
-				if (!verifyCsrfToken($_POST['csrf_token'])) {
-					die("CSRF Token Verification Failed");
-				}
-				$username = test_input($_POST['username']);
-				$password = test_input($_POST['password']);
-				$hashedPass = sha1($password);
+									if ($row) {
+										$db_password = $row['password'];
+										$loginSuccess = false;
 
-				$tenant_id = getCurrentTenantId($con);
+										if (sha1($password) === $db_password) {
+											$newHash = password_hash($password, PASSWORD_DEFAULT);
+											$upd = $con->prepare("UPDATE barber_admin SET password = ? WHERE admin_id = ?");
+											$upd->execute([$newHash, $row['admin_id']]);
+											$loginSuccess = true;
+										} elseif (password_verify($password, $db_password)) {
+											$loginSuccess = true;
+										}
 
-				$stmt = $con->prepare("Select admin_id, username, password from barber_admin where username = ? AND tenant_id = ?");
-				$stmt->execute(array($username, $tenant_id));
-				$row = $stmt->fetch();
-				$count = $stmt->rowCount();
+										if ($loginSuccess) {
+											$_SESSION['username_barbershop_Xw211qAAsq4'] = $username;
+											$_SESSION['admin_id_barbershop_Xw211qAAsq4'] = $row['admin_id'];
+											header('Location: index.php');
+											exit();
+										} else {
+											echo '<div class="alert alert-danger small text-center">Usuario o contraseña incorrectos.</div>';
+										}
+									} else {
+										echo '<div class="alert alert-danger small text-center">Usuario o contraseña incorrectos.</div>';
+									}
+								}
+							}
+							?>
 
-				if ($count > 0) {
-					$db_password = $row['password'];
-					$loginSuccess = false;
-
-					// 1. Check if password is using legacy SHA1
-					if (sha1($password) === $db_password) {
-						// Upgrade to Bcrypt
-						$newHash = password_hash($password, PASSWORD_DEFAULT);
-						$upd = $con->prepare("UPDATE barber_admin SET password = ? WHERE admin_id = ?");
-						$upd->execute(array($newHash, $row['admin_id']));
-						$loginSuccess = true;
-					}
-					// 2. Check if password is using modern Hash
-					elseif (password_verify($password, $db_password)) {
-						$loginSuccess = true;
-					}
-
-					if ($loginSuccess) {
-						$_SESSION['username_barbershop_Xw211qAAsq4'] = $username;
-						$_SESSION['password_barbershop_Xw211qAAsq4'] = $password; // Keeping for session isset check
-						$_SESSION['admin_id_barbershop_Xw211qAAsq4'] = $row['admin_id'];
-						header('Location: index.php');
-						die();
-					} else {
-						// Password incorrect
-						?>
-						<div class="alert alert-danger">
-							<button data-dismiss="alert" class="close close-sm" type="button">
-								<span aria-hidden="true">×</span>
-							</button>
-							<div class="messages">
-								<div>¡El nombre de usuario y/o la contraseña son incorrectos!</div>
+							<form class="user" method="POST" action="">
+								<?php csrfInput(); ?>
+								<div class="form-group">
+									<input type="text" name="username"
+										class="form-control form-control-user glass-card text-white border-0 py-4"
+										style="background: rgba(255,255,255,0.05);" placeholder="Usuario" required>
+								</div>
+								<div class="form-group">
+									<input type="password" name="password"
+										class="form-control form-control-user glass-card text-white border-0 py-4"
+										style="background: rgba(255,255,255,0.05);" placeholder="Contraseña" required>
+								</div>
+								<button type="submit" name="admin_login_btn"
+									class="btn btn-gold-premium btn-user btn-block shadow-lg mt-4 font-weight-bold">
+									INICIAR SESIÓN
+								</button>
+							</form>
+							<hr class="border-secondary my-4">
+							<div class="text-center">
+								<a class="small text-gold" href="../index.php">Volver al Sitio Web</a>
 							</div>
 						</div>
-						<?php
-					}
-				} else {
-					?>
-
-					<div class="alert alert-danger">
-						<button data-dismiss="alert" class="close close-sm" type="button">
-							<span aria-hidden="true">×</span>
-						</button>
-						<div class="messages">
-							<div>¡El nombre de usuario y/o la contraseña son incorrectos!</div>
-						</div>
 					</div>
-
-					<?php
-				}
-			}
-
-			?>
-
-			<!-- USERNAME INPUT -->
-
-			<div class="form-input">
-				<span class="txt1">Usuario</span>
-				<input type="text" name="username" class="form-control"
-					oninput="getElementById('required_username').style.display = 'none'" autocomplete="off">
-				<span class="invalid-feedback" id="required_username">¡Se requiere nombre de usuario!</span>
-			</div>
-
-			<!-- PASSWORD INPUT -->
-
-			<div class="form-input">
-				<span class="txt1">Contraseña</span>
-				<input type="password" name="password" class="form-control"
-					oninput="getElementById('required_password').style.display = 'none'" autocomplete="new-password">
-				<span class="invalid-feedback" id="required_password">¡Se requiere contraseña!</span>
-			</div>
-
-			<!-- SIGN IN BUTTON -->
-
-			<p>
-				<button type="submit" name="signin-button">Acceder</button>
-			</p>
-
-
-		</form>
-	</div>
-
-	<!-- Footer -->
-	<footer class="sticky-footer bg-white">
-		<div class="container my-auto">
-			<div class="copyright text-center my-auto">
-				<span><a
-						href="https://www.configuroweb.com/46-aplicaciones-gratuitas-en-php-python-y-javascript/#Aplicaciones-gratuitas-en-PHP,-Python-y-Javascript">Para
-						más desarrollos ConfiguroWeb</a></span>
+				</div>
 			</div>
 		</div>
-	</footer>
-	<!-- End of Footer -->
+	</div>
 
-	<!-- INCLUDE JS SCRIPTS -->
 	<script src="Design/js/jquery.min.js"></script>
-	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="Design/js/bootstrap.bundle.min.js"></script>
 	<script src="Design/js/sb-admin-2.min.js"></script>
-	<script src="Design/js/main.js"></script>
+	<script src="../Design/js/premium.js"></script>
 </body>
 
 </html>

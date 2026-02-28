@@ -2,7 +2,7 @@
 session_start();
 
 //Check If user is already logged in
-if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['password_barbershop_Xw211qAAsq4'])) {
+if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admin_id_barbershop_Xw211qAAsq4'])) {
     //Page Title
     $pageTitle = 'Dashboard';
 
@@ -23,15 +23,15 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['pass
         <!-- Content Row -->
         <div class="row">
 
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-primary shadow h-100 py-2">
+            <div class="col-xl-3 col-md-6 mb-4 animate-fade-in">
+                <div class="card glass-card border-left-primary shadow h-100 py-2 border-0">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                     Total de Clientes
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <div class="h5 mb-0 font-weight-bold text-white">
                                     <?php echo countItems("client_id", "clients", $tenant_id) ?></div>
                             </div>
                             <div class="col-auto">
@@ -42,15 +42,15 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['pass
                 </div>
             </div>
 
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-success shadow h-100 py-2">
+            <div class="col-xl-3 col-md-6 mb-4 animate-fade-in" style="animation-delay: 0.1s;">
+                <div class="card glass-card border-left-success shadow h-100 py-2 border-0">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                     Total de Servicios
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <div class="h5 mb-0 font-weight-bold text-white">
                                     <?php echo countItems("service_id", "services", $tenant_id) ?></div>
                             </div>
                             <div class="col-auto">
@@ -61,8 +61,8 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['pass
                 </div>
             </div>
 
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-info shadow h-100 py-2">
+            <div class="col-xl-3 col-md-6 mb-4 animate-fade-in" style="animation-delay: 0.2s;">
+                <div class="card glass-card border-left-info shadow h-100 py-2 border-0">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
@@ -71,7 +71,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['pass
                                 </div>
                                 <div class="row no-gutters align-items-center">
                                     <div class="col-auto">
-                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                                        <div class="h5 mb-0 mr-3 font-weight-bold text-white">
                                             <?php echo countItems("employee_id", "employees", $tenant_id) ?></div>
                                     </div>
                                 </div>
@@ -84,15 +84,15 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['pass
                 </div>
             </div>
 
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-warning shadow h-100 py-2">
+            <div class="col-xl-3 col-md-6 mb-4 animate-fade-in" style="animation-delay: 0.3s;">
+                <div class="card glass-card border-left-warning shadow h-100 py-2 border-0">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                     Citas
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <div class="h5 mb-0 font-weight-bold text-white">
                                     <?php echo countItems("appointment_id", "appointments", $tenant_id) ?></div>
                             </div>
                             <div class="col-auto">
@@ -103,16 +103,34 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['pass
                 </div>
             </div>
 
+            <div class="col-xl-3 col-md-6 mb-4 animate-fade-in" style="animation-delay: 0.3s;">
+                <div class="card glass-card border-left-warning shadow h-100 py-2 border-0">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs glass-card border-0 mb-3 p-1" id="appointmentTab" role="tablist" style="background: rgba(255,255,255,0.05);">
+                            <li class="nav-item">
+                                <a class="nav-link active text-white" id="upcoming-tab" data-toggle="tab" href="#upcoming" role="tab">Próximas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" id="all-tab" data-toggle="tab" href="#all" role="tab">Todas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" id="canceled-tab" data-toggle="tab" href="#canceled" role="tab">Canceladas</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <!-- Ventas del Día -->
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-primary shadow h-100 py-2">
+            <div class="col-xl-3 col-md-6 mb-4 animate-fade-in" style="animation-delay: 0.4s;">
+                <div class="card glass-card border-left-primary shadow h-100 py-2 border-0">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                     Ventas Hoy
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <div class="h5 mb-0 font-weight-bold text-white">
                                     <?php
                                     $stmt = $con->prepare("SELECT SUM(total_amount) FROM appointments WHERE tenant_id = ? AND is_paid = 1 AND DATE(paid_at) = CURRENT_DATE");
                                     $stmt->execute([$tenant_id]);
@@ -129,17 +147,17 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['pass
             </div>
 
             <!-- Ventas de la Semana -->
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-success shadow h-100 py-2">
+            <div class="col-xl-3 col-md-6 mb-4 animate-fade-in" style="animation-delay: 0.5s;">
+                <div class="card glass-card border-left-success shadow h-100 py-2 border-0">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                     Ventas Semana
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <div class="h5 mb-0 font-weight-bold text-white">
                                     <?php
-                                    $stmt = $con->prepare("SELECT SUM(total_amount) FROM appointments WHERE tenant_id = ? AND is_paid = 1 AND extract(year from paid_at) = extract(year from current_date) AND extract(week from paid_at) = extract(week from current_date)");
+                                    $stmt = $con->prepare("SELECT SUM(total_amount) FROM appointments WHERE tenant_id = ? AND is_paid = 1 AND paid_at >= DATE_TRUNC('week', CURRENT_DATE)");
                                     $stmt->execute([$tenant_id]);
                                     echo "$" . number_format($stmt->fetchColumn() ?: 0, 2);
                                     ?>
@@ -156,11 +174,11 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['pass
         </div>
 
         <div class="row">
-            <!-- Top Services -->
-            <div class="col-lg-6 mb-4">
-                <div class="card shadow mb-4 h-100">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Servicios Más Solicitados</h6>
+            <div class="row animate-fade-in" style="animation-delay: 0.4s;">
+            <div class="col-lg-12">
+                <div class="card glass-card shadow mb-4 border-0">
+                    <div class="card-header py-3 bg-transparent border-secondary">
+                        <h6 class="m-0 font-weight-bold text-gold text-uppercase">Gestión de Citas</h6>
                     </div>
                     <div class="card-body">
 

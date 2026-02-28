@@ -26,6 +26,7 @@
 <script src="Design/js/bootstrap.min.js"></script>
 <script src="Design/js/bootstrap.bundle.min.js"></script>
 <script src="Design/js/main.js"></script>
+<script src="Design/js/premium.js"></script>
 
 </body>
 

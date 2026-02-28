@@ -1,0 +1,106 @@
+/* Premium Barber SaaS Styles */
+:root {
+    --premium-gold: #D4AF37;
+    --gold-glow: rgba(212, 175, 55, 0.4);
+    --glass-bg: rgba(17, 17, 17, 0.75);
+    --glass-border: rgba(212, 175, 55, 0.2);
+}
+
+/* Glassmorphism Classes */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.glass-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--premium-gold);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 15px var(--gold-glow);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes goldGlow {
+    0% {
+        text-shadow: 0 0 5px var(--gold-glow);
+    }
+
+    50% {
+        text-shadow: 0 0 20px var(--premium-gold);
+    }
+
+    100% {
+        text-shadow: 0 0 5px var(--gold-glow);
+    }
+}
+
+.glow-text {
+    animation: goldGlow 3s infinite;
+}
+
+/* Button Enhancements */
+.btn-gold-premium {
+    background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+    color: #000;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 50px;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.btn-gold-premium:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
+    color: #000;
+}
+
+/* Section Transitions */
+section {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Hero Title Styling */
+.hero-title span {
+    background: linear-gradient(to right, #D4AF37, #F4E5C3, #D4AF37);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% auto;
+    animation: shine 4s linear infinite;
+}
+
+@keyframes shine {
+    to {
+        background-position: 200% center;
+    }
+}

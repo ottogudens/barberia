@@ -25,6 +25,7 @@
 	<!-- Barber Icons -->
 	<link rel="stylesheet" type="text/css" href="Design/fonts/css/all.min.css">
 	<link rel="stylesheet" type="text/css" href="Design/css/barber-icons.css">
+	<link rel="stylesheet" type="text/css" href="../Design/css/premium.css">
 
 </head>
 
