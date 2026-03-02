@@ -61,9 +61,9 @@ try {
     $svc_ids = [];
     foreach ($services as $s) {
         $stmt = $con->prepare("INSERT INTO services (service_name, service_description, service_price, service_duration, category_id, tenant_id) 
-                               VALUES (?, ?, ?, ?, ?, ?)");
+                               VALUES (?, ?, ?, ?, ?, ?) RETURNING service_id");
         $stmt->execute([$s[0], $s[1], $s[2], $s[3], $cat_ids[$s[4]], $tenant_id]);
-        $svc_ids[] = $con->lastInsertId();
+        $svc_ids[] = $stmt->fetchColumn();
     }
 
     // 5. Create Employees
@@ -74,9 +74,9 @@ try {
     ];
     $emp_ids = [];
     foreach ($employees as $e) {
-        $stmt = $con->prepare("INSERT INTO employees (first_name, last_name, phone_number, email, tenant_id) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $con->prepare("INSERT INTO employees (first_name, last_name, phone_number, email, tenant_id) VALUES (?, ?, ?, ?, ?) RETURNING employee_id");
         $stmt->execute([$e[0], $e[1], $e[2], $e[3], $tenant_id]);
-        $emp_ids[] = $con->lastInsertId();
+        $emp_ids[] = $stmt->fetchColumn();
     }
 
     // 6. Create Clients
@@ -88,9 +88,9 @@ try {
     ];
     $cli_ids = [];
     foreach ($clients as $c) {
-        $stmt = $con->prepare("INSERT INTO clients (first_name, last_name, phone_number, client_email, tenant_id) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $con->prepare("INSERT INTO clients (first_name, last_name, phone_number, client_email, tenant_id) VALUES (?, ?, ?, ?, ?) RETURNING client_id");
         $stmt->execute([$c[0], $c[1], $c[2], $c[3], $tenant_id]);
-        $cli_ids[] = $con->lastInsertId();
+        $cli_ids[] = $stmt->fetchColumn();
     }
 
     // 7. Create Historical Appointments (Last 30 days)

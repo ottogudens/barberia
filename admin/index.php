@@ -15,7 +15,6 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
     $tenant_id = getCurrentTenantId($con);
 
     ?>
-    ?>
     <!-- Begin Page Content -->
     <div class="container-fluid py-4">
 

@@ -33,10 +33,16 @@ if (isset($_GET['demo']) && $_GET['demo'] == '1') {
 		if ($a_row) {
 			$_SESSION['username_barbershop_Xw211qAAsq4'] = $demo_user;
 			$_SESSION['admin_id_barbershop_Xw211qAAsq4'] = $a_row['admin_id'];
-			$_SESSION['tenant_id_barbershop'] = $tenant_id;
+			$_SESSION['tenant_id'] = $tenant_id;
 			header('Location: index.php');
 			exit();
 		}
+	} else {
+		// Auto-seed if demo tenant is missing
+		include 'demo_seeder.php';
+		// Try again after seeding
+		header('Location: login.php?demo=1');
+		exit();
 	}
 }
 
