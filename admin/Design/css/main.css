@@ -23,14 +23,39 @@ body {
     color: var(--text-muted) !important;
 }
 
+.text-gray-900,
+.text-gray-800,
+.text-gray-700,
 .text-gray-600,
-.text-gray-400,
-.text-gray-800 {
+.text-gray-500,
+.text-dark {
     color: var(--text-bright) !important;
+}
+
+.text-gray-400,
+.text-gray-300,
+.text-gray-200,
+.text-gray-100 {
+    color: var(--text-main) !important;
 }
 
 .text-primary {
     color: var(--primary-gold) !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+    color: var(--text-bright);
 }
 
 #content-wrapper {
@@ -118,6 +143,59 @@ body {
 .table-bordered td,
 .table-bordered th {
     border: 1px solid var(--glass-border);
+}
+
+/* Modal Refinements */
+.modal-content {
+    background: var(--dark-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text-main) !important;
+}
+
+.modal-header,
+.modal-footer {
+    border-color: var(--glass-border) !important;
+}
+
+.modal-title {
+    color: var(--primary-gold) !important;
+    font-weight: 800;
+}
+
+.close {
+    color: var(--text-bright) !important;
+    text-shadow: none;
+    opacity: 0.8;
+}
+
+.close:hover {
+    color: var(--primary-gold) !important;
+    opacity: 1;
+}
+
+/* Footer Refinements */
+.sticky-footer {
+    background: var(--dark-bg) !important;
+    border-top: 1px solid var(--glass-border) !important;
+}
+
+/* Form Controls */
+.form-control {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text-bright) !important;
+}
+
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: var(--primary-gold) !important;
+    box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25) !important;
+    color: var(--text-bright) !important;
+}
+
+::placeholder {
+    color: var(--text-muted) !important;
+    opacity: 0.6 !important;
 }
 
 .progress {

@@ -65,7 +65,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
 
         <!-- PAGE HEADING -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Finanzas: Egresos y Pagos</h1>
+            <h1 class="h3 mb-0 text-gold font-weight-bold uppercase">Finanzas: Egresos y Pagos</h1>
             <div>
                 <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal"
                     data-target="#addExpenseModal">
@@ -88,7 +88,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
                                     Total Egresos (Periodo)</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <div class="h5 mb-0 font-weight-bold text-gold font-weight-bold uppercase">
                                     $<?php echo number_format($total_expenses, 2); ?></div>
                             </div>
                             <div class="col-auto">

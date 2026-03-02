@@ -42,7 +42,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
 
     <div class="container-fluid">
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Módulo Financiero</h1>
+            <h1 class="h3 mb-0 text-gold font-weight-bold uppercase">Módulo Financiero</h1>
         </div>
 
         <!-- TABS -->

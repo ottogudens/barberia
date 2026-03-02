@@ -45,7 +45,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
 
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4 animate-fade-in">
-            <h1 class="h3 mb-0 text-white font-weight-bold">Dashboard Administrativo</h1>
+            <h1 class="h3 mb-0 text-gold font-weight-bold uppercase">Dashboard Administrativo</h1>
             <div class="d-flex">
                 <?php if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && $_SESSION['username_barbershop_Xw211qAAsq4'] == 'demo'): ?>
                     <button class="btn btn-outline-warning btn-sm shadow-sm mr-2 glass-card" onclick="resetDemo()">
@@ -78,7 +78,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                 </div>
                             </div>
                             <div class="col-auto">
-                                <i class="fas fa-users fa-2x text-gray-800 opacity-50"></i>
+                                <i class="fas fa-users fa-2x text-gold font-weight-bold uppercase opacity-50"></i>
                             </div>
                         </div>
                     </div>
@@ -99,7 +99,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                     ?>
                                 </div>
                             </div>
-                            <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-800 opacity-50"></i></div>
+                            <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gold font-weight-bold uppercase opacity-50"></i></div>
                         </div>
                     </div>
                 </div>
@@ -120,7 +120,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                     ?>
                                 </div>
                             </div>
-                            <div class="col-auto"><i class="fas fa-clock fa-2x text-gray-800 opacity-50"></i></div>
+                            <div class="col-auto"><i class="fas fa-clock fa-2x text-gold font-weight-bold uppercase opacity-50"></i></div>
                         </div>
                     </div>
                 </div>
@@ -141,7 +141,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                     ?>
                                 </div>
                             </div>
-                            <div class="col-auto"><i class="fas fa-check-circle fa-2x text-gray-800 opacity-50"></i></div>
+                            <div class="col-auto"><i class="fas fa-check-circle fa-2x text-gold font-weight-bold uppercase opacity-50"></i></div>
                         </div>
                     </div>
                 </div>

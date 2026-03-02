@@ -18,7 +18,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
-        <!-- Page Heading -->
+        <h1 class="h3 mb-4 text-gold font-weight-bold uppercase">Categorías de Servicio</h1>
 
         <!-- Service Categories Table -->
         <?php

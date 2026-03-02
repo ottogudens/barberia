@@ -45,7 +45,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-4 text-gray-800">Gestionar Sitio Web</h1>
+        <h1 class="h3 mb-4 text-gold font-weight-bold uppercase">Gestionar Sitio Web</h1>
 
         <div class="card glass-card glass-card shadow mb-4">
             <div class="card-header py-3">

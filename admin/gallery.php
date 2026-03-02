@@ -23,7 +23,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
         $stmt->execute([$tenant_id]);
         $images = $stmt->fetchAll();
         ?>
-        <h1 class="h3 mb-4 text-gray-800">Galería de Trabajos</h1>
+        <h1 class="h3 mb-4 text-gold font-weight-bold uppercase">Galería de Trabajos</h1>
 
         <!-- Upload Form -->
         <div class="card glass-card shadow mb-4">

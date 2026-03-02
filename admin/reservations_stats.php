@@ -21,7 +21,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-4 text-gray-800">Historial de Reservas y Reportes</h1>
+        <h1 class="h3 mb-4 text-gold font-weight-bold uppercase">Historial de Reservas y Reportes</h1>
 
         <!-- DATE FILTER FORM -->
         <div class="card glass-card shadow mb-4">
