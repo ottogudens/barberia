@@ -233,10 +233,10 @@
 						<li class="nav-item dropdown no-arrow">
 							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
 								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<span class="mr-2 d-none d-lg-inline text-gray-600 small">
+								<span class="mr-2 d-none d-lg-inline text-white small font-weight-bold">
 									<?php echo $_SESSION['username_barbershop_Xw211qAAsq4']; ?>
 								</span>
-								<i class="fas fa-caret-down"></i>
+								<i class="fas fa-caret-down text-gold"></i>
 							</a>
 
 							<!-- Dropdown - User Information -->

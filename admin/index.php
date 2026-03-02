@@ -20,8 +20,8 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
 
         <?php if ($_SESSION['username_barbershop_Xw211qAAsq4'] == 'demo'): ?>
             <div class="alert alert-info border-0 shadow-sm glass-card mb-4 d-flex align-items-center animate-fade-in"
-                style="background: rgba(49, 130, 206, 0.2);">
-                <i class="fas fa-info-circle mr-3 fa-lg text-info"></i>
+                style="background: rgba(212, 175, 55, 0.15); border: 1px solid var(--primary-gold) !important;">
+                <i class="fas fa-crown mr-3 fa-lg text-gold"></i>
                 <div>
                     <span class="font-weight-bold">Modo Demostración Activo:</span>
                     Estás visualizando datos de prueba reales. Puedes resetear el entorno en cualquier momento.
@@ -71,7 +71,8 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Clientes</div>
+                                <div class="text-xs font-weight-bold text-gold text-uppercase mb-1"
+                                    style="letter-spacing: 0.5px;">Total Clientes</div>
                                 <div class="h3 mb-0 font-weight-bold text-white">
                                     <?php echo countItems("client_id", "clients", $tenant_id) ?>
                                 </div>

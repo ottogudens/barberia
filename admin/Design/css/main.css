@@ -1,10 +1,12 @@
 :root {
     --primary-gold: #D4AF37;
-    --dark-bg: #0f172a;
-    --card-bg: rgba(30, 41, 59, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    --dark-bg: #0b0f19;
+    --card-bg: rgba(26, 32, 44, 0.8);
+    --glass-border: rgba(212, 175, 55, 0.2);
     --text-main: #f8fafc;
-    --text-muted: #94a3b8;
+    --text-bright: #ffffff;
+    --text-muted: #cbd5e1;
+    /* Lighter than original #94a3b8 */
     --accent-success: #10b981;
 }
 
@@ -12,6 +14,19 @@ body {
     background-color: var(--dark-bg);
     color: var(--text-main);
     font-family: 'Inter', 'Nunito', sans-serif;
+}
+
+/* Contrast Overrides for Bootstrap Utilities */
+.text-muted,
+.text-white-50,
+.small {
+    color: var(--text-muted) !important;
+}
+
+.text-gray-600,
+.text-gray-400,
+.text-gray-800 {
+    color: var(--text-bright) !important;
 }
 
 #content-wrapper {
@@ -29,8 +44,8 @@ body {
 
 .glass-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
-    border-color: rgba(212, 175, 55, 0.3) !important;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    border-color: var(--primary-gold) !important;
 }
 
 .text-gold {
@@ -41,55 +56,43 @@ body {
     background-color: var(--primary-gold) !important;
 }
 
+/* Sidebar Refinements */
 .sidebar-dark .nav-item .nav-link {
     color: var(--text-muted);
 }
 
-.sidebar-dark .nav-item.active .nav-link {
+.sidebar-dark .nav-item .nav-link i {
     color: var(--primary-gold);
 }
 
+.sidebar-dark .nav-item.active .nav-link {
+    color: var(--text-bright);
+    font-weight: 700;
+}
+
+.sidebar-heading {
+    color: var(--primary-gold) !important;
+    font-weight: 800 !important;
+    letter-spacing: 1px;
+    opacity: 0.9;
+}
+
+/* Topbar Refinements */
 .topbar {
-    background: rgba(15, 23, 42, 0.8) !important;
-    backdrop-filter: blur(8px);
+    background: rgba(11, 15, 25, 0.9) !important;
+    backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--glass-border) !important;
 }
 
 .navbar-light .navbar-nav .nav-link {
-    color: var(--text-main);
+    color: var(--text-bright) !important;
 }
 
-.animate-fade-in {
-    animation: fadeIn 0.6s ease-out forwards;
-    opacity: 0;
+.topbar .dropdown-toggle::after {
+    color: var(--primary-gold);
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.btn-primary {
-    background-color: var(--primary-gold);
-    border-color: var(--primary-gold);
-    color: #000;
-    font-weight: 700;
-}
-
-.btn-primary:hover {
-    background-color: #b89630;
-    border-color: #b89630;
-    color: #000;
-}
-
-/* Custom layout refinements */
+/* Dashboard Elements */
 .card-header {
     background: transparent !important;
     border-bottom: 1px solid var(--glass-border) !important;
@@ -97,6 +100,11 @@ body {
 
 .table {
     color: var(--text-main);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-bright);
 }
 
 .table-bordered {
@@ -108,6 +116,23 @@ body {
     border: 1px solid var(--glass-border);
 }
 
+.progress {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
 .breadcrumb {
     background: transparent;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+    border: none;
+    color: #000;
+    font-weight: 800;
+}
+
+.btn-primary:hover {
+    transform: scale(1.02);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+    color: #000;
 }
