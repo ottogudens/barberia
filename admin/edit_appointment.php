@@ -11,7 +11,7 @@ include '../Includes/tenant_context.php';
 
 $tenant_id = getCurrentTenantId($con);
 
-if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['password_barbershop_Xw211qAAsq4'])) {
+if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admin_id_barbershop_Xw211qAAsq4'])) {
 
     $appointment_id = isset($_GET['appointment_id']) && is_numeric($_GET['appointment_id']) ? intval($_GET['appointment_id']) : 0;
 

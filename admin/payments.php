@@ -12,7 +12,7 @@ include '../Includes/tenant_context.php';
 $tenant_id = getCurrentTenantId($con);
 
 //Check If user is already logged in
-if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['password_barbershop_Xw211qAAsq4'])) {
+if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admin_id_barbershop_Xw211qAAsq4'])) {
 
     // ACTION HANDLERS
     if (isset($_POST['mark_paid'])) {

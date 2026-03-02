@@ -11,7 +11,7 @@ include '../Includes/tenant_context.php';
 
 $tenant_id = getCurrentTenantId($con);
 
-if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['password_barbershop_Xw211qAAsq4'])) {
+if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admin_id_barbershop_Xw211qAAsq4'])) {
 
     // Date Filter Logic
     $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : date('Y-m-01'); // Default to first of current month

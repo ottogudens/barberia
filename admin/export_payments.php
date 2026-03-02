@@ -3,11 +3,12 @@ session_start();
 include 'connect.php';
 include '../Includes/tenant_context.php';
 
-$tenant_id = getCurrentTenantId($con);
-
-if (!$tenant_id) {
-    die("Acceso denegado.");
+if (!isset($_SESSION['admin_id_barbershop_Xw211qAAsq4'])) {
+    header('Location: login.php');
+    exit();
 }
+
+$tenant_id = getCurrentTenantId($con);
 
 $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : date('Y-m-01');
 $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : date('Y-m-d');
