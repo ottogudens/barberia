@@ -222,6 +222,13 @@
             <button type="submit" class="login-button">Iniciar Sesión</button>
         </form>
 
+        <div class="text-center" style="text-align: center; margin-top: 1.5rem;">
+            <a href="admin/login.php?demo=1" class="button-secondary"
+                style="display: inline-block; padding: 0.6rem 2rem; text-decoration: none; border: 1px solid #D4AF37; color: #D4AF37; border-radius: 50px; font-size: 0.9rem; transition: all 0.3s;">
+                <i class="fas fa-play mr-2"></i> VER DEMO
+            </a>
+        </div>
+
         <div class="links">
             <a href="index.php">← Volver a la página principal</a>
             <p>¿Eres cliente? <a href="login.php">Inicia sesión aquí</a></p>

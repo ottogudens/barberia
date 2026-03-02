@@ -371,6 +371,7 @@
                 negocio. Automatiza reservas, gestiona tu equipo, y aumenta tus ingresos.</p>
             <div class="hero-buttons">
                 <a href="register_tenant.php" class="cta-button">Comenzar Gratis</a>
+                <a href="admin/login.php?demo=1" class="button-secondary">Ver Demo</a>
                 <a href="#features" class="button-secondary">Ver Características</a>
             </div>
         </div>
