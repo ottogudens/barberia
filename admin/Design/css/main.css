@@ -29,6 +29,10 @@ body {
     color: var(--text-bright) !important;
 }
 
+.text-primary {
+    color: var(--primary-gold) !important;
+}
+
 #content-wrapper {
     background: var(--dark-bg);
 }

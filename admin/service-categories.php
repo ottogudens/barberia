@@ -26,7 +26,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
         $stmt->execute(array($tenant_id));
         $rows_categories = $stmt->fetchAll();
         ?>
-        <div class="card glass-card shadow mb-4 border-0">
+        <div class="card glass-card glass-card shadow mb-4 border-0">
             <div class="card-header py-3 bg-transparent">
                 <h6 class="m-0 font-weight-bold text-gold text-uppercase">Categorías de Servicio</h6>
             </div>

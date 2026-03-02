@@ -57,7 +57,7 @@ include 'Includes/templates/header.php';
 
     <div class="row justify-content-center">
         <div class="col-lg-10 animate-fade-in" style="animation-delay: 0.1s;">
-            <div class="card glass-card shadow mb-4 border-0">
+            <div class="card glass-card glass-card shadow mb-4 border-0">
                 <div class="card-header py-3 bg-transparent border-secondary">
                     <h6 class="m-0 font-weight-bold text-gold text-uppercase">Configuración Inicial del SaaS</h6>
                 </div>

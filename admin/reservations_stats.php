@@ -24,7 +24,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
         <h1 class="h3 mb-4 text-gray-800">Historial de Reservas y Reportes</h1>
 
         <!-- DATE FILTER FORM -->
-        <div class="card shadow mb-4">
+        <div class="card glass-card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Filtrar por Fecha</h6>
             </div>
@@ -52,7 +52,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
         <div class="row">
             <!-- TOP SERVICES -->
             <div class="col-xl-6 col-lg-6">
-                <div class="card shadow mb-4">
+                <div class="card glass-card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Servicios Más Populares
                             (<?php echo $start_date . " al " . $end_date; ?>)</h6>
@@ -99,7 +99,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
 
             <!-- TOP EMPLOYEES -->
             <div class="col-xl-6 col-lg-6">
-                <div class="card shadow mb-4">
+                <div class="card glass-card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-success">Empleados con Más Reservas
                             (<?php echo $start_date . " al " . $end_date; ?>)</h6>
@@ -145,7 +145,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
         </div>
 
         <!-- DETAILED APPOINTMENTS LIST -->
-        <div class="card shadow mb-4">
+        <div class="card glass-card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Historial Detallado</h6>
             </div>

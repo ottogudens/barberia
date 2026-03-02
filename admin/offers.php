@@ -29,7 +29,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
         $offers = $stmt->fetchAll();
         ?>
         <h1 class="h3 mb-4 text-gray-800">Ofertas Especiales</h1>
-        <div class="card shadow mb-4">
+        <div class="card glass-card shadow mb-4">
             <div class="card-header py-3">
                 <a href="offers.php?do=Add" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Nueva Oferta</a>
             </div>
@@ -77,7 +77,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
     } elseif ($do == 'Add') {
         ?>
         <h1 class="h3 mb-4 text-gray-800">Nueva Oferta</h1>
-        <div class="card shadow mb-4">
+        <div class="card glass-card shadow mb-4">
             <div class="card-body">
                 <form method="POST" action="offers.php?do=Add" enctype="multipart/form-data">
                     <div class="form-group">

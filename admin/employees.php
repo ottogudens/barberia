@@ -39,7 +39,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
             $rows_employees = $stmt->fetchAll();
 
             ?>
-            <div class="card shadow mb-4">
+            <div class="card glass-card glass-card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Empleado</h6>
                 </div>
@@ -143,7 +143,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
         } elseif ($do == 'Add') {
             ?>
 
-            <div class="card shadow mb-4">
+            <div class="card glass-card glass-card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Agregar Nuevo Empleado</h6>
                 </div>
@@ -343,7 +343,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
 
                 if ($count > 0) {
                     ?>
-                    <div class="card shadow mb-4">
+                    <div class="card glass-card glass-card shadow mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">Editar Empleado</h6>
                         </div>

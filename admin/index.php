@@ -204,7 +204,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
         <!-- Recent Appointments Table -->
         <div class="row">
             <div class="col-12 animate-fade-in" style="animation-delay: 0.6s;">
-                <div class="card glass-card shadow mb-4 border-0">
+                <div class="card glass-card glass-card shadow mb-4 border-0">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-gold text-uppercase">Próximas Citas Hoy</h6>
                         <a href="calendar.php" class="btn btn-sm btn-link text-gold">Ver Calendario Full</a>

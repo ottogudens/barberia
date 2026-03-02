@@ -24,7 +24,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
         <!-- Page Heading -->
 
 
-        <div class="card shadow mb-4">
+        <div class="card glass-card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Horario de empleados</h6>
             </div>

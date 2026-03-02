@@ -92,7 +92,7 @@
 
             <hr class="sidebar-divider">
 
-            <div class="sidebar-heading text-white-50">Administración</div>
+            <div class="sidebar-heading text-gold font-weight-bold">Administración</div>
 
             <li class="nav-item <?php if ($pageTitle == 'Tenants')
                 echo 'active'; ?>">

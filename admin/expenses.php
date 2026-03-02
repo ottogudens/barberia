@@ -101,7 +101,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
         </div>
 
         <!-- FILTERS -->
-        <div class="card shadow mb-4">
+        <div class="card glass-card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Filtrar por Fecha</h6>
             </div>
@@ -117,7 +117,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
         </div>
 
         <!-- EXPENSES TABLE -->
-        <div class="card shadow mb-4">
+        <div class="card glass-card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Historial de Gastos</h6>
             </div>

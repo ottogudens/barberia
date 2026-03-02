@@ -786,38 +786,66 @@ ul#mobile-menu.menu li a {
     --gold: #D4AF37;
     --dark: #111111;
     --light-gray: #f8f9fa;
-    --text-muted: #6c757d;
+    --text-muted: #495057;
+    /* Darker for light backgrounds */
+}
+
+/* Base text contrast */
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+section.bg-light .text-muted {
+    color: #444 !important;
+    font-weight: 400;
 }
 
 /* Typography Overrides */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: 'Prata', serif;
 }
+
 body {
     font-family: 'Roboto', sans-serif;
     color: #333;
 }
 
 /* Utility Classes */
-.text-gold { color: var(--gold) !important; }
-.bg-gold { background-color: var(--gold) !important; }
-.bg-dark { background-color: var(--dark) !important; }
-.btn-gold { 
-    background-color: var(--gold); 
-    color: #fff; 
-    border: none; 
-    padding: 12px 30px; 
-    text-transform: uppercase; 
+.text-gold {
+    color: var(--gold) !important;
+}
+
+.bg-gold {
+    background-color: var(--gold) !important;
+}
+
+.bg-dark {
+    background-color: var(--dark) !important;
+}
+
+.btn-gold {
+    background-color: var(--gold);
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    text-transform: uppercase;
     letter-spacing: 1px;
     font-weight: 600;
     transition: all 0.3s;
 }
-.btn-gold:hover { 
-    background-color: #bfa13f; 
-    color: #fff; 
+
+.btn-gold:hover {
+    background-color: #bfa13f;
+    color: #fff;
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
 }
+
 .divider {
     height: 3px;
     width: 60px;
@@ -829,28 +857,41 @@ body {
     background: url('../images/barbershop_image_1.jpg') no-repeat center center/cover;
     height: 100vh;
     min-height: 600px;
-    margin-top: -80px; /* Offset fixed header */
+    margin-top: -80px;
+    /* Offset fixed header */
 }
+
 .hero-overlay {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.6);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
 }
+
 .hero-title {
     font-size: 3.5rem;
     font-weight: 700;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     z-index: 2;
     position: relative;
 }
+
 .hero-subtitle {
     font-size: 1.5rem;
     z-index: 2;
     position: relative;
 }
+
 @media (max-width: 768px) {
-    .hero-title { font-size: 2.5rem; }
-    .hero-subtitle { font-size: 1.2rem; }
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+    }
 }
 
 /* Services Section */
@@ -860,13 +901,16 @@ body {
     border: 1px solid #eee;
     border-radius: 8px;
 }
+
 .service-box:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
 }
+
 .service-icon i {
     transition: transform 0.3s;
 }
+
 .service-box:hover .service-icon i {
     transform: scale(1.1);
 }
@@ -883,6 +927,7 @@ body {
     border-radius: 8px;
     transition: all 0.3s;
 }
+
 .member-img img {
     border: 3px solid var(--gold);
     padding: 3px;
@@ -894,9 +939,11 @@ body {
     border-radius: 5px;
     cursor: pointer;
 }
+
 .gallery-item img {
     transition: transform 0.5s ease;
 }
+
 .gallery-item:hover img {
     transform: scale(1.1);
 }

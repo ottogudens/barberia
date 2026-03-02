@@ -33,7 +33,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
             $stmt->execute(array($tenant_id));
             $rows_clients = $stmt->fetchAll();
             ?>
-            <div class="card shadow mb-4">
+            <div class="card glass-card glass-card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Clientes</h6>
                 </div>
@@ -124,7 +124,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
             <?php
         } elseif ($do == 'Add') {
             ?>
-            <div class="card shadow mb-4">
+            <div class="card glass-card glass-card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Agregar Nuevo Cliente</h6>
                 </div>
@@ -172,7 +172,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
             $client = $stmt->fetch();
             if ($stmt->rowCount() > 0) {
                 ?>
-                <div class="card shadow mb-4">
+                <div class="card glass-card glass-card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Editar Cliente</h6>
                     </div>

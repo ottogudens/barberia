@@ -134,7 +134,7 @@ $tenants = $stmt->fetchAll();
     </div>
 
     <!-- Tenants Table -->
-    <div class="card glass-card shadow mb-4 border-0 animate-fade-in" style="animation-delay: 0.3s;">
+    <div class="card glass-card glass-card shadow mb-4 border-0 animate-fade-in" style="animation-delay: 0.3s;">
         <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-secondary">
             <h6 class="m-0 font-weight-bold text-gold text-uppercase">Listado Maestro de Barberías</h6>
             <a href="create_tenant.php" class="btn btn-gold-premium btn-sm shadow-sm font-weight-bold">

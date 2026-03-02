@@ -46,7 +46,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
         </div>
 
         <!-- TABS -->
-        <div class="card glass-card shadow mb-4 border-0">
+        <div class="card glass-card glass-card shadow mb-4 border-0">
             <div class="card-header border-bottom-0 p-0 bg-transparent">
                 <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
                     <li class="nav-item">
