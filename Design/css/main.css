@@ -952,3 +952,124 @@ body {
 .contact-info li {
     font-size: 1.1rem;
 }
+/*** PREMIUM CONTRAST & UTILITIES FOR DARK THEME ***/
+:root {
+    --premium-gold: #D4AF37;
+    --premium-dark: #0b0f19;
+    --premium-card: rgba(26, 32, 44, 0.8);
+    --premium-border: rgba(212, 175, 55, 0.2);
+    --premium-text: #f8fafc;
+    --premium-bright: #ffffff;
+    --premium-muted: #cbd5e1;
+    --accent-success: #00ff88;
+    --accent-info: #00d4ff;
+    --accent-warning: #ffcc00;
+    --accent-danger: #ff4444;
+}
+
+/* Global Contrast Overrides */
+.text-gray-900, .text-gray-800, .text-gray-700, .text-gray-600, .text-gray-500, .text-dark {
+    color: var(--premium-bright) !important;
+}
+
+.text-gray-400, .text-gray-300, .text-gray-200, .text-gray-100 {
+    color: var(--premium-text) !important;
+}
+
+.text-muted, .text-white-50, .small {
+    color: var(--premium-muted) !important;
+}
+
+/* Vibrant Utility Colors */
+.text-success { color: var(--accent-success) !important; }
+.text-info { color: var(--accent-info) !important; }
+.text-warning { color: var(--accent-warning) !important; }
+.text-danger { color: var(--accent-danger) !important; }
+
+/* Exception for Gold Backgrounds */
+.bg-gold .text-dark, .bg-gold.text-dark, .nav-link.active.bg-gold {
+    color: #000 !important;
+}
+
+/* Glass Components */
+.glass-card {
+    background: var(--premium-card) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--premium-border) !important;
+    border-radius: 16px !important;
+}
+
+.alert {
+    border: 1px solid transparent !important;
+    border-radius: 12px !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(5px);
+    color: var(--premium-text) !important;
+}
+
+.alert-info { border-color: var(--accent-info) !important; color: var(--accent-info) !important; }
+.alert-success { border-color: var(--accent-success) !important; color: var(--accent-success) !important; }
+.alert-warning { border-color: var(--accent-warning) !important; color: var(--accent-warning) !important; }
+.alert-danger { border-color: var(--accent-danger) !important; color: var(--accent-danger) !important; }
+
+/* Table Adjustments */
+.thead-light th {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: var(--premium-gold) !important;
+    border-color: var(--premium-border) !important;
+}
+
+.table-bordered td, .table-bordered th {
+    border: 1px solid var(--premium-border) !important;
+}
+
+/* Badge Refinements */
+.badge {
+    padding: 0.5em 0.8em !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+}
+
+.badge-success { background-color: rgba(0, 255, 136, 0.2) !important; color: var(--accent-success) !important; border: 1px solid var(--accent-success) !important; }
+.badge-info { background-color: rgba(0, 212, 255, 0.2) !important; color: var(--accent-info) !important; border: 1px solid var(--accent-info) !important; }
+.badge-warning { background-color: rgba(255, 204, 0, 0.2) !important; color: var(--accent-warning) !important; border: 1px solid var(--accent-warning) !important; }
+.badge-danger { background-color: rgba(255, 68, 68, 0.2) !important; color: var(--accent-danger) !important; border: 1px solid var(--accent-danger) !important; }
+.badge-secondary { background-color: rgba(203, 213, 225, 0.2) !important; color: var(--text-muted) !important; border: 1px solid var(--text-muted) !important; }
+.badge-primary { background-color: rgba(212, 175, 55, 0.2) !important; color: var(--primary-gold) !important; border: 1px solid var(--primary-gold) !important; }
+
+/* Aggressive Contrast Fixes from Final Audit */
+label, 
+.control-label,
+.day-name,
+th {
+    color: var(--text-bright) !important;
+}
+
+.thead-light th {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: var(--primary-gold) !important;
+}
+
+/* Fix for specific Schedule Page blue text */
+.worktime-day .day-name {
+    color: var(--primary-gold) !important;
+    font-weight: 700;
+}
+
+/* Ensure card headers in Finance/Expenses are dark */
+.card-header {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-bottom: 1px solid var(--glass-border) !important;
+}
+
+.card-header h6 {
+    color: var(--primary-gold) !important;
+}
+
+/* Alert Glass Polish */
+.alert-info {
+    background: rgba(0, 212, 255, 0.1) !important;
+    border-color: var(--accent-info) !important;
+    color: var(--accent-info) !important;
+}

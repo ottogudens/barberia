@@ -4,7 +4,6 @@ $pageTitle = 'Finanzas - Egresos y Pagos';
 include 'connect.php';
 include 'Includes/functions/functions.php';
 include 'Includes/templates/header.php';
-include 'Includes/templates/navbar.php';
 include '../Includes/tenant_context.php';
 
 $tenant_id = getCurrentTenantId($con);
@@ -82,7 +81,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
         <!-- SUMMARY CARDS -->
         <div class="row">
             <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card glass-card border-left-danger shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
