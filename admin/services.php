@@ -27,7 +27,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
         <?php
         $do = '';
 
-        if (isset($_GET['do']) && in_array($_GET['do'], array('Add', 'Edit'))) {
+        if (isset($_GET['do']) && in_array($_GET['do'], array('Add', 'Edit', 'Import'))) {
             $do = htmlspecialchars($_GET['do']);
         } else {
             $do = 'Manage';
@@ -49,6 +49,13 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                     <a href="services.php?do=Add" class="btn btn-success btn-sm" style="margin-bottom: 10px;">
                         <i class="fa fa-plus"></i>
                         Agregar Servicio
+                    </a>
+                    <a href="services.php?do=Import" class="btn btn-info btn-sm" style="margin-bottom: 10px;">
+                        <i class="fa fa-upload"></i> Importar Servicios
+                    </a>
+                    <a href="import_services_template.csv" class="btn btn-secondary btn-sm" style="margin-bottom: 10px;"
+                        download>
+                        <i class="fa fa-download"></i> Descargar Plantilla
                     </a>
 
                     <!-- SERVICES TABLE -->
@@ -539,6 +546,74 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                 header('Location: services.php');
                 exit();
             }
+        } elseif ($do == 'Import') {
+            ?>
+            <div class="card glass-card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Importar Servicios (CSV)</h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        Sube un archivo CSV con las columnas: <b>category_name, service_name, service_description,
+                            service_price, service_duration</b>.
+                        <br>Las categorías se crearán automáticamente si no existen.
+                        <br>Puedes descargar la <a href="import_services_template.csv" download>plantilla aquí</a>.
+                    </div>
+                    <form method="POST" action="services.php?do=Import" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label>Seleccionar Archivo CSV</label>
+                            <input type="file" name="csv_file" class="form-control" accept=".csv" required>
+                        </div>
+                        <button type="submit" name="import_csv" class="btn btn-primary">Cargar Servicios</button>
+                    </form>
+
+                    <?php
+                    if (isset($_POST['import_csv']) && isset($_FILES['csv_file'])) {
+                        $file = $_FILES['csv_file']['tmp_name'];
+                        if (($handle = fopen($file, "r")) !== FALSE) {
+                            $header = fgetcsv($handle, 1000, ","); // Skip header
+                            $imported = 0;
+                            $errors = 0;
+
+                            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                                if (count($data) >= 5) {
+                                    $cat_name = test_input($data[0]);
+                                    $s_name = test_input($data[1]);
+                                    $s_desc = test_input($data[2]);
+                                    $s_price = floatval($data[3]);
+                                    $s_dur = intval($data[4]);
+
+                                    // 1. Get or Create Category
+                                    $stmtCat = $con->prepare("SELECT category_id FROM service_categories WHERE category_name = ? AND tenant_id = ?");
+                                    $stmtCat->execute([$cat_name, $tenant_id]);
+                                    $cat_row = $stmtCat->fetch();
+
+                                    if ($cat_row) {
+                                        $cat_id = $cat_row['category_id'];
+                                    } else {
+                                        $stmtNewCat = $con->prepare("INSERT INTO service_categories (category_name, tenant_id) VALUES (?, ?)");
+                                        $stmtNewCat->execute([$cat_name, $tenant_id]);
+                                        $cat_id = $con->lastInsertId();
+                                    }
+
+                                    // 2. Insert Service
+                                    $stmt = $con->prepare("INSERT INTO services (service_name, service_description, service_price, service_duration, category_id, tenant_id) VALUES (?,?,?,?,?,?)");
+                                    if ($stmt->execute([$s_name, $s_desc, $s_price, $s_dur, $cat_id, $tenant_id])) {
+                                        $imported++;
+                                    } else {
+                                        $errors++;
+                                    }
+                                }
+                            }
+                            fclose($handle);
+                            echo "<div class='alert alert-success mt-3'>Importación finalizada: $imported servicios creados con éxito.</div>";
+                            echo "<a href='services.php' class='btn btn-secondary'>Volver al listado</a>";
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
+            <?php
         }
         ?>
     </div>
