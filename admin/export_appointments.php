@@ -57,7 +57,7 @@ foreach ($rows as $row) {
         $row['e_fname'] . " " . $row['e_lname'],
         $service_list,
         $status,
-        $row['total_amount']
+        number_format($row['total_amount'], 0, '', '')
     ));
 }
 

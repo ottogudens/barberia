@@ -88,7 +88,8 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                 <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
                                     Total Egresos (Periodo)</div>
                                 <div class="h5 mb-0 font-weight-bold text-gold font-weight-bold uppercase">
-                                    $<?php echo number_format($total_expenses, 2); ?></div>
+                                    <?php echo formatCurrency($total_expenses); ?>
+                                </div>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -140,8 +141,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                             class="badge badge-secondary"><?php echo htmlspecialchars($expense['category']); ?></span>
                                     </td>
                                     <td><?php echo htmlspecialchars($expense['description']); ?></td>
-                                    <td class="text-danger font-weight-bold">
-                                        -$<?php echo number_format($expense['amount'], 2); ?></td>
+                                    -<?php echo formatCurrency($expense['amount']); ?></td>
                                     <td>
                                         <a href="expenses.php?do=delete&id=<?php echo $expense['expense_id']; ?>"
                                             class="btn btn-danger btn-sm btn-circle"

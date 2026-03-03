@@ -95,11 +95,13 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                     <?php
                                     $stmt = $con->prepare("SELECT SUM(total_amount) FROM appointments WHERE tenant_id = ? AND is_paid = 1 AND DATE(paid_at) = CURRENT_DATE");
                                     $stmt->execute([$tenant_id]);
-                                    echo "$" . number_format($stmt->fetchColumn() ?: 0, 0);
+                                    echo formatCurrency($stmt->fetchColumn() ?: 0);
                                     ?>
                                 </div>
                             </div>
-                            <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gold font-weight-bold uppercase opacity-50"></i></div>
+                            <div class="col-auto"><i
+                                    class="fas fa-dollar-sign fa-2x text-gold font-weight-bold uppercase opacity-50"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -120,7 +122,8 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                     ?>
                                 </div>
                             </div>
-                            <div class="col-auto"><i class="fas fa-clock fa-2x text-gold font-weight-bold uppercase opacity-50"></i></div>
+                            <div class="col-auto"><i
+                                    class="fas fa-clock fa-2x text-gold font-weight-bold uppercase opacity-50"></i></div>
                         </div>
                     </div>
                 </div>
@@ -141,7 +144,9 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                     ?>
                                 </div>
                             </div>
-                            <div class="col-auto"><i class="fas fa-check-circle fa-2x text-gold font-weight-bold uppercase opacity-50"></i></div>
+                            <div class="col-auto"><i
+                                    class="fas fa-check-circle fa-2x text-gold font-weight-bold uppercase opacity-50"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -286,7 +291,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                 data: {
                     labels: <?php echo json_encode($labels); ?>,
                     datasets: [{
-                        label: 'Ventas ($)',
+                        label: 'Ventas',
                         data: <?php echo json_encode($data); ?>,
                         backgroundColor: 'rgba(212, 175, 55, 0.1)',
                         borderColor: '#D4AF37',

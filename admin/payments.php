@@ -126,7 +126,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                                     echo implode(", ", $services);
                                                     ?>
                                                 </td>
-                                                <td>$<?php echo number_format($price, 2); ?></td>
+                                                <td><?php echo formatCurrency($price); ?></td>
                                                 <td>
                                                     <button class="btn btn-success btn-sm" data-toggle="modal"
                                                         data-target="#payModal<?php echo $appt['appointment_id']; ?>">
@@ -191,7 +191,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                 $stmtTotal->execute([$tenant_id, $start_date, $end_date]);
                                 $total_period = $stmtTotal->fetchColumn() ?: 0;
                                 ?>
-                                <h4 class="font-weight-bold text-success">Total: $<?php echo number_format($total_period, 2); ?>
+                                <h4 class="font-weight-bold text-success">Total: <?php echo formatCurrency($total_period); ?>
                                 </h4>
                             </div>
 
@@ -224,7 +224,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                                 <td><?php echo $appt['c_name'] . ' ' . $appt['c_lname']; ?></td>
                                                 <td><?php echo $appt['e_name'] . ' ' . $appt['e_lname']; ?></td>
                                                 <td><?php echo $appt['payment_method']; ?></td>
-                                                <td>$<?php echo number_format($appt['total_amount'], 2); ?></td>
+                                                <td><?php echo formatCurrency($appt['total_amount']); ?></td>
                                             </tr>
                                         <?php endforeach; ?>
                                     </tbody>
@@ -304,11 +304,11 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                     <tr>
                                         <td><?php echo $emp['first_name'] . ' ' . $emp['last_name']; ?></td>
                                         <td><?php echo $emp['commission_percentage']; ?>%</td>
-                                        <td>$<?php echo number_format($total_sales, 2); ?></td>
-                                        <td>$<?php echo number_format($commission_earned, 2); ?></td>
-                                        <td>$<?php echo number_format($total_payouts, 2); ?></td>
+                                        <td><?php echo formatCurrency($total_sales); ?></td>
+                                        <td><?php echo formatCurrency($commission_earned); ?></td>
+                                        <td><?php echo formatCurrency($total_payouts); ?></td>
                                         <td class="<?php echo ($balance > 0) ? 'text-danger font-weight-bold' : 'text-success'; ?>">
-                                            $<?php echo number_format($balance, 2); ?>
+                                            <?php echo formatCurrency($balance); ?>
                                         </td>
                                         <td>
                                             <button class="btn btn-info btn-sm" data-toggle="modal"
@@ -383,7 +383,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                     <tr>
                                         <td><?php echo $p['created_at']; ?></td>
                                         <td><?php echo $p['first_name'] . ' ' . $p['last_name']; ?></td>
-                                        <td>$<?php echo number_format($p['amount'], 2); ?></td>
+                                        <td><?php echo formatCurrency($p['amount']); ?></td>
                                         <td><?php echo htmlspecialchars($p['notes']); ?></td>
                                     </tr>
                                 <?php endforeach; ?>

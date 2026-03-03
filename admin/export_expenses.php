@@ -35,7 +35,7 @@ foreach ($expenses as $row) {
         $row['expense_date'],
         $row['category'],
         $row['description'],
-        $row['amount']
+        number_format($row['amount'], 0, '', '')
     ));
 }
 

@@ -78,7 +78,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                 echo $service['service_description'];
                                 echo "</td>";
                                 echo "<td>";
-                                echo $service['service_price'];
+                                echo formatCurrency($service['service_price']);
                                 echo "</td>";
                                 echo "<td>";
                                 echo $service['service_duration'];

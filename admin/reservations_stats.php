@@ -191,7 +191,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                 echo "<td>" . $row['e_fname'] . " " . $row['e_lname'] . "</td>";
                                 echo "<td>" . $service_list . "</td>";
                                 echo "<td>" . $status . "</td>";
-                                echo "<td>$" . number_format($row['total_amount'], 2) . "</td>";
+                                echo "<td>" . formatCurrency($row['total_amount']) . "</td>";
                                 echo "</tr>";
                             }
                             ?>

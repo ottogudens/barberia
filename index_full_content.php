@@ -261,7 +261,8 @@ include "Includes/templates/header.php";
                             <i class="bs bs-scissors-1"></i>
                             <h3><?php echo $service['service_name']; ?></h3>
                             <p><?php echo $service['service_description']; ?></p>
-                            <h4 style="color: var(--primary-color) !important">$<?php echo $service['service_price']; ?></h4>
+                            <h4 style="color: var(--primary-color) !important">
+                                <?php echo formatCurrency($service['service_price']); ?></h4>
                         </div>
                     </div>
                     <?php

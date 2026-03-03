@@ -238,7 +238,7 @@ include "Includes/templates/header.php";
 						echo "</span>";
 						echo "<div class = 'service_price_field'>";
 						echo "<span style = 'font-weight: bold;'>";
-						echo $row['service_price'] . "$";
+						echo formatCurrency($row['service_price']);
 						echo "</span>";
 						echo "</div>";
 						?>

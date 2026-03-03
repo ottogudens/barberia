@@ -80,6 +80,15 @@ function test_input($data)
 	return $data;
 }
 
+/**
+ * Formats a numeric value as Chilean Pesos (CLP) with no decimals.
+ * Example: 15000 -> $15.000
+ */
+function formatCurrency($value)
+{
+	$value = (float) $value;
+	return '$' . number_format($value, 0, ',', '.');
+}
 
 
 

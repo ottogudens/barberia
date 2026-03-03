@@ -40,7 +40,7 @@ foreach ($paid_appts as $appt) {
         $appt['c_name'] . ' ' . $appt['c_lname'],
         $appt['e_name'] . ' ' . $appt['e_lname'],
         $appt['payment_method'],
-        $appt['total_amount']
+        number_format($appt['total_amount'], 0, '', '')
     ));
 }
 

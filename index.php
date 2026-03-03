@@ -72,7 +72,8 @@ include "Includes/templates/navbar.php";
                         <h4 class="mb-3 text-white"><?php echo htmlspecialchars($service['service_name']); ?></h4>
                         <p class="text-white-50"><?php echo htmlspecialchars($service['service_description']); ?></p>
                         <h5 class="text-gold mt-3 font-weight-bold">
-                            $<?php echo number_format($service['service_price'], 2); ?></h5>
+                            <?php echo formatCurrency($service['service_price']); ?>
+                        </h5>
                     </div>
                 </div>
             <?php endforeach; ?>
