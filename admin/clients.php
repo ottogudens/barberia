@@ -22,7 +22,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
 
         <?php
         $do = '';
-        if (isset($_GET['do']) && in_array($_GET['do'], array('Add', 'Edit', 'Delete'))) {
+        if (isset($_GET['do']) && in_array($_GET['do'], array('Add', 'Edit', 'Delete', 'Import'))) {
             $do = htmlspecialchars($_GET['do']);
         } else {
             $do = 'Manage';
@@ -41,6 +41,13 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                     <!-- ADD NEW CLIENT BUTTON -->
                     <a href="clients.php?do=Add" class="btn btn-success btn-sm" style="margin-bottom: 10px;">
                         <i class="fa fa-plus"></i> Agregar Cliente
+                    </a>
+                    <a href="clients.php?do=Import" class="btn btn-info btn-sm" style="margin-bottom: 10px;">
+                        <i class="fa fa-upload"></i> Importar Clientes
+                    </a>
+                    <a href="import_clients_template.csv" class="btn btn-secondary btn-sm" style="margin-bottom: 10px;"
+                        download>
+                        <i class="fa fa-download"></i> Descargar Plantilla
                     </a>
 
                     <!-- Clients Table -->
@@ -221,6 +228,66 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                 $stmt->execute([$id, $tenant_id]);
                 echo "<script>window.location.replace('clients.php');</script>";
             }
+        } elseif ($do == 'Import') {
+            ?>
+            <div class="card glass-card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Importar Clientes (CSV)</h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        Sube un archivo CSV con las columnas: <b>first_name, last_name, phone_number, client_email</b>.
+                        <br>Puedes descargar la <a href="import_clients_template.csv" download>plantilla aquí</a>.
+                    </div>
+                    <form method="POST" action="clients.php?do=Import" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label>Seleccionar Archivo CSV</label>
+                            <input type="file" name="csv_file" class="form-control" accept=".csv" required>
+                        </div>
+                        <button type="submit" name="import_csv" class="btn btn-primary">Cargar Clientes</button>
+                    </form>
+
+                    <?php
+                    if (isset($_POST['import_csv']) && isset($_FILES['csv_file'])) {
+                        $file = $_FILES['csv_file']['tmp_name'];
+                        if (($handle = fopen($file, "r")) !== FALSE) {
+                            $header = fgetcsv($handle, 1000, ","); // Skip header
+                            $imported = 0;
+                            $errors = 0;
+                            $duplicate = 0;
+
+                            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                                if (count($data) >= 4) {
+                                    $fname = test_input($data[0]);
+                                    $lname = test_input($data[1]);
+                                    $phone = test_input($data[2]);
+                                    $email = test_input($data[3]);
+                                    $pass = password_hash('123456', PASSWORD_DEFAULT); // Default password
+            
+                                    // Check duplicate
+                                    $stmtCheck = $con->prepare("SELECT * FROM clients WHERE client_email = ? AND tenant_id = ?");
+                                    $stmtCheck->execute([$email, $tenant_id]);
+                                    if ($stmtCheck->rowCount() == 0) {
+                                        $stmt = $con->prepare("INSERT INTO clients (first_name, last_name, phone_number, client_email, password, tenant_id) VALUES (?,?,?,?,?,?)");
+                                        if ($stmt->execute([$fname, $lname, $phone, $email, $pass, $tenant_id])) {
+                                            $imported++;
+                                        } else {
+                                            $errors++;
+                                        }
+                                    } else {
+                                        $duplicate++;
+                                    }
+                                }
+                            }
+                            fclose($handle);
+                            echo "<div class='alert alert-success mt-3'>Importación finalizada: $imported exitosos, $duplicate duplicados omitidos, $errors errores.</div>";
+                            echo "<a href='clients.php' class='btn btn-secondary'>Volver al listado</a>";
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
+            <?php
         }
         ?>
     </div>
