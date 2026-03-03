@@ -37,7 +37,8 @@ CREATE TABLE IF NOT EXISTS employees (
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     phone_number VARCHAR(20) NOT NULL,
-    email VARCHAR(100) NOT NULL
+    email VARCHAR(100) NOT NULL,
+    image VARCHAR(255) DEFAULT 'Design/images/default_employee.png'
 );
 
 -- TABLE: employees_schedule
@@ -166,6 +167,11 @@ BEGIN
     -- appointments
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='appointments' AND column_name='tenant_id') THEN
         ALTER TABLE appointments ADD COLUMN tenant_id INT;
+    END IF;
+
+    -- employees image column
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='employees' AND column_name='image') THEN
+        ALTER TABLE employees ADD COLUMN image VARCHAR(255) DEFAULT 'Design/images/default_employee.png';
     END IF;
 END $$;
 
