@@ -109,6 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
 
         <form method="POST" action="login.php" class="mt-4">
+                                    <?php if(function_exists("csrfInput")) csrfInput(); ?>
             <?php csrfInput(); ?>
             <div class="form-group mb-4">
                 <label class="text-gold small font-weight-bold text-uppercase mb-2 d-block">Usuario</label>

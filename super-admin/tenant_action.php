@@ -6,11 +6,16 @@ if (!isset($_SESSION['super_admin_id'])) {
 }
 
 include '../connect.php';
+include '../Includes/csrf.php';
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['csrf_token']) || !verifyCsrfToken($_POST['csrf_token'])) {
+    die("Error de seguridad (CSRF).");
+}
 
 // Check if tenant_id and action are set
-if (isset($_GET['tenant_id']) && isset($_GET['action'])) {
-    $tenant_id = $_GET['tenant_id'];
-    $action = $_GET['action'];
+if (isset($_POST['tenant_id']) && isset($_POST['action'])) {
+    $tenant_id = $_POST['tenant_id'];
+    $action = $_POST['action'];
 
     if ($action == 'suspend') {
         $stmt = $con->prepare("UPDATE tenants SET status = 'suspended' WHERE tenant_id = ?");

@@ -161,6 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login_client'])) {
             <?php endif; ?>
 
             <form method="POST" action="login.php">
+                                    <?php if(function_exists("csrfInput")) csrfInput(); ?>
                 <div class="form-group mb-4">
                     <label class="form-label">Correo Electrónico</label>
                     <div class="input-group">

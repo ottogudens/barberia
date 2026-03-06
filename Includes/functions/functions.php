@@ -12,32 +12,84 @@ function getTitle()
 }
 
 /*
-	This function returns the number of items in a given table
+	This function returns the number of items in a given table.
+	Uses a whitelist of allowed table/column names to prevent SQL injection.
+	Filters by tenant_id for multi-tenant data isolation.
 */
 
-function countItems($item, $table)
+// Whitelist of allowed table/column combinations
+function _getAllowedCountTargets()
+{
+	return [
+		'clients' => 'client_id',
+		'employees' => 'employee_id',
+		'services' => 'service_id',
+		'appointments' => 'appointment_id',
+		'service_categories' => 'category_id',
+		'offers' => 'offer_id',
+		'gallery_images' => 'image_id',
+		'expenses' => 'expense_id',
+		'employee_payouts' => 'payout_id',
+	];
+}
+
+function countItems($item, $table, $tenant_id = null)
 {
 	global $con;
-	$stat_ = $con->prepare("SELECT COUNT($item) FROM $table");
-	$stat_->execute();
+
+	// Whitelist validation
+	$allowed = _getAllowedCountTargets();
+	if (!isset($allowed[$table]) || $allowed[$table] !== $item) {
+		error_log("countItems() blocked: invalid table/column '$table'/'$item'");
+		return 0;
+	}
+
+	if ($tenant_id !== null) {
+		$stat_ = $con->prepare("SELECT COUNT($item) FROM $table WHERE tenant_id = ?");
+		$stat_->execute([$tenant_id]);
+	} else {
+		$stat_ = $con->prepare("SELECT COUNT($item) FROM $table");
+		$stat_->execute();
+	}
 
 	return $stat_->fetchColumn();
 }
 
 /*
+ ** Check Items Function — Whitelisted version
+ ** Checks if a value exists in an allowed table/column combination.
+ */
 
-** Check Items Function
-** Function to Check Item In Database [Function with Parameters]
-** $select = the item to select [Example : user, item, category]
-** $from = the table to select from [Example : users, items, categories]
-** $value = The value of select [Example: Ossama, Box, Electronics]
+function _getAllowedCheckTargets()
+{
+	return [
+		'clients' => ['client_email', 'client_id'],
+		'employees' => ['email', 'employee_id'],
+		'services' => ['service_name', 'service_id'],
+		'barber_admin' => ['username', 'admin_id'],
+		'tenants' => ['slug', 'tenant_id'],
+		'super_admins' => ['username'],
+	];
+}
 
-*/
-function checkItem($select, $from, $value)
+function checkItem($select, $from, $value, $tenant_id = null)
 {
 	global $con;
-	$statment = $con->prepare("SELECT $select FROM $from WHERE $select = ? ");
-	$statment->execute(array($value));
+
+	// Whitelist validation
+	$allowed = _getAllowedCheckTargets();
+	if (!isset($allowed[$from]) || !in_array($select, $allowed[$from])) {
+		error_log("checkItem() blocked: invalid table/column '$from'/'$select'");
+		return 0;
+	}
+
+	if ($tenant_id !== null) {
+		$statment = $con->prepare("SELECT $select FROM $from WHERE $select = ? AND tenant_id = ?");
+		$statment->execute(array($value, $tenant_id));
+	} else {
+		$statment = $con->prepare("SELECT $select FROM $from WHERE $select = ?");
+		$statment->execute(array($value));
+	}
 	$count = $statment->rowCount();
 
 	return $count;
@@ -49,7 +101,6 @@ function checkItem($select, $from, $value)
   TEST INPUT FUNCTION, IS USED FOR SANITIZING USER INPUTS
   AND REMOVE SUSPICIOUS CHARS and Remove Extra Spaces
   ==============================================
-
 */
 
 function test_input($data)

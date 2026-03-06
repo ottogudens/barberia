@@ -7,6 +7,7 @@ if (!isset($_SESSION['super_admin_id'])) {
 
 include '../connect.php';
 include '../Includes/functions/functions.php';
+include '../Includes/csrf.php';
 
 $pageTitle = 'Dashboard';
 include 'Includes/templates/header.php';
@@ -175,7 +176,7 @@ $tenants = $stmt->fetchAll();
                                 </td>
                                 <td><?php echo date('d/m/Y', strtotime($tenant['created_at'])); ?></td>
                                 <td class="text-center">
-                                    <div class="btn-group">
+                                    <div class="btn-group d-flex" style="gap: 5px;">
                                         <a href="export_tenant.php?tenant_id=<?php echo $tenant['tenant_id']; ?>"
                                             class="btn btn-outline-success btn-sm" title="Respaldar Datos">
                                             <i class="fas fa-download"></i>
@@ -185,22 +186,37 @@ $tenants = $stmt->fetchAll();
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <?php if ($tenant['status'] == 'active'): ?>
-                                            <a href="tenant_action.php?tenant_id=<?php echo $tenant['tenant_id']; ?>&action=suspend"
-                                                class="btn btn-outline-warning btn-sm" title="Suspender"
-                                                onclick="return confirm('¿Suspender esta barbería?');">
-                                                <i class="fas fa-pause"></i>
-                                            </a>
+                                            <form method="POST" action="tenant_action.php"
+                                                onsubmit="return confirm('¿Suspender esta barbería?');">
+                                    <?php if(function_exists("csrfInput")) csrfInput(); ?>
+                                                <?php csrfInput(); ?>
+                                                <input type="hidden" name="action" value="suspend">
+                                                <input type="hidden" name="tenant_id"
+                                                    value="<?php echo $tenant['tenant_id']; ?>">
+                                                <button type="submit" class="btn btn-outline-warning btn-sm"
+                                                    title="Suspender"><i class="fas fa-pause"></i></button>
+                                            </form>
                                         <?php else: ?>
-                                            <a href="tenant_action.php?tenant_id=<?php echo $tenant['tenant_id']; ?>&action=activate"
-                                                class="btn btn-outline-success btn-sm" title="Activar">
-                                                <i class="fas fa-play"></i>
-                                            </a>
+                                            <form method="POST" action="tenant_action.php">
+                                    <?php if(function_exists("csrfInput")) csrfInput(); ?>
+                                                <?php csrfInput(); ?>
+                                                <input type="hidden" name="action" value="activate">
+                                                <input type="hidden" name="tenant_id"
+                                                    value="<?php echo $tenant['tenant_id']; ?>">
+                                                <button type="submit" class="btn btn-outline-success btn-sm" title="Activar"><i
+                                                        class="fas fa-play"></i></button>
+                                            </form>
                                         <?php endif; ?>
-                                        <a href="tenant_action.php?tenant_id=<?php echo $tenant['tenant_id']; ?>&action=delete"
-                                            class="btn btn-outline-danger btn-sm" title="Eliminar"
-                                            onclick="return confirm('¡ADVERTENCIA! Eliminación permanente. Se recomienda realizar un RESPALDO primero. ¿Desea continuar con la eliminación?');">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
+                                        <form method="POST" action="tenant_action.php"
+                                            onsubmit="return confirm('¡ADVERTENCIA! Eliminación permanente. Se recomienda realizar un RESPALDO primero. ¿Desea continuar con la eliminación?');">
+                                    <?php if(function_exists("csrfInput")) csrfInput(); ?>
+                                            <?php csrfInput(); ?>
+                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="tenant_id"
+                                                value="<?php echo $tenant['tenant_id']; ?>">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm" title="Eliminar"><i
+                                                    class="fas fa-trash"></i></button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

@@ -1,5 +1,4 @@
 <?php
-session_start();
 $pageTitle = 'Respaldo de Base de Datos';
 include 'connect.php';
 include 'Includes/functions/functions.php';
@@ -9,8 +8,7 @@ include '../Includes/tenant_context.php';
 
 $tenant_id = getCurrentTenantId($con);
 
-//Check If user is already logged in
-if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admin_id_barbershop_Xw211qAAsq4'])) {
+include 'Includes/auth_check.php';
 
 
     // HANDLE BACKUP GENERATION
@@ -44,7 +42,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
             unlink($file); // Delete after download
             exit;
         } else {
-            echo "<script>swal('Error', 'No se pudo generar el respaldo. Verifique configuración de mysqldump.', 'error');</script>";
+            echo "<script>Swal.fire('Error', 'No se pudo generar el respaldo. Verifique configuración de mysqldump.', 'error');</script>";
         }
     }
     ?>
@@ -68,6 +66,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                 </div>
 
                 <form method="POST" action="backup.php">
+                                    <?php if(function_exists("csrfInput")) csrfInput(); ?>
                     <button type="submit" name="generate_backup" class="btn btn-lg btn-success">
                         <i class="fas fa-database mb-1"></i> Generar y Descargar Backup
                     </button>
@@ -77,8 +76,4 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
     </div>
 
     <?php include 'Includes/templates/footer.php';
-} else {
-    header('Location: login.php');
-    exit();
-}
 ?>

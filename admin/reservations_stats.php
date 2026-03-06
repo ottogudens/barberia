@@ -1,8 +1,5 @@
 <?php
-ob_start();
-session_start();
-
-$pageTitle = 'Historial y Reportes';
+ob_start();$pageTitle = 'Historial y Reportes';
 
 include 'connect.php';
 include 'Includes/functions/functions.php';
@@ -83,7 +80,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
 
                                     foreach ($services as $svc) {
                                         echo "<tr>";
-                                        echo "<td>" . $svc['service_name'] . "</td>";
+                                        echo "<td>" . htmlspecialchars($svc['service_name']) . "</td>";
                                         echo "<td><span class='badge badge-success'>" . $svc['total_bookings'] . "</span></td>";
                                         echo "</tr>";
                                     }
@@ -129,7 +126,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
 
                                     foreach ($employees as $emp) {
                                         echo "<tr>";
-                                        echo "<td>" . $emp['first_name'] . " " . $emp['last_name'] . "</td>";
+                                        echo "<td>" . htmlspecialchars($emp['first_name'] . " " . $emp['last_name']) . "</td>";
                                         echo "<td><span class='badge badge-primary'>" . $emp['total_bookings'] . "</span></td>";
                                         echo "</tr>";
                                     }
@@ -187,9 +184,9 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                 echo "<tr>";
                                 echo "<td>" . date('Y-m-d', strtotime($row['start_time'])) . "</td>";
                                 echo "<td>" . date('H:i', strtotime($row['start_time'])) . "</td>";
-                                echo "<td>" . $row['c_fname'] . " " . $row['c_lname'] . "</td>";
-                                echo "<td>" . $row['e_fname'] . " " . $row['e_lname'] . "</td>";
-                                echo "<td>" . $service_list . "</td>";
+                                echo "<td>" . htmlspecialchars($row['c_fname'] . " " . $row['c_lname']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['e_fname'] . " " . $row['e_lname']) . "</td>";
+                                echo "<td>" . htmlspecialchars($service_list) . "</td>";
                                 echo "<td>" . $status . "</td>";
                                 echo "<td>" . formatCurrency($row['total_amount']) . "</td>";
                                 echo "</tr>";
@@ -204,8 +201,4 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
     </div>
     <?php
     include 'Includes/templates/footer.php';
-} else {
-    header('Location: login.php');
-    exit();
-}
 ?>

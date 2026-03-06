@@ -96,7 +96,7 @@ $('.cancel_appointment_button').click(function()
             $('#cancel_appointment_'+appointment_id).modal('hide');
             
             //Show Success Message
-            swal("Cancel Appointment","The Appointment has been canceled successfully!", "success").then((value) => 
+            Swal.fire("Cancel Appointment","The Appointment has been canceled successfully!", "success").then((value) => 
             {
                 window.location.replace("index.php");
             });
@@ -140,12 +140,12 @@ $('#add_category_bttn').click(function()
             {
                 if(data['alert'] == "Warning")
                 {
-                    swal("Warning",data['message'], "warning").then((value) => {});
+                    Swal.fire("Warning",data['message'], "warning").then((value) => {});
                 }
                 if(data['alert'] == "Success")
                 {
                     $('#add_new_category').modal('hide');
-                    swal("New Category",data['message'], "success").then((value) => 
+                    Swal.fire("New Category",data['message'], "success").then((value) => 
                     {
                         window.location.replace("service-categories.php");
                     });
@@ -186,11 +186,11 @@ $('.delete_category_bttn').click(function()
         {
             if(data['alert'] == "Warning")
                 {
-                    swal("Warning",data['message'], "warning").then((value) => {});
+                    Swal.fire("Warning",data['message'], "warning").then((value) => {});
                 }
                 if(data['alert'] == "Success")
                 {
-                    swal("New Category",data['message'], "success").then((value) => 
+                    Swal.fire("New Category",data['message'], "success").then((value) => 
                     {
                         window.location.replace("service-categories.php");
                     });
@@ -228,11 +228,11 @@ $('.edit_category_bttn').click(function()
             {
                 if(data['alert'] == "Warning")
                 {
-                    swal("Warning",data['message'], "warning").then((value) => {});
+                    Swal.fire("Warning",data['message'], "warning").then((value) => {});
                 }
                 if(data['alert'] == "Success")
                 {
-                    swal("New Category",data['message'], "success").then((value) => 
+                    Swal.fire("New Category",data['message'], "success").then((value) => 
                     {
                         window.location.replace("service-categories.php");
                     });
@@ -269,7 +269,7 @@ $('.delete_service_bttn').click(function()
         data:{service_id:service_id,do:do_},
         success: function (data) 
         {
-            swal("Delete Service","The service has been deleted successfully!", "success").then((value) => {
+            Swal.fire("Delete Service","The service has been deleted successfully!", "success").then((value) => {
                 window.location.replace("services.php");
             });     
         },
@@ -322,7 +322,7 @@ $(".sb-worktime-day-switch").click(function()
         data:{employee_id:employee_id,do:do_},
         success: function (data) 
         {
-            swal("Delete Employee","The employee has been deleted successfully!", "success").then((value) => {
+            Swal.fire("Delete Employee","The employee has been deleted successfully!", "success").then((value) => {
                 window.location.replace("employees.php");
             });     
         },

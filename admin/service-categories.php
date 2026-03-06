@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 //Page Title
 $pageTitle = 'Categorías de Servicio';
 
@@ -12,8 +10,7 @@ include '../Includes/tenant_context.php';
 
 $tenant_id = getCurrentTenantId($con);
 
-//Check If user is already logged in
-if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admin_id_barbershop_Xw211qAAsq4'])) {
+include 'Includes/auth_check.php';
     ?>
     <!-- Begin Page Content -->
     <div class="container-fluid">
@@ -84,7 +81,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                 echo $category['category_id'];
                                 echo "</td>";
                                 echo "<td>";
-                                echo $category['category_name'];
+                                echo htmlspecialchars($category['category_name']);
                                 echo "</td>";
                                 echo "<td>";
                                 if (strtolower($category["category_name"]) != "uncategorized") {
@@ -116,7 +113,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                                                 <label for="category_name">Nombre de Categoría</label>
                                                                 <input type="text" class="form-control"
                                                                     id="<?php echo "input_category_name_" . $category["category_id"]; ?>"
-                                                                    value="<?php echo $category["category_name"]; ?>">
+                                                                    value="<?php echo htmlspecialchars($category["category_name"]); ?>">
                                                                 <div class="invalid-feedback"
                                                                     id="<?php echo "invalid_input_" . $category["category_id"]; ?>">
                                                                     El nombre de la categoría es obligatorio.
@@ -154,7 +151,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                                         </div>
                                                         <div class="modal-body">
                                                             ¿Está seguro de que desea eliminar esta categoría?
-                                                            "<?php echo $category['category_name']; ?>"?
+                                                            "<?php echo htmlspecialchars($category['category_name']); ?>"?
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
@@ -184,9 +181,5 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
 
     //Include Footer
     include 'Includes/templates/footer.php';
-} else {
-    header('Location: login.php');
-    exit();
-}
 
 ?>

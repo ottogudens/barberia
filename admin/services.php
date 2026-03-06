@@ -1,8 +1,5 @@
 <?php
-ob_start();
-session_start();
-
-//Page Title
+ob_start();//Page Title
 $pageTitle = 'Servicios';
 
 //Includes
@@ -16,615 +13,651 @@ $tenant_id = getCurrentTenantId($con);
 //Extra JS FILES
 echo "<script src='https://unpkg.com/sweetalert/dist/sweetalert.min.js'></script>";
 
-//Check If user is already logged in
-if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admin_id_barbershop_Xw211qAAsq4'])) {
-    ?>
-    <!-- Begin Page Content -->
-    <div class="container-fluid">
+include 'Includes/auth_check.php';
+?>
+<!-- Begin Page Content -->
+<div class="container-fluid">
 
-        <!-- Page Heading -->
+    <!-- Page Heading -->
 
-        <?php
-        $do = '';
+    <?php
+    $do = '';
 
-        if (isset($_GET['do']) && in_array($_GET['do'], array('Add', 'Edit', 'Import'))) {
-            $do = htmlspecialchars($_GET['do']);
-        } else {
-            $do = 'Manage';
-        }
+    if (isset($_GET['do']) && in_array($_GET['do'], array('Add', 'Edit', 'Import'))) {
+        $do = htmlspecialchars($_GET['do']);
+    } else {
+        $do = 'Manage';
+    }
 
-        if ($do == 'Manage') {
-            $stmt = $con->prepare("SELECT * FROM services s, service_categories sc where s.category_id = sc.category_id AND s.tenant_id = ?");
-            $stmt->execute(array($tenant_id));
-            $rows_services = $stmt->fetchAll();
-            ?>
-            <div class="card glass-card glass-card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Servicios</h6>
-                </div>
-                <div class="card-body">
+    if ($do == 'Manage') {
+        $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int) $_GET['page'] : 1;
+        $per_page = 15;
+        $offset = ($page - 1) * $per_page;
 
-                    <!-- ADD NEW SERVICE BUTTON -->
+        $stmt_count = $con->prepare("SELECT COUNT(*) FROM services s JOIN service_categories sc ON s.category_id = sc.category_id WHERE s.tenant_id = ?");
+        $stmt_count->execute([$tenant_id]);
+        $total_rows = $stmt_count->fetchColumn();
+        $total_pages = ceil($total_rows / $per_page);
 
-                    <a href="services.php?do=Add" class="btn btn-success btn-sm" style="margin-bottom: 10px;">
-                        <i class="fa fa-plus"></i>
-                        Agregar Servicio
-                    </a>
-                    <a href="services.php?do=Import" class="btn btn-info btn-sm" style="margin-bottom: 10px;">
-                        <i class="fa fa-upload"></i> Importar Servicios
-                    </a>
-                    <a href="import_services_template.csv" class="btn btn-secondary btn-sm" style="margin-bottom: 10px;"
-                        download>
-                        <i class="fa fa-download"></i> Descargar Plantilla
-                    </a>
+        $stmt = $con->prepare("SELECT * FROM services s, service_categories sc where s.category_id = sc.category_id AND s.tenant_id = ? ORDER BY s.service_id DESC LIMIT ? OFFSET ?");
+        $stmt->bindValue(1, $tenant_id, PDO::PARAM_INT);
+        $stmt->bindValue(2, $per_page, PDO::PARAM_INT);
+        $stmt->bindValue(3, $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        $rows_services = $stmt->fetchAll();
+        ?>
+        <div class="card glass-card glass-card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Servicios</h6>
+            </div>
+            <div class="card-body">
 
-                    <!-- SERVICES TABLE -->
+                <!-- ADD NEW SERVICE BUTTON -->
 
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th scope="col">Nombre de Servicio</th>
-                                <th scope="col">Categoría de Servicio</th>
-                                <th scope="col">Descripción</th>
-                                <th scope="col">Precio</th>
-                                <th scope="col">Duración</th>
-                                <th scope="col">Gestionar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            foreach ($rows_services as $service) {
-                                echo "<tr>";
-                                echo "<td>";
-                                echo $service['service_name'];
-                                echo "</td>";
-                                echo "<td>";
-                                echo $service['category_name'];
-                                echo "</td>";
-                                echo "<td style = 'width:30%'>";
-                                echo $service['service_description'];
-                                echo "</td>";
-                                echo "<td>";
-                                echo formatCurrency($service['service_price']);
-                                echo "</td>";
-                                echo "<td>";
-                                echo $service['service_duration'];
-                                echo "</td>";
-                                echo "<td>";
-                                $delete_data = "delete_" . $service["service_id"];
-                                ?>
-                                <ul class="list-inline m-0">
+                <a href="services.php?do=Add" class="btn btn-success btn-sm" style="margin-bottom: 10px;">
+                    <i class="fa fa-plus"></i>
+                    Agregar Servicio
+                </a>
+                <a href="services.php?do=Import" class="btn btn-info btn-sm" style="margin-bottom: 10px;">
+                    <i class="fa fa-upload"></i> Importar Servicios
+                </a>
+                <a href="import_services_template.csv" class="btn btn-secondary btn-sm" style="margin-bottom: 10px;"
+                    download>
+                    <i class="fa fa-download"></i> Descargar Plantilla
+                </a>
 
-                                    <!-- EDIT BUTTON -->
+                <!-- SERVICES TABLE -->
 
-                                    <li class="list-inline-item" data-toggle="tooltip" title="Editar">
-                                        <button class="btn btn-success btn-sm rounded-0">
-                                            <a href="services.php?do=Edit&service_id=<?php echo $service['service_id']; ?>"
-                                                style="color: white;">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
-                                        </button>
-                                    </li>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre de Servicio</th>
+                            <th scope="col">Categoría de Servicio</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Duración</th>
+                            <th scope="col">Gestionar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        foreach ($rows_services as $service) {
+                            echo "<tr>";
+                            echo "<td>";
+                            echo htmlspecialchars($service['service_name']);
+                            echo "</td>";
+                            echo "<td>";
+                            echo htmlspecialchars($service['category_name']);
+                            echo "</td>";
+                            echo "<td style = 'width:30%'>";
+                            echo htmlspecialchars($service['service_description']);
+                            echo "</td>";
+                            echo "<td>";
+                            echo formatCurrency($service['service_price']);
+                            echo "</td>";
+                            echo "<td>";
+                            echo htmlspecialchars($service['service_duration']);
+                            echo "</td>";
+                            echo "<td>";
+                            $delete_data = "delete_" . $service["service_id"];
+                            ?>
+                            <ul class="list-inline m-0">
 
-                                    <!-- DELETE BUTTON -->
+                                <!-- EDIT BUTTON -->
 
-                                    <li class="list-inline-item" data-toggle="tooltip" title="Eliminar">
-                                        <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="modal"
-                                            data-target="#<?php echo $delete_data; ?>" data-placement="top"><i
-                                                class="fa fa-trash"></i></button>
+                                <li class="list-inline-item" data-toggle="tooltip" title="Editar">
+                                    <button class="btn btn-success btn-sm rounded-0">
+                                        <a href="services.php?do=Edit&service_id=<?php echo $service['service_id']; ?>"
+                                            style="color: white;">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                    </button>
+                                </li>
 
-                                        <!-- Delete Modal -->
+                                <!-- DELETE BUTTON -->
 
-                                        <div class="modal fade" id="<?php echo $delete_data; ?>" tabindex="-1" role="dialog"
-                                            aria-labelledby="<?php echo $delete_data; ?>" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Eliminar Servicio</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        ¿Deseas eliminar este servicio?"<?php echo $service['service_name']; ?>"?
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">Cancelar</button>
-                                                        <button type="button" data-id="<?php echo $service['service_id']; ?>"
-                                                            class="btn btn-danger delete_service_bttn">Eliminar</button>
-                                                    </div>
+                                <li class="list-inline-item" data-toggle="tooltip" title="Eliminar">
+                                    <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="modal"
+                                        data-target="#<?php echo $delete_data; ?>" data-placement="top"><i
+                                            class="fa fa-trash"></i></button>
+
+                                    <!-- Delete Modal -->
+
+                                    <div class="modal fade" id="<?php echo $delete_data; ?>" tabindex="-1" role="dialog"
+                                        aria-labelledby="<?php echo $delete_data; ?>" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Eliminar Servicio</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    ¿Deseas eliminar este
+                                                    servicio?"<?php echo htmlspecialchars($service['service_name']); ?>"?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Cancelar</button>
+                                                    <button type="button" data-id="<?php echo $service['service_id']; ?>"
+                                                        class="btn btn-danger delete_service_bttn">Eliminar</button>
                                                 </div>
                                             </div>
                                         </div>
-                                    </li>
-                                </ul>
-                                <?php
-                                echo "</td>";
-                                echo "</tr>";
-                            }
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <?php
-        } elseif ($do == 'Add') {
-            ?>
-
-            <div class="card glass-card glass-card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Agregar Nuevo Servicio</h6>
-                </div>
-                <div class="card-body">
-                    <form method="POST" action="services.php?do=Add">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="service_name">Nombre Servicio</label>
-                                    <input type="text" class="form-control"
-                                        value="<?php echo (isset($_POST['service_name'])) ? htmlspecialchars($_POST['service_name']) : '' ?>"
-                                        placeholder="Nombre Servicio" name="service_name">
-                                    <?php
-                                    $flag_add_service_form = 0;
-                                    if (isset($_POST['add_new_service'])) {
-                                        if (empty(test_input($_POST['service_name']))) {
-                                            ?>
-                                            <div class="invalid-feedback" style="display: block;">
-                                                Nombre de Servicio es Requerido
-                                            </div>
-                                            <?php
-
-                                            $flag_add_service_form = 1;
-                                        }
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <?php
-                                $stmt = $con->prepare("SELECT * FROM service_categories WHERE tenant_id = ?");
-                                $stmt->execute(array($tenant_id));
-                                $rows_categories = $stmt->fetchAll();
-                                ?>
-                                <div class="form-group">
-                                    <label for="service_category">Categoría de Servicio</label>
-                                    <select class="custom-select" name="service_category">
-                                        <?php
-                                        foreach ($rows_categories as $category) {
-                                            echo "<option value = '" . $category['category_id'] . "'>";
-                                            echo $category['category_name'];
-                                            echo "</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="service_duration">Duración de Servicio(min)</label>
-                                    <input type="text" class="form-control"
-                                        value="<?php echo (isset($_POST['service_duration'])) ? htmlspecialchars($_POST['service_duration']) : '' ?>"
-                                        placeholder="Duración de Servicio" name="service_duration">
-                                    <?php
-
-                                    if (isset($_POST['add_new_service'])) {
-                                        if (empty(test_input($_POST['service_duration']))) {
-                                            ?>
-                                            <div class="invalid-feedback" style="display: block;">
-                                                Duración de Servicio es requerido
-                                            </div>
-                                            <?php
-
-                                            $flag_add_service_form = 1;
-                                        } elseif (!ctype_digit(test_input($_POST['service_duration']))) {
-                                            ?>
-                                            <div class="invalid-feedback" style="display: block;">
-                                                Duración inválida
-                                            </div>
-                                            <?php
-
-                                            $flag_add_service_form = 1;
-                                        }
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="service_price">Precio de Servicio($)</label>
-                                    <input type="text" class="form-control"
-                                        value="<?php echo (isset($_POST['service_price'])) ? htmlspecialchars($_POST['service_price']) : '' ?>"
-                                        placeholder="Precio de Servicio" name="service_price">
-                                    <?php
-
-                                    if (isset($_POST['add_new_service'])) {
-                                        if (empty(test_input($_POST['service_price']))) {
-                                            ?>
-                                            <div class="invalid-feedback" style="display: block;">
-                                                Precio de Servicio es Requerido
-                                            </div>
-                                            <?php
-
-                                            $flag_add_service_form = 1;
-                                        } elseif (!is_numeric(test_input($_POST['service_price']))) {
-                                            ?>
-                                            <div class="invalid-feedback" style="display: block;">
-                                                Precio Inválido
-                                            </div>
-                                            <?php
-
-                                            $flag_add_service_form = 1;
-                                        }
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="service_description">Descripción de Servicio</label>
-                                    <textarea class="form-control" name="service_description"
-                                        style="resize: none;"><?php echo (isset($_POST['service_description'])) ? htmlspecialchars($_POST['service_description']) : ''; ?></textarea>
-                                    <?php
-
-                                    if (isset($_POST['add_new_service'])) {
-                                        if (empty(test_input($_POST['service_description']))) {
-                                            ?>
-                                            <div class="invalid-feedback" style="display: block;">
-                                                Se requiere descripción del servicio
-                                            </div>
-                                            <?php
-
-                                            $flag_add_service_form = 1;
-                                        } elseif (strlen(test_input($_POST['service_description'])) > 250) {
-                                            ?>
-                                            <div class="invalid-feedback" style="display: block;">
-                                                La longitud de la descripción debe ser inferior a 250 letras.
-                                            </div>
-                                            <?php
-
-                                            $flag_add_service_form = 1;
-                                        }
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- SUBMIT BUTTON -->
-
-                        <button type="submit" name="add_new_service" class="btn btn-primary">Agregar Servicio</button>
-
-                    </form>
-
-                    <?php
-
-                    /*** ADD NEW SERVICE ***/
-                    if (isset($_POST['add_new_service']) && $_SERVER['REQUEST_METHOD'] == 'POST' && $flag_add_service_form == 0) {
-                        $service_name = test_input($_POST['service_name']);
-                        $service_category = $_POST['service_category'];
-                        $service_duration = test_input($_POST['service_duration']);
-                        $service_price = test_input($_POST['service_price']);
-                        $service_description = test_input($_POST['service_description']);
-
-                        try {
-                            $stmt = $con->prepare("insert into services(service_name,service_description,service_price,service_duration,category_id, tenant_id) values(?,?,?,?,?,?) ");
-                            $stmt->execute(array($service_name, $service_description, $service_price, $service_duration, $service_category, $tenant_id));
-
-                            ?>
-                            <!-- SUCCESS MESSAGE -->
-
-                            <script type="text/javascript">
-                                swal("Nuevo Servicio", "El nuevo servicio ha sido creado con éxito.", "success").then((value) => {
-                                    window.location.replace("services.php");
-                                });
-                            </script>
-
+                                    </div>
+                                </li>
+                            </ul>
                             <?php
-
-                        } catch (Exception $e) {
-                            echo "<div class = 'alert alert-danger' style='margin:10px 0px;'>";
-                            echo 'Ocurrió un error: ' . $e->getMessage();
-                            echo "</div>";
+                            echo "</td>";
+                            echo "</tr>";
                         }
-                    }
-                    ?>
-                </div>
+                        ?>
+                    </tbody>
+                </table>
+
+                <!-- Pagination -->
+                <?php if (isset($total_pages) && $total_pages > 1): ?>
+                    <nav aria-label="Page navigation" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item <?php echo ($page <= 1) ? 'disabled' : ''; ?>">
+                                <a class="page-link" href="?do=Manage&page=<?php echo $page - 1; ?>">Anterior</a>
+                            </li>
+                            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                <li class="page-item <?php echo ($page == $i) ? 'active' : ''; ?>">
+                                    <a class="page-link" href="?do=Manage&page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                </li>
+                            <?php endfor; ?>
+                            <li class="page-item <?php echo ($page >= $total_pages) ? 'disabled' : ''; ?>">
+                                <a class="page-link" href="?do=Manage&page=<?php echo $page + 1; ?>">Siguiente</a>
+                            </li>
+                        </ul>
+                    </nav>
+                <?php endif; ?>
             </div>
+        </div>
+        <?php
+    } elseif ($do == 'Add') {
+        ?>
 
-
-            <?php
-        } elseif ($do == "Edit") {
-            $service_id = (isset($_GET['service_id']) && is_numeric($_GET['service_id'])) ? intval($_GET['service_id']) : 0;
-
-            if ($service_id) {
-                $stmt = $con->prepare("Select * from services where service_id = ? AND tenant_id = ?");
-                $stmt->execute(array($service_id, $tenant_id));
-                $service = $stmt->fetch();
-                $count = $stmt->rowCount();
-
-                if ($count > 0) {
-                    ?>
-                    <div class="card glass-card glass-card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Editar Servicio</h6>
-                        </div>
-                        <div class="card-body">
-                            <form method="POST" action="services.php?do=Edit&service_id=<?php echo $service_id; ?>">
-                                <!-- SERVICE ID -->
-                                <input type="hidden" name="service_id" value="<?php echo $service['service_id']; ?>">
-
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="service_name">Nombre de Servicio</label>
-                                            <input type="text" class="form-control" value="<?php echo $service['service_name'] ?>"
-                                                placeholder="Nombre de Servicio" name="service_name">
-                                            <?php
-                                            $flag_edit_service_form = 0;
-
-                                            if (isset($_POST['edit_service_sbmt'])) {
-                                                if (empty(test_input($_POST['service_name']))) {
-                                                    ?>
-                                                    <div class="invalid-feedback" style="display: block;">
-                                                        El nombre del servicio es obligatorio.
-                                                    </div>
-                                                    <?php
-
-                                                    $flag_edit_service_form = 1;
-                                                }
-                                            }
-                                            ?>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <?php
-                                        $stmt = $con->prepare("SELECT * FROM service_categories WHERE tenant_id = ?");
-                                        $stmt->execute(array($tenant_id));
-                                        $rows_categories = $stmt->fetchAll();
+        <div class="card glass-card glass-card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Agregar Nuevo Servicio</h6>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="services.php?do=Add">
+                    <?php if (function_exists("csrfInput"))
+                        csrfInput(); ?>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="service_name">Nombre Servicio</label>
+                                <input type="text" class="form-control"
+                                    value="<?php echo (isset($_POST['service_name'])) ? htmlspecialchars($_POST['service_name']) : '' ?>"
+                                    placeholder="Nombre Servicio" name="service_name">
+                                <?php
+                                $flag_add_service_form = 0;
+                                if (isset($_POST['add_new_service'])) {
+                                    if (empty(test_input($_POST['service_name']))) {
                                         ?>
-                                        <div class="form-group">
-                                            <label for="service_category">Categoría de Servicio</label>
-                                            <select class="custom-select" name="service_category">
-                                                <?php
-                                                foreach ($rows_categories as $category) {
-                                                    if ($category['category_id'] == $service['category_id']) {
-                                                        echo "<option value = '" . $category['category_id'] . "' selected>";
-                                                        echo $category['category_name'];
-                                                        echo "</option>";
-                                                    } else {
-                                                        echo "<option value = '" . $category['category_id'] . "'>";
-                                                        echo $category['category_name'];
-                                                        echo "</option>";
-                                                    }
-                                                }
-                                                ?>
-                                            </select>
+                                        <div class="invalid-feedback" style="display: block;">
+                                            Nombre de Servicio es Requerido
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="service_duration">Duración de Servicio(min)</label>
-                                            <input type="text" class="form-control" value="<?php echo $service['service_duration'] ?>"
-                                                placeholder="Duración de Servicio" name="service_duration">
-                                            <?php
+                                        <?php
 
-                                            if (isset($_POST['edit_service_sbmt'])) {
-                                                if (empty(test_input($_POST['service_duration']))) {
-                                                    ?>
-                                                    <div class="invalid-feedback" style="display: block;">
-                                                        Duración de servicio es requerido
-                                                    </div>
-                                                    <?php
-
-                                                    $flag_edit_service_form = 1;
-                                                } elseif (!ctype_digit(test_input($_POST['service_duration']))) {
-                                                    ?>
-                                                    <div class="invalid-feedback" style="display: block;">
-                                                        Duración Inválida.
-                                                    </div>
-                                                    <?php
-
-                                                    $flag_edit_service_form = 1;
-                                                }
-                                            }
-                                            ?>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="service_price">Precio de Servicio($)</label>
-                                            <input type="text" class="form-control" value="<?php echo $service['service_price'] ?>"
-                                                placeholder="Precio de Servicio" name="service_price">
-                                            <?php
-
-                                            if (isset($_POST['edit_service_sbmt'])) {
-                                                if (empty(test_input($_POST['service_price']))) {
-                                                    ?>
-                                                    <div class="invalid-feedback" style="display: block;">
-                                                        Precio de servicio es requerido
-                                                    </div>
-                                                    <?php
-
-                                                    $flag_edit_service_form = 1;
-                                                } elseif (!is_numeric(test_input($_POST['service_price']))) {
-                                                    ?>
-                                                    <div class="invalid-feedback" style="display: block;">
-                                                        Precio inválido
-                                                    </div>
-                                                    <?php
-
-                                                    $flag_edit_service_form = 1;
-                                                }
-                                            }
-                                            ?>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="service_description">Descripción de Servicio</label>
-                                            <textarea class="form-control" name="service_description"
-                                                style="resize: none;"><?php echo $service['service_description']; ?></textarea>
-                                            <?php
-
-                                            if (isset($_POST['edit_service_sbmt'])) {
-                                                if (empty(test_input($_POST['service_description']))) {
-                                                    ?>
-                                                    <div class="invalid-feedback" style="display: block;">
-                                                        Descripción de servicio es requerido
-                                                    </div>
-                                                    <?php
-
-                                                    $flag_edit_service_form = 1;
-                                                } elseif (strlen(test_input($_POST['service_description'])) > 250) {
-                                                    ?>
-                                                    <div class="invalid-feedback" style="display: block;">
-                                                        La longitud de la descripción debe ser inferior a 250 letras.
-                                                    </div>
-                                                    <?php
-
-                                                    $flag_edit_service_form = 1;
-                                                }
-                                            }
-                                            ?>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- SUBMIT BUTTON -->
-                                <button type="submit" name="edit_service_sbmt" class="btn btn-primary">Guardar Cambios</button>
-                            </form>
-
-                            <?php
-                            /*** EDIT SERVICE ***/
-                            if (isset($_POST['edit_service_sbmt']) && $_SERVER['REQUEST_METHOD'] == 'POST' && $flag_edit_service_form == 0) {
-                                $service_id = $_POST['service_id'];
-                                $service_name = test_input($_POST['service_name']);
-                                $service_category = $_POST['service_category'];
-                                $service_duration = test_input($_POST['service_duration']);
-                                $service_price = test_input($_POST['service_price']);
-                                $service_description = test_input($_POST['service_description']);
-
-                                try {
-                                    $stmt = $con->prepare("update services set service_name = ?, service_description = ?, service_price = ?, service_duration = ?, category_id = ? where service_id = ? AND tenant_id = ?");
-                                    $stmt->execute(array($service_name, $service_description, $service_price, $service_duration, $service_category, $service_id, $tenant_id));
-
-                                    ?>
-                                    <!-- SUCCESS MESSAGE -->
-
-                                    <script type="text/javascript">
-                                        swal("Servicio Actualizado", "Este servicio ha sido actualizado, correctamente", "success").then((value) => {
-                                            window.location.replace("services.php");
-                                        });
-                                    </script>
-
-                                    <?php
-
-                                } catch (Exception $e) {
-                                    echo "<div class = 'alert alert-danger' style='margin:10px 0px;'>";
-                                    echo 'Ocurrió un error: ' . $e->getMessage();
-                                    echo "</div>";
+                                        $flag_add_service_form = 1;
+                                    }
                                 }
-                            }
+                                ?>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <?php
+                            $stmt = $con->prepare("SELECT * FROM service_categories WHERE tenant_id = ?");
+                            $stmt->execute(array($tenant_id));
+                            $rows_categories = $stmt->fetchAll();
                             ?>
+                            <div class="form-group">
+                                <label for="service_category">Categoría de Servicio</label>
+                                <select class="custom-select" name="service_category">
+                                    <?php
+                                    foreach ($rows_categories as $category) {
+                                        echo "<option value = '" . $category['category_id'] . "'>";
+                                        echo $category['category_name'];
+                                        echo "</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                    <?php
-                } else {
-                    header('Location: services.php');
-                    exit();
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="service_duration">Duración de Servicio(min)</label>
+                                <input type="text" class="form-control"
+                                    value="<?php echo (isset($_POST['service_duration'])) ? htmlspecialchars($_POST['service_duration']) : '' ?>"
+                                    placeholder="Duración de Servicio" name="service_duration">
+                                <?php
+
+                                if (isset($_POST['add_new_service'])) {
+                                    if (empty(test_input($_POST['service_duration']))) {
+                                        ?>
+                                        <div class="invalid-feedback" style="display: block;">
+                                            Duración de Servicio es requerido
+                                        </div>
+                                        <?php
+
+                                        $flag_add_service_form = 1;
+                                    } elseif (!ctype_digit(test_input($_POST['service_duration']))) {
+                                        ?>
+                                        <div class="invalid-feedback" style="display: block;">
+                                            Duración inválida
+                                        </div>
+                                        <?php
+
+                                        $flag_add_service_form = 1;
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="service_price">Precio de Servicio($)</label>
+                                <input type="text" class="form-control"
+                                    value="<?php echo (isset($_POST['service_price'])) ? htmlspecialchars($_POST['service_price']) : '' ?>"
+                                    placeholder="Precio de Servicio" name="service_price">
+                                <?php
+
+                                if (isset($_POST['add_new_service'])) {
+                                    if (empty(test_input($_POST['service_price']))) {
+                                        ?>
+                                        <div class="invalid-feedback" style="display: block;">
+                                            Precio de Servicio es Requerido
+                                        </div>
+                                        <?php
+
+                                        $flag_add_service_form = 1;
+                                    } elseif (!is_numeric(test_input($_POST['service_price']))) {
+                                        ?>
+                                        <div class="invalid-feedback" style="display: block;">
+                                            Precio Inválido
+                                        </div>
+                                        <?php
+
+                                        $flag_add_service_form = 1;
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="service_description">Descripción de Servicio</label>
+                                <textarea class="form-control" name="service_description"
+                                    style="resize: none;"><?php echo (isset($_POST['service_description'])) ? htmlspecialchars($_POST['service_description']) : ''; ?></textarea>
+                                <?php
+
+                                if (isset($_POST['add_new_service'])) {
+                                    if (empty(test_input($_POST['service_description']))) {
+                                        ?>
+                                        <div class="invalid-feedback" style="display: block;">
+                                            Se requiere descripción del servicio
+                                        </div>
+                                        <?php
+
+                                        $flag_add_service_form = 1;
+                                    } elseif (strlen(test_input($_POST['service_description'])) > 250) {
+                                        ?>
+                                        <div class="invalid-feedback" style="display: block;">
+                                            La longitud de la descripción debe ser inferior a 250 letras.
+                                        </div>
+                                        <?php
+
+                                        $flag_add_service_form = 1;
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SUBMIT BUTTON -->
+
+                    <button type="submit" name="add_new_service" class="btn btn-primary">Agregar Servicio</button>
+
+                </form>
+
+                <?php
+
+                /*** ADD NEW SERVICE ***/
+                if (isset($_POST['add_new_service']) && $_SERVER['REQUEST_METHOD'] == 'POST' && $flag_add_service_form == 0) {
+                    $service_name = test_input($_POST['service_name']);
+                    $service_category = $_POST['service_category'];
+                    $service_duration = test_input($_POST['service_duration']);
+                    $service_price = test_input($_POST['service_price']);
+                    $service_description = test_input($_POST['service_description']);
+
+                    try {
+                        $stmt = $con->prepare("insert into services(service_name,service_description,service_price,service_duration,category_id, tenant_id) values(?,?,?,?,?,?) ");
+                        $stmt->execute(array($service_name, $service_description, $service_price, $service_duration, $service_category, $tenant_id));
+
+                        ?>
+                        <!-- SUCCESS MESSAGE -->
+
+                        <script type="text/javascript">
+                            Swal.fire("Nuevo Servicio", "El nuevo servicio ha sido creado con éxito.", "success").then((value) => {
+                                window.location.replace("services.php");
+                            });
+                        </script>
+
+                        <?php
+
+                    } catch (Exception $e) {
+                        echo "<div class = 'alert alert-danger' style='margin:10px 0px;'>";
+                        echo 'Ocurrió un error: ' . $e->getMessage();
+                        echo "</div>";
+                    }
                 }
+                ?>
+            </div>
+        </div>
+
+
+        <?php
+    } elseif ($do == "Edit") {
+        $service_id = (isset($_GET['service_id']) && is_numeric($_GET['service_id'])) ? intval($_GET['service_id']) : 0;
+
+        if ($service_id) {
+            $stmt = $con->prepare("Select * from services where service_id = ? AND tenant_id = ?");
+            $stmt->execute(array($service_id, $tenant_id));
+            $service = $stmt->fetch();
+            $count = $stmt->rowCount();
+
+            if ($count > 0) {
+                ?>
+                <div class="card glass-card glass-card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Editar Servicio</h6>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="services.php?do=Edit&service_id=<?php echo $service_id; ?>
+                                    <?php if (function_exists("csrfInput"))
+                                        csrfInput(); ?>">
+                            <!-- SERVICE ID -->
+                            <input type="hidden" name="service_id" value="<?php echo $service['service_id']; ?>">
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="service_name">Nombre de Servicio</label>
+                                        <input type="text" class="form-control"
+                                            value="<?php echo htmlspecialchars($service['service_name']); ?>"
+                                            placeholder="Nombre de Servicio" name="service_name">
+                                        <?php
+                                        $flag_edit_service_form = 0;
+
+                                        if (isset($_POST['edit_service_sbmt'])) {
+                                            if (empty(test_input($_POST['service_name']))) {
+                                                ?>
+                                                <div class="invalid-feedback" style="display: block;">
+                                                    El nombre del servicio es obligatorio.
+                                                </div>
+                                                <?php
+
+                                                $flag_edit_service_form = 1;
+                                            }
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <?php
+                                    $stmt = $con->prepare("SELECT * FROM service_categories WHERE tenant_id = ?");
+                                    $stmt->execute(array($tenant_id));
+                                    $rows_categories = $stmt->fetchAll();
+                                    ?>
+                                    <div class="form-group">
+                                        <label for="service_category">Categoría de Servicio</label>
+                                        <select class="custom-select" name="service_category">
+                                            <?php
+                                            foreach ($rows_categories as $category) {
+                                                if ($category['category_id'] == $service['category_id']) {
+                                                    echo "<option value = '" . $category['category_id'] . "' selected>";
+                                                    echo $category['category_name'];
+                                                    echo "</option>";
+                                                } else {
+                                                    echo "<option value = '" . $category['category_id'] . "'>";
+                                                    echo $category['category_name'];
+                                                    echo "</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="service_duration">Duración de Servicio(min)</label>
+                                        <input type="text" class="form-control"
+                                            value="<?php echo htmlspecialchars($service['service_duration']); ?>"
+                                            placeholder="Duración de Servicio" name="service_duration">
+                                        <?php
+
+                                        if (isset($_POST['edit_service_sbmt'])) {
+                                            if (empty(test_input($_POST['service_duration']))) {
+                                                ?>
+                                                <div class="invalid-feedback" style="display: block;">
+                                                    Duración de servicio es requerido
+                                                </div>
+                                                <?php
+
+                                                $flag_edit_service_form = 1;
+                                            } elseif (!ctype_digit(test_input($_POST['service_duration']))) {
+                                                ?>
+                                                <div class="invalid-feedback" style="display: block;">
+                                                    Duración Inválida.
+                                                </div>
+                                                <?php
+
+                                                $flag_edit_service_form = 1;
+                                            }
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="service_price">Precio de Servicio($)</label>
+                                        <input type="text" class="form-control"
+                                            value="<?php echo htmlspecialchars($service['service_price']); ?>"
+                                            placeholder="Precio de Servicio" name="service_price">
+                                        <?php
+
+                                        if (isset($_POST['edit_service_sbmt'])) {
+                                            if (empty(test_input($_POST['service_price']))) {
+                                                ?>
+                                                <div class="invalid-feedback" style="display: block;">
+                                                    Precio de servicio es requerido
+                                                </div>
+                                                <?php
+
+                                                $flag_edit_service_form = 1;
+                                            } elseif (!is_numeric(test_input($_POST['service_price']))) {
+                                                ?>
+                                                <div class="invalid-feedback" style="display: block;">
+                                                    Precio inválido
+                                                </div>
+                                                <?php
+
+                                                $flag_edit_service_form = 1;
+                                            }
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="service_description">Descripción de Servicio</label>
+                                        <textarea class="form-control" name="service_description"
+                                            style="resize: none;"><?php echo htmlspecialchars($service['service_description']); ?></textarea>
+                                        <?php
+
+                                        if (isset($_POST['edit_service_sbmt'])) {
+                                            if (empty(test_input($_POST['service_description']))) {
+                                                ?>
+                                                <div class="invalid-feedback" style="display: block;">
+                                                    Descripción de servicio es requerido
+                                                </div>
+                                                <?php
+
+                                                $flag_edit_service_form = 1;
+                                            } elseif (strlen(test_input($_POST['service_description'])) > 250) {
+                                                ?>
+                                                <div class="invalid-feedback" style="display: block;">
+                                                    La longitud de la descripción debe ser inferior a 250 letras.
+                                                </div>
+                                                <?php
+
+                                                $flag_edit_service_form = 1;
+                                            }
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SUBMIT BUTTON -->
+                            <button type="submit" name="edit_service_sbmt" class="btn btn-primary">Guardar Cambios</button>
+                        </form>
+
+                        <?php
+                        /*** EDIT SERVICE ***/
+                        if (isset($_POST['edit_service_sbmt']) && $_SERVER['REQUEST_METHOD'] == 'POST' && $flag_edit_service_form == 0) {
+                            $service_id = $_POST['service_id'];
+                            $service_name = test_input($_POST['service_name']);
+                            $service_category = $_POST['service_category'];
+                            $service_duration = test_input($_POST['service_duration']);
+                            $service_price = test_input($_POST['service_price']);
+                            $service_description = test_input($_POST['service_description']);
+
+                            try {
+                                $stmt = $con->prepare("update services set service_name = ?, service_description = ?, service_price = ?, service_duration = ?, category_id = ? where service_id = ? AND tenant_id = ?");
+                                $stmt->execute(array($service_name, $service_description, $service_price, $service_duration, $service_category, $service_id, $tenant_id));
+
+                                ?>
+                                <!-- SUCCESS MESSAGE -->
+
+                                <script type="text/javascript">
+                                    Swal.fire("Servicio Actualizado", "Este servicio ha sido actualizado, correctamente", "success").then((value) => {
+                                        window.location.replace("services.php");
+                                    });
+                                </script>
+
+                                <?php
+
+                            } catch (Exception $e) {
+                                echo "<div class = 'alert alert-danger' style='margin:10px 0px;'>";
+                                echo 'Ocurrió un error: ' . $e->getMessage();
+                                echo "</div>";
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+                <?php
             } else {
                 header('Location: services.php');
                 exit();
             }
-        } elseif ($do == 'Import') {
-            ?>
-            <div class="card glass-card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Importar Servicios (CSV)</h6>
+        } else {
+            header('Location: services.php');
+            exit();
+        }
+    } elseif ($do == 'Import') {
+        ?>
+        <div class="card glass-card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Importar Servicios (CSV)</h6>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    Sube un archivo CSV con las columnas: <b>category_name, service_name, service_description,
+                        service_price, service_duration</b>.
+                    <br>Las categorías se crearán automáticamente si no existen.
+                    <br>Puedes descargar la <a href="import_services_template.csv" download>plantilla aquí</a>.
                 </div>
-                <div class="card-body">
-                    <div class="alert alert-info">
-                        Sube un archivo CSV con las columnas: <b>category_name, service_name, service_description,
-                            service_price, service_duration</b>.
-                        <br>Las categorías se crearán automáticamente si no existen.
-                        <br>Puedes descargar la <a href="import_services_template.csv" download>plantilla aquí</a>.
+                <form method="POST" action="services.php?do=Import" enctype="multipart/form-data">
+                    <?php if (function_exists("csrfInput"))
+                        csrfInput(); ?>
+                    <div class="form-group">
+                        <label>Seleccionar Archivo CSV</label>
+                        <input type="file" name="csv_file" class="form-control" accept=".csv" required>
                     </div>
-                    <form method="POST" action="services.php?do=Import" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <label>Seleccionar Archivo CSV</label>
-                            <input type="file" name="csv_file" class="form-control" accept=".csv" required>
-                        </div>
-                        <button type="submit" name="import_csv" class="btn btn-primary">Cargar Servicios</button>
-                    </form>
+                    <button type="submit" name="import_csv" class="btn btn-primary">Cargar Servicios</button>
+                </form>
 
-                    <?php
-                    if (isset($_POST['import_csv']) && isset($_FILES['csv_file'])) {
-                        $file = $_FILES['csv_file']['tmp_name'];
-                        if (($handle = fopen($file, "r")) !== FALSE) {
-                            $header = fgetcsv($handle, 1000, ","); // Skip header
-                            $imported = 0;
-                            $errors = 0;
+                <?php
+                if (isset($_POST['import_csv']) && isset($_FILES['csv_file'])) {
+                    $file = $_FILES['csv_file']['tmp_name'];
+                    if (($handle = fopen($file, "r")) !== FALSE) {
+                        $header = fgetcsv($handle, 1000, ","); // Skip header
+                        $imported = 0;
+                        $errors = 0;
 
-                            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                                if (count($data) >= 5) {
-                                    $cat_name = test_input($data[0]);
-                                    $s_name = test_input($data[1]);
-                                    $s_desc = test_input($data[2]);
-                                    $s_price = floatval($data[3]);
-                                    $s_dur = intval($data[4]);
+                        while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                            if (count($data) >= 5) {
+                                $cat_name = test_input($data[0]);
+                                $s_name = test_input($data[1]);
+                                $s_desc = test_input($data[2]);
+                                $s_price = floatval($data[3]);
+                                $s_dur = intval($data[4]);
 
-                                    // 1. Get or Create Category
-                                    $stmtCat = $con->prepare("SELECT category_id FROM service_categories WHERE category_name = ? AND tenant_id = ?");
-                                    $stmtCat->execute([$cat_name, $tenant_id]);
-                                    $cat_row = $stmtCat->fetch();
+                                // 1. Get or Create Category
+                                $stmtCat = $con->prepare("SELECT category_id FROM service_categories WHERE category_name = ? AND tenant_id = ?");
+                                $stmtCat->execute([$cat_name, $tenant_id]);
+                                $cat_row = $stmtCat->fetch();
 
-                                    if ($cat_row) {
-                                        $cat_id = $cat_row['category_id'];
-                                    } else {
-                                        $stmtNewCat = $con->prepare("INSERT INTO service_categories (category_name, tenant_id) VALUES (?, ?)");
-                                        $stmtNewCat->execute([$cat_name, $tenant_id]);
-                                        $cat_id = $con->lastInsertId();
-                                    }
+                                if ($cat_row) {
+                                    $cat_id = $cat_row['category_id'];
+                                } else {
+                                    $stmtNewCat = $con->prepare("INSERT INTO service_categories (category_name, tenant_id) VALUES (?, ?)");
+                                    $stmtNewCat->execute([$cat_name, $tenant_id]);
+                                    $cat_id = $con->lastInsertId();
+                                }
 
-                                    // 2. Insert Service
-                                    $stmt = $con->prepare("INSERT INTO services (service_name, service_description, service_price, service_duration, category_id, tenant_id) VALUES (?,?,?,?,?,?)");
-                                    if ($stmt->execute([$s_name, $s_desc, $s_price, $s_dur, $cat_id, $tenant_id])) {
-                                        $imported++;
-                                    } else {
-                                        $errors++;
-                                    }
+                                // 2. Insert Service
+                                $stmt = $con->prepare("INSERT INTO services (service_name, service_description, service_price, service_duration, category_id, tenant_id) VALUES (?,?,?,?,?,?)");
+                                if ($stmt->execute([$s_name, $s_desc, $s_price, $s_dur, $cat_id, $tenant_id])) {
+                                    $imported++;
+                                } else {
+                                    $errors++;
                                 }
                             }
-                            fclose($handle);
-                            echo "<div class='alert alert-success mt-3'>Importación finalizada: $imported servicios creados con éxito.</div>";
-                            echo "<a href='services.php' class='btn btn-secondary'>Volver al listado</a>";
                         }
+                        fclose($handle);
+                        echo "<div class='alert alert-success mt-3'>Importación finalizada: $imported servicios creados con éxito.</div>";
+                        echo "<a href='services.php' class='btn btn-secondary'>Volver al listado</a>";
                     }
-                    ?>
-                </div>
+                }
+                ?>
             </div>
-            <?php
-        }
-        ?>
-    </div>
+        </div>
+        <?php
+    }
+    ?>
+</div>
 
-    <?php
+<?php
 
-    //Include Footer
-    include 'Includes/templates/footer.php';
-} else {
-    header('Location: login.php');
-    exit();
-}
+//Include Footer
+include 'Includes/templates/footer.php';
 
 ?>

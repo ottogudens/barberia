@@ -1,7 +1,5 @@
 <?php
-	//Start Session
-	session_start();
-	//Unset variables of session
+	//Start Session//Unset variables of session
 	session_unset();
 	//Destroy Session
 	session_destroy();

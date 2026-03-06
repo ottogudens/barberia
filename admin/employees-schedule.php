@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 //Page Title
 $pageTitle = 'Horario de Emplead@s';
 
@@ -15,8 +13,7 @@ $tenant_id = getCurrentTenantId($con);
 //Extra JS FILES
 echo "<script src='https://unpkg.com/sweetalert/dist/sweetalert.min.js'></script>";
 
-//Check If user is already logged in
-if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admin_id_barbershop_Xw211qAAsq4'])) {
+include 'Includes/auth_check.php';
     ?>
     <!-- Begin Page Content -->
     <div class="container-fluid">
@@ -31,6 +28,8 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
             <div class="card-body">
                 <div class="sb-entity-selector" style="max-width:300px;">
                     <form action="employees-schedule.php" method="POST">
+                        <?php if (function_exists("csrfInput"))
+                            csrfInput(); ?>
                         <div class="form-group">
                             <label class="control-label" for="emloyee_schedule_select">
                                 Seleccione empleado para configurar el horario:
@@ -43,7 +42,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
 
                                 echo "<select class='form-control' name='employee_selected'>";
                                 foreach ($employees as $employee) {
-                                    echo "<option value=" . $employee['employee_id'] . " " . ((isset($_POST['employee_selected']) && $_POST['employee_selected'] == $employee['employee_id']) ? 'selected' : '') . ">" . $employee['first_name'] . " " . $employee['last_name'] . "</option>";
+                                    echo "<option value=" . $employee['employee_id'] . " " . ((isset($_POST['employee_selected']) && $_POST['employee_selected'] == $employee['employee_id']) ? 'selected' : '') . ">" . htmlspecialchars($employee['first_name'] . " " . $employee['last_name']) . "</option>";
                                 }
                                 echo "</select>";
                                 ?>
@@ -70,7 +69,10 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                     if (isset($_POST['show_schedule_sbmt'])) {
                         ?>
                         <form method="POST" action="employees-schedule.php">
-                            <input type="hidden" name="employee_id" value="<?php echo $_POST['employee_selected']; ?>" hidden>
+                            <?php if (function_exists("csrfInput"))
+                                csrfInput(); ?>
+                            <input type="hidden" name="employee_id"
+                                value="<?php echo htmlspecialchars($_POST['employee_selected'] ?? ''); ?>" hidden>
                             <div class="worktime-days">
                                 <?php
                                 $employee_id = $_POST['employee_selected'];
@@ -79,13 +81,13 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                 $employees = $stmt->fetchAll();
 
                                 $days = array(
-                                    "1" => "Monday",
-                                    "2" => "Tuesday",
-                                    "3" => "Wednsday",
-                                    "4" => "Thursday",
-                                    "5" => "Friday",
-                                    "6" => "Saturday",
-                                    "7" => "Sunday"
+                                    "1" => "Lunes",
+                                    "2" => "Martes",
+                                    "3" => "Miércoles",
+                                    "4" => "Jueves",
+                                    "5" => "Viernes",
+                                    "6" => "Sábado",
+                                    "7" => "Domingo"
                                 );
 
                                 //Available days
@@ -157,13 +159,13 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
 
                 if (isset($_POST['save_schedule_sbmt'])) {
                     $days = array(
-                        "1" => "Monday",
-                        "2" => "Tuesday",
-                        "3" => "Wednsday",
-                        "4" => "Thursday",
-                        "5" => "Friday",
-                        "6" => "Saturday",
-                        "7" => "Sunday"
+                        "1" => "Lunes",
+                        "2" => "Martes",
+                        "3" => "Miércoles",
+                        "4" => "Jueves",
+                        "5" => "Viernes",
+                        "6" => "Sábado",
+                        "7" => "Domingo"
                     );
                     // Verify employee belongs to tenant
                     $stmtCheck = $con->prepare("SELECT 1 FROM employees WHERE employee_id = ? AND tenant_id = ?");
@@ -187,7 +189,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                             ?>
 
                             <script type="text/javascript">
-                                swal("Establecer horario de empleados", "¡Ha establecido con éxito el horario de los empleados!", "success").then((value) => { });
+                                Swal.fire("Establecer horario de empleados", "¡Ha establecido con éxito el horario de los empleados!", "success").then((value) => { });
                             </script>
 
                             <?php
@@ -203,9 +205,5 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
 
     //Include Footer
     include 'Includes/templates/footer.php';
-} else {
-    header('Location: login.php');
-    exit();
-}
 
 ?>

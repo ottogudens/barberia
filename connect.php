@@ -13,7 +13,20 @@ $port = getenv('DB_PORT') ?: getenv('PGPORT') ?: '5432';
 $user = getenv('DB_USER') ?: getenv('PGUSER');
 $pass = getenv('DB_PASS') ?: getenv('PGPASSWORD');
 $dbname = getenv('DB_NAME') ?: getenv('PGDATABASE');
-$debug = isset($_GET['debug_init']) || getenv('APP_DEBUG') === 'true';
+$debug = getenv('APP_DEBUG') === 'true';
+
+require_once __DIR__ . '/Includes/csrf.php';
+
+// Global CSRF Protection for POST requests
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $script_name = $_SERVER['SCRIPT_NAME'];
+    // Exclude AJAX scripts and scripts that handle CSRF manually
+    if (strpos($script_name, 'ajax') === false && strpos($script_name, 'appointment.php') === false && strpos($script_name, '/login.php') === false) {
+        if (!isset($_POST['csrf_token']) || !verifyCsrfToken($_POST['csrf_token'])) {
+            die("Error de seguridad (CSRF). Por favor recargue la página o re-inicie sesión.");
+        }
+    }
+}
 
 $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
 $option = array(

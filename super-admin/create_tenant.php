@@ -76,6 +76,7 @@ include 'Includes/templates/header.php';
                     <?php endif; ?>
 
                     <form method="POST">
+                                    <?php if(function_exists("csrfInput")) csrfInput(); ?>
                         <h5 class="text-white mb-4 border-left-gold pl-3">Datos de la Barbería</h5>
                         <div class="row">
                             <div class="col-md-6">

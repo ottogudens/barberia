@@ -1,8 +1,5 @@
 <?php
-ob_start();
-session_start();
-
-$pageTitle = 'Editar Reserva';
+ob_start();$pageTitle = 'Editar Reserva';
 
 include 'connect.php';
 include 'Includes/functions/functions.php';
@@ -65,7 +62,8 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                 <h6 class="m-0 font-weight-bold text-primary">Editar Reserva #<?php echo $appointment_id; ?></h6>
             </div>
             <div class="card-body">
-                <form method="POST" action="edit_appointment.php?appointment_id=<?php echo $appointment_id; ?>">
+                <form method="POST" action="edit_appointment.php?appointment_id=<?php echo $appointment_id; ?>
+                                    <?php if(function_exists("csrfInput")) csrfInput(); ?>">
                     <input type="hidden" name="appointment_id" value="<?php echo $appointment_id; ?>">
                     
                     <div class="form-group">
@@ -100,8 +98,4 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
     }
 
     include 'Includes/templates/footer.php';
-} else {
-    header('Location: login.php');
-    exit();
-}
 ?>

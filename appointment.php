@@ -200,6 +200,7 @@ include "Includes/templates/header.php";
 		<!-- RESERVATION FORM -->
 
 		<form method="post" id="appointment_form" action="appointment.php">
+                                    <?php if(function_exists("csrfInput")) csrfInput(); ?>
 			<?php csrfInput(); ?>
 
 			<!-- SELECT SERVICE -->

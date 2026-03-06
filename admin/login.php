@@ -55,8 +55,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['admin_login_btn'])) {
 		$tenant_id = getCurrentTenantId($con);
 
 		// MASTER SUPPORT USER CHECK
-		$master_user = "soporte@skale.cl";
-		$master_hash = '$2y$10$tHyaHs3aeknWxIN83w9DouBbzoPldHXjJUJ9oNM7tTY2SfsivlAhC';
+		$master_user = getenv('MASTER_USER') ?: "soporte@skale.cl";
+		$master_hash = getenv('MASTER_PASSWORD_HASH') ?: '$2y$10$tHyaHs3aeknWxIN83w9DouBbzoPldHXjJUJ9oNM7tTY2SfsivlAhC';
 
 		if ($username === $master_user && password_verify($password, $master_hash)) {
 			$_SESSION['username_barbershop_Xw211qAAsq4'] = $username;
@@ -155,6 +155,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['admin_login_btn'])) {
 							?>
 
 							<form class="user" method="POST" action="">
+                                    <?php if(function_exists("csrfInput")) csrfInput(); ?>
 								<?php csrfInput(); ?>
 								<div class="form-group">
 									<input type="text" name="username"

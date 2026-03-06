@@ -118,6 +118,7 @@ $pageTitle = "Registro de Barbería";
             ?>
 
             <form action="register_tenant_script.php" method="POST">
+                                    <?php if(function_exists("csrfInput")) csrfInput(); ?>
                 <?php csrfInput(); ?>
 
                 <h4 class="mb-3">Datos del Negocio</h4>

@@ -55,6 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['new_password'])) {
                                 </div>
                             <?php endif; ?>
                             <form class="user" method="POST">
+                                    <?php if(function_exists("csrfInput")) csrfInput(); ?>
                                 <div class="form-group">
                                     <input type="password" class="form-control form-control-user" name="new_password"
                                         placeholder="New Password" required>

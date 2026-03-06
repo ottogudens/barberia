@@ -1,15 +1,14 @@
 <?php
-session_start();
 $pageTitle = 'Finanzas - Egresos y Pagos';
 include 'connect.php';
 include 'Includes/functions/functions.php';
+include '../Includes/csrf.php';
 include 'Includes/templates/header.php';
 include '../Includes/tenant_context.php';
 
 $tenant_id = getCurrentTenantId($con);
 
-//Check If user is already logged in
-if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admin_id_barbershop_Xw211qAAsq4'])) {
+include 'Includes/auth_check.php';
 
 
     // HANDLE ADD EXPENSE
@@ -24,18 +23,21 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
             try {
                 $stmt = $con->prepare("INSERT INTO expenses (tenant_id, amount, category, description, expense_date) VALUES (?, ?, ?, ?, ?)");
                 $stmt->execute([$tenant_id, $amount, $category, $description, $expense_date]);
-                echo "<script>swal('Éxito', 'Gasto registrado correctamente', 'success');</script>";
+                echo "<script>Swal.fire('Éxito', 'Gasto registrado correctamente', 'success');</script>";
             } catch (PDOException $e) {
-                echo "<script>swal('Error', 'Ocurrió un error al registrar el gasto', 'error');</script>";
+                echo "<script>Swal.fire('Error', 'Ocurrió un error al registrar el gasto', 'error');</script>";
             }
         } else {
-            echo "<script>swal('Error', 'Por favor complete todos los campos obligatorios', 'error');</script>";
+            echo "<script>Swal.fire('Error', 'Por favor complete todos los campos obligatorios', 'error');</script>";
         }
     }
 
     // HANDLE DELETE EXPENSE
-    if (isset($_GET['do']) && $_GET['do'] == 'delete' && isset($_GET['id'])) {
-        $expense_id = $_GET['id'];
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'delete' && isset($_POST['id'])) {
+        if (!verifyCsrfToken($_POST['csrf_token'])) {
+            die("Error de seguridad (CSRF).");
+        }
+        $expense_id = $_POST['id'];
         $stmt = $con->prepare("DELETE FROM expenses WHERE expense_id = ? AND tenant_id = ?");
         $stmt->execute([$expense_id, $tenant_id]);
         echo "<script>window.location.href = 'expenses.php';</script>";
@@ -143,11 +145,16 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                                     <td><?php echo htmlspecialchars($expense['description']); ?></td>
                                     -<?php echo formatCurrency($expense['amount']); ?></td>
                                     <td>
-                                        <a href="expenses.php?do=delete&id=<?php echo $expense['expense_id']; ?>"
-                                            class="btn btn-danger btn-sm btn-circle"
-                                            onclick="return confirm('¿Está seguro de eliminar este gasto?');">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
+                                        <form method="POST" action="expenses.php" style="display:inline-block;"
+                                            onsubmit="return confirm('¿Está seguro de eliminar este gasto?');">
+                                    <?php if(function_exists("csrfInput")) csrfInput(); ?>
+                                            <?php csrfInput(); ?>
+                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="id" value="<?php echo $expense['expense_id']; ?>">
+                                            <button type="submit" class="btn btn-danger btn-sm btn-circle">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -176,6 +183,7 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
                     </button>
                 </div>
                 <form method="POST" action="expenses.php">
+                                    <?php if(function_exists("csrfInput")) csrfInput(); ?>
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Fecha</label>
@@ -215,8 +223,4 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && isset($_SESSION['admi
     </div>
 
     <?php include 'Includes/templates/footer.php';
-} else {
-    header('Location: login.php');
-    exit();
-}
 ?>

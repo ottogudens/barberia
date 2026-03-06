@@ -98,17 +98,19 @@ include 'Includes/templates/header.php';
                 </div>
                 <div class="card-body">
                     <?php if ($error): ?>
-                            <div class="alert alert-danger border-0 bg-danger text-white small mb-4">
-                                <i class="fas fa-exclamation-circle mr-2"></i> <?php echo $error; ?>
-                            </div>
+                        <div class="alert alert-danger border-0 bg-danger text-white small mb-4">
+                            <i class="fas fa-exclamation-circle mr-2"></i> <?php echo $error; ?>
+                        </div>
                     <?php endif; ?>
                     <?php if ($success): ?>
-                            <div class="alert alert-success border-0 bg-success text-white small mb-4">
-                                <i class="fas fa-check-circle mr-2"></i> <?php echo $success; ?>
-                            </div>
+                        <div class="alert alert-success border-0 bg-success text-white small mb-4">
+                            <i class="fas fa-check-circle mr-2"></i> <?php echo $success; ?>
+                        </div>
                     <?php endif; ?>
 
                     <form method="POST">
+                        <?php if (function_exists("csrfInput"))
+                            csrfInput(); ?>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
@@ -146,7 +148,7 @@ include 'Includes/templates/header.php';
                                         name="slug" value="<?php echo htmlspecialchars($tenant['slug']); ?>"
                                         style="background: rgba(255,255,255,0.05) !important;" required>
                                     <small class="text-white-50">Ej:
-                                        <code>barberia.skale.cl/<?php echo $tenant['slug']; ?></code></small>
+                                        <code>barberia.skale.cl/<?php echo htmlspecialchars($tenant['slug']); ?></code></small>
                                 </div>
                             </div>
                         </div>

@@ -1,5 +1,4 @@
 <?php
-session_start();
 include 'connect.php';
 
 // Only allow demo user to reset demo data
@@ -15,7 +14,3 @@ if (isset($_SESSION['username_barbershop_Xw211qAAsq4']) && $_SESSION['username_b
     $_SESSION['demo_reset_msg'] = "Demo reiniciada con éxito.";
     header('Location: index.php');
     exit();
-} else {
-    header('Location: login.php');
-    exit();
-}

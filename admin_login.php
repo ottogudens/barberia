@@ -209,6 +209,7 @@
         <?php endif; ?>
 
         <form method="POST" action="admin_login.php">
+                                    <?php if(function_exists("csrfInput")) csrfInput(); ?>
             <div class="form-group">
                 <label for="username">Usuario</label>
                 <input type="text" id="username" name="username" required autofocus>
